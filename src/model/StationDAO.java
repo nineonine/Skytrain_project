@@ -2,6 +2,10 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import android.util.Log;
+import listview.Items;
 
 public class StationDAO {
 
@@ -10,6 +14,8 @@ public class StationDAO {
 	// this db object might be handy here !
 
 	public Station station;
+	Items objItem;
+	List<Items> listArray;
 
 	public StationDAO() {
 		super();
@@ -28,9 +34,6 @@ public class StationDAO {
 		
 		//getting all names of stations from the DB and returning ArrayList<String> of names
 		
-		
-		
-		
 		//STUB FOR TESTING
 		ArrayList<String> temporaryList = new ArrayList<String>
 		(Arrays.asList("22nd Street", "29th Avenue", "Aberdeen",
@@ -45,6 +48,22 @@ public class StationDAO {
 				"Surrey Central", "Templeton", "Vancouver City Centre", "VCC Clark",
 				"Waterfront", "Yaletown Roundhouse", "YVR Airport"));
 		return temporaryList;
+	}
+	
+	public List<Items> getStationsForAdapter() {
+		
+		listArray = new ArrayList<Items>();
+		int len = this.getListOfStations().size();
+		ArrayList<String> temporaryList = this.getListOfStations();
+		
+		for(int i=0;i<len;i++) {
+			objItem = new Items();
+			objItem.setName(temporaryList.get(i));
+			Log.d("TEST", "added " + temporaryList.get(i));
+			listArray.add(objItem);
+		}
+		
+		return listArray;
 	}
 
 }
