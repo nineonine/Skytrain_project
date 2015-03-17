@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -108,8 +109,27 @@ public class MainActivity extends Activity implements TextWatcher,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		
+		//code for testing
+		TextView tv = (TextView)view.findViewById(R.id.tvname);
+		String stationName = (String) tv.getText();
+		
 		Intent intent = new Intent(this, StationActivity.class);
-		intent.putExtra("station", new Station("TEST", "zone", "desc", "loc", "lat", "lon"));
+		intent.putExtra("station", new Station(stationName,
+				"zone",
+				"Lorem Ipsum is simply dummy text of the printing and "
+				+ "typesetting industry. Lorem Ipsum has been the industry's "
+				+ "standard dummy text ever since the 1500s, when an unknown "
+				+ "printer took a galley of type and scrambled it to make a type "
+				+ "specimen book. It has survived not only five centuries, but also "
+				+ "the leap into electronic typesetting, remaining essentially unchanged. "
+				+ "It was popularised in the 1960s with the release of Letraset "
+				+ "sheets containing Lorem Ipsum passages, and more recently "
+				+ "with desktop publishing software like Aldus PageMaker including "
+				+ "versions of Lorem Ipsum.",
+				"Some useful information about location of the station. Here you might also find"
+				+ " this random text !",
+				"lat",
+				"lon"));
 		this.startActivityForResult(intent,0);
 
 	}

@@ -1,16 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white" >
 
-    <TextView
-        android:id="@+id/stationName"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp"
-        android:text="station name" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:weightSum="1" >
+
+            <ImageView
+                android:id="@+id/stationImage"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/placeholder" />
+
+            <TextView
+                android:id="@+id/stationName"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/stationImage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="14dp"
+                android:shadowColor="@color/black"
+                android:text="Station name"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/stationDescription"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignLeft="@+id/stationImage"
+                android:layout_below="@+id/stationName"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/stationLocationTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/stationImage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="14dp"
+                android:shadowColor="@color/black"
+                android:text="@string/stationLocTitle"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/stationLocation"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignLeft="@+id/stationImage"
+                android:layout_below="@+id/stationName"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:text="TextView" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

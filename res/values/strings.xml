@@ -2,5 +2,6 @@
 
     <string name="app_name">SkyTrainProject</string>
     <string name="searchname">Enter Station</string>
+    <string name="stationLocTitle">Location</string>
 
 </resources>
