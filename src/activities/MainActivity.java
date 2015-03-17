@@ -10,13 +10,14 @@ import listview.Item;
 import listview.Items;
 import listview.ItemsSections;
 import listview.NamesAdapter;
-
+import model.Station;
 import model.StationDAO;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -106,17 +107,10 @@ public class MainActivity extends Activity implements TextWatcher,
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-
-		//Item item = itemsSection.get(position);
-
-//		 if
-//		 (view.getTag().getClass().getSimpleName().equals("ViewHolderName")) {
-//		 Items objSchoolname = (Items) item;
-//		 showToast(objSchoolname.getName());
-//		 } else {
-//		 ItemsSections objSectionsName = (ItemsSections) item;
-//		 showToast("Section :: "+String.valueOf(objSectionsName.getSectionLetter()));
-//		 }
+		
+		Intent intent = new Intent(this, StationActivity.class);
+		intent.putExtra("station", new Station("TEST", "zone", "desc", "loc", "lat", "lon"));
+		this.startActivityForResult(intent,0);
 
 	}
 

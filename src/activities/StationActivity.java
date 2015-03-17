@@ -1,5 +1,7 @@
 package activities;
 
+import model.Station;
+
 import com.douglas.skytrainproject.R;
 
 import android.app.Activity;
@@ -17,9 +19,9 @@ public class StationActivity extends Activity {
 		TextView stationName =(TextView)findViewById(R.id.stationName);
 		
 		Intent intent = this.getIntent();
-		//Station station = intent.getParcelableExtra("station");
+		Station station = intent.getParcelableExtra("station");
 		
-		//stationName.setText(station.getName());
+		stationName.setText(station.getName());
 
 	}
 }
