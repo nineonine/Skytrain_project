@@ -1,7 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">SkyTrainProject</string>
     <string name="searchname">Enter Station</string>
     <string name="stationLocTitle">Location</string>
+    <string name="title_activity_trip_form">Trip Planning Form</string>
+    <string name="hello_world">Please select starting and ending stations:</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

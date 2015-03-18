@@ -96,7 +96,7 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			db.endTransaction();
 		}
 		//That first transaction creates the basic data that my (Aidan's) logic
-		//will need to work.
+		//will need to work. PLEASE DO NOT ALTER IT WITHOUT MY INPUT.
 		//This second transaction is a place to put "extra" data.
 		//First, I'll create a sample piece of data:
 		ContentValues wfDesc = new ContentValues();
