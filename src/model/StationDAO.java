@@ -27,7 +27,7 @@ public class StationDAO {
 		// HERE SHOULD BE IMPLEMENTED SOME LOGIC OF RETREIVING A STATION FROM A
 		// DB TABLE
 		// WE HAVE TO USE OUR DB CONNECTION OBJECT OR SMTH
-		String where = SkytrainOpenHelper.STN_NAME_ROW + " = ?";
+		String where = SkytrainOpenHelper.STN_NAME_COL + " = ?";
 		Station[] res = dbHelp.queryForStationArray(where, stationName);
 		//Assume that there is exactly one station that matches
 		return res[0];
@@ -61,9 +61,9 @@ public class StationDAO {
 							"Yaletown Roundhouse", "YVR Airport"));
 			return temporaryList;
 		}
-		String[] cols = {SkytrainOpenHelper.STN_NAME_ROW};
+		String[] cols = {SkytrainOpenHelper.STN_NAME_COL};
 		Cursor stnNames = dbHelp.query(SkytrainOpenHelper.STN_TBL_NAME, cols, null, null);
-		int nameX = stnNames.getColumnIndex(SkytrainOpenHelper.STN_NAME_ROW);
+		int nameX = stnNames.getColumnIndex(SkytrainOpenHelper.STN_NAME_COL);
 		ArrayList<String> names = new ArrayList<String>();
 		stnNames.moveToFirst();
 		do{

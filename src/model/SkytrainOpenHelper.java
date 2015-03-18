@@ -16,23 +16,23 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	public static int DBVER = 1;
 	
 	public static String STN_TBL_NAME = "Stations";
-	public static String STN_ID_ROW = "_id";
-	public static String STN_NAME_ROW = "Name";
-	public static String STN_DESC_ROW = "Description";
-	public static String STN_LOC_ROW = "Location";
-	public static String STN_LAT_ROW = "Latitude";
-	public static String STN_LON_ROW = "Longitude";
-	public static String STN_ZONE_ROW = "Zone";
-	public static String STN_IMG_ROW = "Image";
+	public static String STN_ID_COL = "_id";
+	public static String STN_NAME_COL = "Name";
+	public static String STN_DESC_COL = "Description";
+	public static String STN_LOC_COL = "Location";
+	public static String STN_LAT_COL = "Latitude";
+	public static String STN_LON_COL = "Longitude";
+	public static String STN_ZONE_COL = "Zone";
+	public static String STN_IMG_COL = "Image";
 	private static String STN_TBL_CREATE = "CREATE TABLE " + STN_TBL_NAME +
-			" (" + STN_ID_ROW + " INTEGER PRIMARY KEY, " +
-			STN_NAME_ROW + " CHAR NOT NULL ON CONFLICT FAIL, " +
-			STN_DESC_ROW + " CHAR, " +
-			STN_LOC_ROW + " CHAR, " +
-			STN_LAT_ROW + " FLOAT, " +
-			STN_LON_ROW + " FLOAT, " +
-			STN_ZONE_ROW + " INT NOT NULL ON CONFLICT FAIL, " +
-			STN_IMG_ROW + " INT DEFAULT " + String.valueOf(R.drawable.placeholder) + ")";
+			" (" + STN_ID_COL + " INTEGER PRIMARY KEY, " +
+			STN_NAME_COL + " CHAR NOT NULL ON CONFLICT FAIL, " +
+			STN_DESC_COL + " CHAR, " +
+			STN_LOC_COL + " CHAR, " +
+			STN_LAT_COL + " FLOAT, " +
+			STN_LON_COL + " FLOAT, " +
+			STN_ZONE_COL + " INT NOT NULL ON CONFLICT FAIL, " +
+			STN_IMG_COL + " INT DEFAULT " + String.valueOf(R.drawable.placeholder) + ")";
 	private static String[] stnnames = {"Waterfront", "Burrard", "Granville",
 		"Stadium-Chinatown", "Main Street-Science World", "Commercial-Broadway",
 		"Nanaimo", "29th Avenue", "Joyce-Collingwood", "Patterson", "Metrotown",
@@ -49,23 +49,23 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	private static ContentValues[] stnValues = buildStationsValues();
 	
 	public static String LINE_TBL_NAME = "Lines";
-	public static String LINE_ID_ROW = "_id";
-	public static String LINE_NAME_ROW = "Name";
+	public static String LINE_ID_COL = "_id";
+	public static String LINE_NAME_COL = "Name";
 	private static String LINE_TBL_CREATE = "CREATE TABLE " + LINE_TBL_NAME +
-			" (" + LINE_ID_ROW + " INTEGER PRIMARY KEY, " +
-			LINE_NAME_ROW + " CHAR NOT NULL ON CONFLICT FAIL)";
+			" (" + LINE_ID_COL + " INTEGER PRIMARY KEY, " +
+			LINE_NAME_COL + " CHAR NOT NULL ON CONFLICT FAIL)";
 	private static String[] linenames = {"Expo", "Millennium",
 		"Airport", "Brighouse", "Evergreen"};
 	private static ContentValues[] lineValues = buildLinesValues();
 	
 	public static String INDEX_TBL_NAME = "StationIndices";
-	public static String INDEX_LINE_ROW = "line_id";
-	public static String INDEX_POS_ROW = "index";
-	public static String INDEX_STN_ROW = "station_id";
+	public static String INDEX_LINE_COL = "line_id";
+	public static String INDEX_POS_COL = "index";
+	public static String INDEX_STN_COL = "station_id";
 	private static String INDEX_TBL_CREATE = "CREATE TABLE " + INDEX_TBL_NAME +
-			" (" + INDEX_LINE_ROW + " INTEGER NOT NULL REFERENCES " + LINE_TBL_NAME + "(" + LINE_ID_ROW + "), "+
-			INDEX_STN_ROW + " INTEGER NOT NULL REFERENCES " + STN_TBL_NAME + "(" + STN_ID_ROW + "), " +
-			INDEX_POS_ROW + " INTEGER NOT NULL ON CONFLICT FAIL)";
+			" (" + INDEX_LINE_COL + " INTEGER NOT NULL REFERENCES " + LINE_TBL_NAME + "(" + LINE_ID_COL + "), "+
+			INDEX_STN_COL + " INTEGER NOT NULL REFERENCES " + STN_TBL_NAME + "(" + STN_ID_COL + "), " +
+			INDEX_POS_COL + " INTEGER NOT NULL ON CONFLICT FAIL)";
 	private static ContentValues[] indexValues = buildIndexValues();
 	
 	private static String fkPragma = "PRAGMA foreign_keys = ON";
@@ -100,12 +100,12 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		//This second transaction is a place to put "extra" data.
 		//First, I'll create a sample piece of data:
 		ContentValues wfDesc = new ContentValues();
-		wfDesc.put(STN_LOC_ROW, "Waterfront Station is located in the former CPR station at the west end of Gastown.");
+		wfDesc.put(STN_LOC_COL, "Waterfront Station is located in the former CPR station at the west end of Gastown.");
 		//now, begin:
 		db.beginTransaction();
 		try{
 			//Example:
-			db.update(STN_TBL_NAME, wfDesc, STN_NAME_ROW + " = 'Waterfront'", null);
+			db.update(STN_TBL_NAME, wfDesc, STN_NAME_COL + " = 'Waterfront'", null);
 			
 			//insert database update code here:
 			
@@ -133,13 +133,13 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	public Station[] queryForStationArray(String where, String... binding){
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor stnQuery = db.query(STN_TBL_NAME, null, where, binding, null, null, null);
-		int nameX = stnQuery.getColumnIndex(STN_NAME_ROW);
-		int descX = stnQuery.getColumnIndex(STN_DESC_ROW);
-		int latX = stnQuery.getColumnIndex(STN_LAT_ROW);
-		int lonX = stnQuery.getColumnIndex(STN_LON_ROW);
-		int locX = stnQuery.getColumnIndex(STN_LOC_ROW);
-		int zoneX = stnQuery.getColumnIndex(STN_ZONE_ROW);
-		int imgX = stnQuery.getColumnIndex(STN_IMG_ROW);
+		int nameX = stnQuery.getColumnIndex(STN_NAME_COL);
+		int descX = stnQuery.getColumnIndex(STN_DESC_COL);
+		int latX = stnQuery.getColumnIndex(STN_LAT_COL);
+		int lonX = stnQuery.getColumnIndex(STN_LON_COL);
+		int locX = stnQuery.getColumnIndex(STN_LOC_COL);
+		int zoneX = stnQuery.getColumnIndex(STN_ZONE_COL);
+		int imgX = stnQuery.getColumnIndex(STN_IMG_COL);
 		Station[] result = new Station[stnQuery.getCount()];
 		int i = 0;
 		stnQuery.moveToFirst();
@@ -163,8 +163,8 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		ContentValues[] lines = new ContentValues[5];
 		for(int i = 0; i < 5; ++i){
 			lines[i] = new ContentValues();
-			lines[i].put(LINE_ID_ROW, i);
-			lines[i].put(LINE_NAME_ROW, linenames[i]);
+			lines[i].put(LINE_ID_COL, i);
+			lines[i].put(LINE_NAME_COL, linenames[i]);
 		}
 		return lines;
 	}
@@ -183,8 +183,8 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		ContentValues[] stns = new ContentValues[53];
 		for(int i = 0;i < 53;++i){
 			stns[i] = new ContentValues();
-			stns[i].put(STN_ID_ROW, i);
-			stns[i].put(STN_NAME_ROW, stnnames[i]);
+			stns[i].put(STN_ID_COL, i);
+			stns[i].put(STN_NAME_COL, stnnames[i]);
 			int zone;
 			if(i < 9 || (i > 29 && i < 40)){
 				zone = 1;
@@ -193,16 +193,16 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			}else{
 				zone = 3;
 			}
-			stns[i].put(STN_ZONE_ROW, zone);
+			stns[i].put(STN_ZONE_COL, zone);
 		}
 		return stns;
 	}
 	
 	private static ContentValues valuesOfTuple(int line, int stn, int index){
 		ContentValues res = new ContentValues();
-		res.put(INDEX_LINE_ROW, line);
-		res.put(INDEX_STN_ROW, stn);
-		res.put(INDEX_POS_ROW, index);
+		res.put(INDEX_LINE_COL, line);
+		res.put(INDEX_STN_COL, stn);
+		res.put(INDEX_POS_COL, index);
 		return res;
 	}
 	
