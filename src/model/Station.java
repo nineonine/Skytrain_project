@@ -8,12 +8,14 @@ public class Station implements Parcelable {
 	//HERE IS OUR STATION MODEL
 	//we decided to keep everything ins String
 	
-	public String name;
+	private String name;
 	public String zone;
-	public String description;
-	public String location;
+	private String description;
+	private String location;
 	public String latX;
 	public String longY;
+	//we should also store the R.drawable id of the station's picture
+	private String image;
 
 	//Standard Constructor
 	public Station(String name, String zone, String description,
@@ -39,6 +41,15 @@ public class Station implements Parcelable {
 		this.location = data[3];
 		this.latX = data[4];
 		this.longY = data[5];
+	}
+	
+	//getter and setter
+	
+	public String getImage(){
+		return image;
+	}
+	public void setImage(String image){
+		this.image = image;
 	}
 
 	@Override

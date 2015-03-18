@@ -29,6 +29,8 @@ public class StationActivity extends Activity {
 		stationName.setText(station.getName());
 		stationDescription.setText(station.getDescription());
 		stationLocation.setText(station.getLocation());
+		
+		stationImage.setImageResource(Integer.valueOf(station.getImage()));
 
 	}
 }
