@@ -7,5 +7,6 @@
     <string name="title_activity_trip_form">Trip Planning Form</string>
     <string name="hello_world">Please select starting and ending stations:</string>
     <string name="action_settings">Settings</string>
+    <string name="routing_btn_text">Find your route!</string>
 
 </resources>

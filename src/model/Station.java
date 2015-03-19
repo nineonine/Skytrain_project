@@ -33,7 +33,7 @@ public class Station implements Parcelable {
 	// reached its destination activity
 	private Station(Parcel in) {
 
-		String[] data = new String[6];
+		String[] data = new String[7];
 		in.readStringArray(data);
 		this.name = data[0];
 		this.zone = data[1];
@@ -41,6 +41,7 @@ public class Station implements Parcelable {
 		this.location = data[3];
 		this.latX = data[4];
 		this.longY = data[5];
+		this.image = data[6];
 	}
 	
 	//getter and setter
@@ -62,7 +63,8 @@ public class Station implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 
 		dest.writeStringArray(new String[] { this.name, this.zone,
-				this.description, this.location, this.latX, this.longY });
+				this.description, this.location, this.latX,
+				this.longY, this.image });
 
 	}
 

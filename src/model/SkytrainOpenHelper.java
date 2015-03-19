@@ -179,6 +179,11 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		return query(table, columns, where, whereArgs, null, null, null);
 	}
 	
+	public Cursor rawQuery(String query, String[] bindings){
+		SQLiteDatabase db = getReadableDatabase();
+		return db.rawQuery(query, bindings);
+	}
+	
 	private static ContentValues[] buildStationsValues(){
 		ContentValues[] stns = new ContentValues[53];
 		for(int i = 0;i < 53;++i){

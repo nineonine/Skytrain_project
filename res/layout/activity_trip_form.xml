@@ -6,11 +6,38 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="activities.TripFormActivity" >
+    tools:context="activities.TripFormActivity"
+    android:id="@+id/vgTripForm" >
 
     <TextView
+        android:id="@+id/lblChoose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+    
+    <Spinner
+        android:id="@+id/spnStnA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/lblChoose" />
+    
+    <Spinner
+        android:id="@+id/spnStnB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/spnStnA" />
+    
+    <Button
+        android:id="@+id/btnFindRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spnStnB"
+        android:layout_centerHorizontal="true"
+        android:text="@string/routing_btn_text" />
 
 </RelativeLayout>
