@@ -1,5 +1,6 @@
 package model;
 
+import com.douglas.skytrainproject.R;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -27,6 +28,7 @@ public class Station implements Parcelable {
 		this.location = location;
 		this.latX = latX;
 		this.longY = longY;
+		image = String.valueOf(R.drawable.placeholder);
 	}
 
 	// used to inflate the POJO once it has

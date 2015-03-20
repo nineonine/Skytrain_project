@@ -10,6 +10,15 @@
 
     <ListView
         android:isScrollContainer="false"
-        android:id="@+id/legListView" ></ListView>
+        android:id="@+id/legListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" ></ListView>
+    
+    <TextView
+        android:id="@+id/legEndText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/legListView" />
 
 </RelativeLayout>
