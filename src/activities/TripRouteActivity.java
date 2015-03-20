@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class TripRouteActivity extends Activity {
@@ -266,7 +268,7 @@ public class TripRouteActivity extends Activity {
 		}
 		
 		protected void onPostExecute(Cursor result){
-			
+			Toast.makeText(TripRouteActivity.this, "Number of Legs: " + legCount + ". Returning: " + result.getClass().getName(), Toast.LENGTH_LONG).show();
 		}
 	}
 	
