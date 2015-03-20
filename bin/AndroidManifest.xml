@@ -30,6 +30,13 @@
         <activity
             android:name="activities.TripFormActivity"
             android:label="@string/title_activity_trip_form" >
+            <intent-filter>
+                <action android:name="android.intent.action.RUN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="activities.TripRouteActivity"
+            android:label="@string/title_activity_trip_route" >
         </activity>
     </application>
 

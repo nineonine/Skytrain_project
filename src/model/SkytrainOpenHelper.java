@@ -60,7 +60,7 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	
 	public static String INDEX_TBL_NAME = "StationIndices";
 	public static String INDEX_LINE_COL = "line_id";
-	public static String INDEX_POS_COL = "index";
+	public static String INDEX_POS_COL = "index_number";
 	public static String INDEX_STN_COL = "station_id";
 	private static String INDEX_TBL_CREATE = "CREATE TABLE " + INDEX_TBL_NAME +
 			" (" + INDEX_LINE_COL + " INTEGER NOT NULL REFERENCES " + LINE_TBL_NAME + "(" + LINE_ID_COL + "), "+
@@ -177,6 +177,23 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	
 	public Cursor query(String table, String[] columns, String where, String[] whereArgs){
 		return query(table, columns, where, whereArgs, null, null, null);
+	}
+	
+	public Cursor queryStationsOfLine(int lineID, Integer from, Integer to){
+		String qstr = "SELECT * FROM " + STN_TBL_NAME + " NATURAL JOIN " + INDEX_TBL_NAME + " WHERE " + INDEX_LINE_COL + " = CAST( ? AS INTEGER)";
+		if(from != null && to != null){
+			qstr = qstr + " AND " + INDEX_POS_COL + " BETWEEN CAST( ? AS INTEGER) AND CAST( ? AS INTEGER)";
+			if(from < to){
+				qstr = qstr + " ORDER BY " + INDEX_POS_COL + " ASC";
+			}else{
+				qstr = qstr + " ORDER BY " + INDEX_POS_COL + " DESC";
+				int tos = to;
+				to = from;
+				from = tos;
+			}
+		}
+		String[] bindings = {String.valueOf(lineID), String.valueOf(from), String.valueOf(to)};
+		return rawQuery(qstr, bindings);
 	}
 	
 	public Cursor rawQuery(String query, String[] bindings){

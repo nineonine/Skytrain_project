@@ -5,17 +5,17 @@ import com.douglas.skytrainproject.R;
 import model.QueryAsyncTask;
 import model.SkytrainOpenHelper;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-//import android.view.ViewGroup;
-//import android.view.ViewGroupOverlay;
 import android.view.View.OnClickListener;
 import android.widget.Spinner;
-import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class TripFormActivity extends Activity implements OnClickListener {
 
@@ -25,8 +25,11 @@ public class TripFormActivity extends Activity implements OnClickListener {
 	private View btnRoute;
 	private Spinner spnStnA;
 	private Spinner spnStnB;
-	private ProgressBar pbar;
-//	private ViewGroupOverlay vgo;
+	private ProgressDialog loadPD;
+	private int idCol;
+	
+	public static final String EXTRA_STNA_ID = "com.douglas.skytrainproject.STNA";
+	public static final String EXTRA_STNB_ID = "com.douglas.skytrainproject.STNB";
 	
 	private class PopulateSpinnerTask extends QueryAsyncTask{
 		
@@ -35,14 +38,13 @@ public class TripFormActivity extends Activity implements OnClickListener {
 		
 		@Override
 		protected void onPostExecute(Cursor result) {
+			idCol = result.getColumnIndex(SkytrainOpenHelper.STN_ID_COL);
 			SimpleCursorAdapter sca = new SimpleCursorAdapter(TripFormActivity.this,
 					android.R.layout.simple_spinner_item, result, fromCols, toViews, 0);
 			sca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spnStnA.setAdapter(sca);
 			spnStnB.setAdapter(sca);
-			pbar.setVisibility(ProgressBar.GONE);
-			//vgo.clear();
-			
+			loadPD.dismiss();
 		}
 
 		PopulateSpinnerTask(){
@@ -53,14 +55,12 @@ public class TripFormActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		pbar = new ProgressBar(this);
-		//pbar.setBackgroundResource(android.R.drawable.toast_frame);
 		PopulateSpinnerTask pst = new PopulateSpinnerTask();
 		setContentView(R.layout.activity_trip_form);
-//		vgo = ((ViewGroup)findViewById(R.id.vgTripForm)).getOverlay();
-//		vgo.add(pbar);
 		spnStnA = (Spinner)findViewById(R.id.spnStnA);
 		spnStnB = (Spinner)findViewById(R.id.spnStnB);
+		loadPD = ProgressDialog.show(this, getString(R.string.progress_title),
+				getString(R.string.progress_form_msg), true);
 		pst.execute(query);
 		btnRoute = findViewById(R.id.btnFindRoute);
 		btnRoute.setOnClickListener(this);
@@ -87,7 +87,20 @@ public class TripFormActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
+		if(v.equals(btnRoute)){
+			Cursor crs = (Cursor)spnStnA.getSelectedItem();
+			int idA = crs.getInt(idCol);
+			crs = (Cursor)spnStnB.getSelectedItem();
+			int idB = crs.getInt(idCol);
+			if(idA == idB){
+				Toast.makeText(this, R.string.go_nowhere_msg, Toast.LENGTH_LONG).show();
+				return;
+			}
+			Intent routeIntent = new Intent(this, TripRouteActivity.class);
+			routeIntent.putExtra(EXTRA_STNA_ID, idA);
+			routeIntent.putExtra(EXTRA_STNB_ID, idB);
+			startActivity(routeIntent);
+			return;
+		}
 	}
 }

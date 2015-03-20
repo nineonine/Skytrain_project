@@ -42,46 +42,57 @@ public final class R {
         public static final int placeholder=0x7f020007;
     }
     public static final class id {
-        public static final int action_settings=0x7f090013;
-        public static final int alphabet_letter=0x7f090005;
+        public static final int ScrollView1=0x7f090005;
+        public static final int action_settings=0x7f090017;
+        public static final int alphabet_letter=0x7f090008;
+        public static final int board_dir=0x7f090007;
         public static final int btnFindRoute=0x7f090004;
-        public static final int button_search=0x7f09000a;
-        public static final int input_search_query=0x7f09000b;
+        public static final int button_search=0x7f09000e;
+        public static final int container=0x7f090006;
+        public static final int input_search_query=0x7f09000f;
         public static final int lblChoose=0x7f090001;
-        public static final int linearLayout1=0x7f09000d;
-        public static final int listview=0x7f090006;
-        public static final int rel_my_search=0x7f090007;
-        public static final int relativelay=0x7f090008;
-        public static final int scrollView1=0x7f09000c;
+        public static final int legListView=0x7f090009;
+        public static final int linearLayout1=0x7f090011;
+        public static final int listview=0x7f09000a;
+        public static final int rel_my_search=0x7f09000b;
+        public static final int relativelay=0x7f09000c;
+        public static final int scrollView1=0x7f090010;
         public static final int spnStnA=0x7f090002;
         public static final int spnStnB=0x7f090003;
-        public static final int stationDescription=0x7f090010;
-        public static final int stationImage=0x7f09000e;
-        public static final int stationLocation=0x7f090012;
-        public static final int stationLocationTitle=0x7f090011;
-        public static final int stationName=0x7f09000f;
-        public static final int tvname=0x7f090009;
+        public static final int stationDescription=0x7f090014;
+        public static final int stationImage=0x7f090012;
+        public static final int stationLocation=0x7f090016;
+        public static final int stationLocationTitle=0x7f090015;
+        public static final int stationName=0x7f090013;
+        public static final int tvname=0x7f09000d;
         public static final int vgTripForm=0x7f090000;
     }
     public static final class layout {
         public static final int activity_trip_form=0x7f030000;
-        public static final int alphabet_separator=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int row=0x7f030003;
-        public static final int search_bar=0x7f030004;
-        public static final int station=0x7f030005;
+        public static final int activity_trip_route=0x7f030001;
+        public static final int alphabet_separator=0x7f030002;
+        public static final int fragment_trip_route=0x7f030003;
+        public static final int main=0x7f030004;
+        public static final int row=0x7f030005;
+        public static final int search_bar=0x7f030006;
+        public static final int station=0x7f030007;
     }
     public static final class menu {
         public static final int trip_form=0x7f080000;
+        public static final int trip_route=0x7f080001;
     }
     public static final class string {
         public static final int action_settings=0x7f060005;
         public static final int app_name=0x7f060000;
+        public static final int go_nowhere_msg=0x7f060009;
         public static final int hello_world=0x7f060004;
+        public static final int progress_form_msg=0x7f060008;
+        public static final int progress_title=0x7f060007;
         public static final int routing_btn_text=0x7f060006;
         public static final int searchname=0x7f060001;
         public static final int stationLocTitle=0x7f060002;
         public static final int title_activity_trip_form=0x7f060003;
+        public static final int title_activity_trip_route=0x7f06000a;
     }
     public static final class style {
         /** 

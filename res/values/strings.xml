@@ -8,5 +8,9 @@
     <string name="hello_world">Please select starting and ending stations:</string>
     <string name="action_settings">Settings</string>
     <string name="routing_btn_text">Find your route!</string>
+    <string name="progress_title">Please Wait</string>
+    <string name="progress_form_msg">Loading Stations…</string>
+    <string name="go_nowhere_msg">You go nowhere. Please select differing start and end stations.</string>
+    <string name="title_activity_trip_route">TripRouteActivity</string>
 
 </resources>
