@@ -88,6 +88,7 @@ public final class R {
         public static final int go_nowhere_msg=0x7f060009;
         public static final int hello_world=0x7f060004;
         public static final int progress_form_msg=0x7f060008;
+        public static final int progress_route_msg=0x7f06000b;
         public static final int progress_title=0x7f060007;
         public static final int routing_btn_text=0x7f060006;
         public static final int searchname=0x7f060001;

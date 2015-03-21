@@ -70,6 +70,8 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	
 	private static String fkPragma = "PRAGMA foreign_keys = ON";
 	
+	private SQLiteDatabase db;
+	
 	public SkytrainOpenHelper(Context context){
 		super(context, DBNAME, null, DBVER);
 	}
@@ -131,7 +133,7 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	 * @return
 	 */
 	public Station[] queryForStationArray(String where, String... binding){
-		SQLiteDatabase db = getReadableDatabase();
+		db = (db == null)?getReadableDatabase():db;
 		Cursor stnQuery = db.query(STN_TBL_NAME, null, where, binding, null, null, null);
 		int nameX = stnQuery.getColumnIndex(STN_NAME_COL);
 		int descX = stnQuery.getColumnIndex(STN_DESC_COL);
@@ -171,7 +173,7 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	
 	public Cursor query(String table, String[] columns, String where, String[] whereArgs,
 			String groupBy, String having, String orderBy){
-		SQLiteDatabase db = getReadableDatabase();
+		db = (db == null)?getReadableDatabase():db;
 		return db.query(table, columns, where, whereArgs, groupBy, having, orderBy);
 	}
 	
@@ -180,24 +182,38 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	}
 	
 	public Cursor queryStationsOfLine(int lineID, Integer from, Integer to){
-		String qstr = "SELECT * FROM " + STN_TBL_NAME + " NATURAL JOIN " + INDEX_TBL_NAME + " WHERE " + INDEX_LINE_COL + " = CAST( ? AS INTEGER)";
+		String qstr = "SELECT " + STN_ID_COL + " , " + INDEX_STN_COL + " , " + STN_NAME_COL + " , " + STN_ZONE_COL + " , " +
+						INDEX_LINE_COL + " , " + INDEX_POS_COL + " FROM " + STN_TBL_NAME + " JOIN " + INDEX_TBL_NAME + " ON " +
+						STN_ID_COL + "=" + INDEX_STN_COL + " WHERE " + INDEX_LINE_COL + " = CAST( ? AS INTEGER)";
 		if(from != null && to != null){
 			qstr = qstr + " AND " + INDEX_POS_COL + " BETWEEN CAST( ? AS INTEGER) AND CAST( ? AS INTEGER)";
 			if(from < to){
 				qstr = qstr + " ORDER BY " + INDEX_POS_COL + " ASC";
 			}else{
 				qstr = qstr + " ORDER BY " + INDEX_POS_COL + " DESC";
-				int tos = to;
-				to = from;
-				from = tos;
 			}
 		}
-		String[] bindings = {String.valueOf(lineID), String.valueOf(from), String.valueOf(to)};
+		String[] bindings = {String.valueOf(lineID), String.valueOf((from<to)?from:to), String.valueOf((from<to)?to:from)};
 		return rawQuery(qstr, bindings);
 	}
 	
+	public Cursor queryLineByStationId(int lineID, int stnA, int stnB){
+		String posAq = "SELECT " + INDEX_POS_COL + " FROM " + INDEX_TBL_NAME + " WHERE " + INDEX_LINE_COL + " = " + lineID +
+				" AND " + INDEX_STN_COL + " = " + stnA;
+		Cursor posAc = rawQuery(posAq, null);
+		posAc.moveToFirst();
+		int posA = posAc.getInt(posAc.getColumnIndex(INDEX_POS_COL));
+		posAc.close();
+		String posBq = "SELECT " + INDEX_POS_COL + " FROM " + INDEX_TBL_NAME + " WHERE " + INDEX_LINE_COL + " = " + lineID +
+				" AND " + INDEX_STN_COL + " = " + stnB;
+		Cursor posBc = rawQuery(posBq, null);
+		posBc.moveToFirst();
+		int posB = posBc.getInt(posBc.getColumnIndex(INDEX_POS_COL));
+		return queryStationsOfLine(lineID, posA, posB);
+	}
+	
 	public Cursor rawQuery(String query, String[] bindings){
-		SQLiteDatabase db = getReadableDatabase();
+		db = (db == null)?getReadableDatabase():db;
 		return db.rawQuery(query, bindings);
 	}
 	
