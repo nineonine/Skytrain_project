@@ -6,6 +6,7 @@ import model.QueryAsyncTask;
 import model.SkytrainOpenHelper;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.database.Cursor;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -42,6 +42,8 @@ public class TripRouteActivity extends Activity {
 	private int duration;
 	private boolean unsetTime;
 	private ProgressDialog pdlg;
+	private int[] xferIds;
+	private SkytrainOpenHelper dbHelp;
 	
 	private class LineQueryTask extends QueryAsyncTask{
 		
@@ -58,15 +60,7 @@ public class TripRouteActivity extends Activity {
 	
 	private class TransferQueryTask extends AsyncTask<Cursor, Void, Cursor>{
 		
-		private final String xferBase = "SELECT " + SkytrainOpenHelper.STN_ID_COL + " , " +
-				SkytrainOpenHelper.STN_NAME_COL + " , " + SkytrainOpenHelper.STN_ZONE_COL +
-				" FROM " + SkytrainOpenHelper.STN_TBL_NAME + " WHERE " +
-				SkytrainOpenHelper.STN_ID_COL + " IN ( ";
-		
-		private SkytrainOpenHelper dbHelp;
-		
 		public TransferQueryTask() {
-			dbHelp = new SkytrainOpenHelper(TripRouteActivity.this);
 		}
 
 		@Override
@@ -113,67 +107,65 @@ public class TripRouteActivity extends Activity {
 				//if stnA is on the Millennium Line and stnB is in Surrey, or vice versa:
 				if((lineA == 0 && lineB == 1)||(lineB == 0 && lineA == 1)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + COLUMBIA_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[] {idA,COLUMBIA_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on Millennium and stnB is on Evergreen or vice versa:
 				if((lineA == 1 && lineB == 4)||(lineB == 1 && lineA == 4)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[] {idA,LOUGHEED_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Surrey and stnB is on Evergreen or vice versa:
 				if(lineA == 0 && lineB == 4){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + COLUMBIA_ID + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,COLUMBIA_ID,LOUGHEED_ID,idB};
+					return null;
 				}
 				if(lineB == 0 && lineA == 4){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + COLUMBIA_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,LOUGHEED_ID,COLUMBIA_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on Sea Island and stnB is elsewhere in Richmond, or vice versa:
 				if((lineA == 2 && lineB == 3)||(lineB == 2 && lineA == 3)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + BRIDGEPORT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,BRIDGEPORT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Richmond and stnB is in Surrey, or vice versa:
 				if(((lineA == 2 || lineA == 3) && lineB == 0)||((lineB == 2 || lineB == 3) && lineA == 0)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Richmond and stnB is on the Millennium Line, or vice versa:
 				if((lineA == 2 || lineA == 3) && lineB == 1){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,idB};
+					return null;
 				}
 				if((lineB == 2 || lineB == 3) && lineA == 1){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + BROADWAY_ID + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Richmond and stnB is on the Evergreen Line, or vice versa:
 				if((lineA == 2 || lineA == 3) && lineB == 4){
 					legCount = 4;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " +
-											LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,LOUGHEED_ID,idB};
+					return null;
 				}
 				if((lineB == 2 || lineB == 3) && lineA == 4){
 					legCount = 4;
-					String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + BROADWAY_ID + " , " +
-											WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,LOUGHEED_ID,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 			}
 			
@@ -194,8 +186,8 @@ public class TripRouteActivity extends Activity {
 								return dbHelp.queryStationsOfLine(lineA, posA, posB);
 							}else{
 								legCount = 2;
-								String xferQuery = xferBase + idA + " , " + BROADWAY_ID + " , " + idB + " )";
-								return dbHelp.rawQuery(xferQuery, null);
+								xferIds = new int[]{idA,BROADWAY_ID,idB};
+								return null;
 							}
 						}else{
 							legCount = 1;
@@ -213,22 +205,22 @@ public class TripRouteActivity extends Activity {
 				//if stnB is on the Expo Line:
 				if(stnBLines.contains(0)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnB is on the Millennium Line:
 				if(stnBLines.contains(1)){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,idB};
+					return null;
 				}
 				
 				//if stnB is on the Evergreen Line:
 				if(stnBLines.contains(4)){
 					legCount = 4;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,LOUGHEED_ID,idB};
+					return null;
 				}
 			}
 			
@@ -238,22 +230,22 @@ public class TripRouteActivity extends Activity {
 				//if stnA is on the Expo Line:
 				if(stnALines.contains(0)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on the Millennium Line:
 				if(stnALines.contains(1)){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + BROADWAY_ID + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on the Evergreen Line:
 				if(stnALines.contains(4)){
 					legCount = 4;
-					String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + BROADWAY_ID + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,LOUGHEED_ID,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 			}
 			
@@ -266,82 +258,76 @@ public class TripRouteActivity extends Activity {
 				//if stnA is near or past Commercial-Broadway:
 				if(idA < 8){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + BROADWAY_ID + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,BROADWAY_ID,LOUGHEED_ID,idB};
+					return null;
 				}
 				
 				//otherwise:
 				legCount = 2;
-				String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + idB + " )";
-				return dbHelp.rawQuery(xferQuery, null);
+				xferIds = new int[]{idA,LOUGHEED_ID,idB};
+				return null;
 			}
 			
 			if(idB < 8){
 				legCount = 3;
-				String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + BROADWAY_ID + " , " + idB + " )";
-				return dbHelp.rawQuery(xferQuery, null);
+				xferIds = new int[]{idA,LOUGHEED_ID,BROADWAY_ID,idB};
+				return null;
 			}
 			
 			legCount = 2;
-			String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + idB + " )";
-			return dbHelp.rawQuery(xferQuery, null);
+			xferIds = new int[]{idA,LOUGHEED_ID,idB};
+			return null;
 		}
 		
 		protected void onPostExecute(Cursor result){
-			//Toast for testing:
-			String colarray = "{ " + result.getColumnName(0);
-			int colCount = result.getColumnCount();
-			for(int i = 1; i < colCount; ++i){
-				colarray += " , " + result.getColumnName(i);
-			}
-			colarray += " }";
-			Toast.makeText(TripRouteActivity.this, colarray, Toast.LENGTH_SHORT).show();
 			if(legCount == 1){
 				fragman.beginTransaction().add(R.id.container, new TripLegFragment(result)).commit();
 				return;
 			}
-			FragmentInitTask fit = new FragmentInitTask();
-			fit.execute(result);
-		}
-	}
-	
-	class FragmentInitTask extends AsyncTask<Cursor, Void, Void>{
-		
-		protected Void doInBackground(Cursor... params){
-			Cursor stns = params[0];
-			SkytrainOpenHelper dbHelp = new SkytrainOpenHelper(TripRouteActivity.this);
-			stns.moveToFirst();
-			stns.moveToNext();
-			int xferId = stns.getInt(stns.getColumnIndex(SkytrainOpenHelper.STN_ID_COL));
-			int line = dbHelp.findLineWithStations(idA, xferId);
-			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, idA, xferId)).commit();
+			TripLegFragment[] legs = new TripLegFragment[legCount];
+			int xferId = xferIds[1];
+			int line = dbHelp.findLineFromTransfer(xferId, idA);
+			legs[0] = new TripLegFragment(line, idA, xferId);
 			if(legCount == 2){
-				line = dbHelp.findLineWithStations(xferId, idB);
-				fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferId, idB)).commit();
-				return null;
+				line = dbHelp.findLineFromTransfer(xferId, idB);
+				legs[1] = new TripLegFragment(line, xferId, idB);
+				FragmentTransaction fragtxn = fragman.beginTransaction();
+				for(int i = 0;i < legCount;++i){
+					fragtxn.add(R.id.container, legs[i]);
+				}
+				fragtxn.commit();
+				return;
 			}
-			stns.moveToNext();
-			int xferYd = stns.getInt(stns.getColumnIndex(SkytrainOpenHelper.STN_ID_COL));
-			line = dbHelp.findLineWithStations(xferId, xferYd);
-			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferId, xferYd)).commit();
+			int xferYd = xferIds[2];
+			line = dbHelp.findLineFromTransfer(xferId, xferYd);
+			legs[1] = new TripLegFragment(line, xferId, xferYd);
 			if(legCount == 3){
-				line = dbHelp.findLineWithStations(xferYd, idB);
-				fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferYd, idB)).commit();
-				return null;
+				line = dbHelp.findLineFromTransfer(xferYd, idB);
+				legs[2] = new TripLegFragment(line, xferYd, idB);
+				FragmentTransaction fragtxn = fragman.beginTransaction();
+				for(int i = 0;i < legCount;++i){
+					fragtxn.add(R.id.container, legs[i]);
+				}
+				fragtxn.commit();
+				return;
 			}
-			stns.moveToNext();
-			xferId = stns.getInt(stns.getColumnIndex(SkytrainOpenHelper.STN_ID_COL));
-			line = dbHelp.findLineWithStations(xferYd, xferId);
-			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferYd, xferId)).commit();
+			xferId = xferIds[3];
+			line = dbHelp.findLineFromTransfer(xferYd, xferId);
+			legs[2] = new TripLegFragment(line, xferYd, xferId);
 			//we'll never get more than four legs in a single trip.
-			line = dbHelp.findLineWithStations(xferId, idB);
-			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferId, idB));
-			return null;
+			line = dbHelp.findLineFromTransfer(xferId, idB);
+			legs[3] = new TripLegFragment(line, xferId, idB);
+			FragmentTransaction fragtxn = fragman.beginTransaction();
+			for(int i = 0;i < legCount;++i){
+				fragtxn.add(R.id.container, legs[i]);
+			}
+			fragtxn.commit();
 		}
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		dbHelp = new SkytrainOpenHelper(this);
 		idA = getIntent().getIntExtra(TripFormActivity.EXTRA_STNA_ID, -1);
 		idB = getIntent().getIntExtra(TripFormActivity.EXTRA_STNB_ID, -1);
 		legsDone = 0;
@@ -388,7 +374,6 @@ public class TripRouteActivity extends Activity {
 		private boolean skipQuery;
 		private Cursor data;
 		private int line, stnA, stnB;
-		private SkytrainOpenHelper dbHelp;
 		private TextView boardingInstr;
 		
 		final String[] from = {SkytrainOpenHelper.STN_NAME_COL};
@@ -414,7 +399,6 @@ public class TripRouteActivity extends Activity {
 		}
 		
 		public TripLegFragment(int line, int stnA, int stnB) {
-			dbHelp = new SkytrainOpenHelper(TripRouteActivity.this);
 			this.line = line;
 			this.stnA = stnA;
 			this.stnB = stnB;
