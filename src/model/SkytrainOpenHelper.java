@@ -171,6 +171,17 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		return lines;
 	}
 	
+	public int findLineWithStations(int stnA, int stnB){
+		db = (db == null)?getReadableDatabase():db;
+		String FREQ = "count(*) AS freq";
+		String[] cols = {INDEX_LINE_COL,INDEX_STN_COL,FREQ};
+		String where = INDEX_STN_COL + " IN ( " + stnA + " , " + stnB + " )";
+		String order = "freq DESC";
+		Cursor crs = db.query(INDEX_TBL_NAME, cols, where, null, INDEX_LINE_COL, null, order);
+		crs.moveToFirst();
+		return crs.getInt(crs.getColumnIndex(INDEX_LINE_COL));
+	}
+	
 	public Cursor query(String table, String[] columns, String where, String[] whereArgs,
 			String groupBy, String having, String orderBy){
 		db = (db == null)?getReadableDatabase():db;
@@ -201,15 +212,40 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		String posAq = "SELECT " + INDEX_POS_COL + " FROM " + INDEX_TBL_NAME + " WHERE " + INDEX_LINE_COL + " = " + lineID +
 				" AND " + INDEX_STN_COL + " = " + stnA;
 		Cursor posAc = rawQuery(posAq, null);
+		if(posAc.getCount() == 0)return null;//this shouldn't happen, but you never know.
+		int[] posnsA = new int[posAc.getCount()];
 		posAc.moveToFirst();
-		int posA = posAc.getInt(posAc.getColumnIndex(INDEX_POS_COL));
+		for(int i = 0;i < posnsA.length;++i){
+			posnsA[i] = posAc.getInt(posAc.getColumnIndex(INDEX_POS_COL));
+			posAc.moveToNext();
+		}
 		posAc.close();
 		String posBq = "SELECT " + INDEX_POS_COL + " FROM " + INDEX_TBL_NAME + " WHERE " + INDEX_LINE_COL + " = " + lineID +
 				" AND " + INDEX_STN_COL + " = " + stnB;
 		Cursor posBc = rawQuery(posBq, null);
+		if(posBc.getCount() == 0)return null;//can't happen
+		int[] posnsB = new int[posBc.getCount()];
 		posBc.moveToFirst();
-		int posB = posBc.getInt(posBc.getColumnIndex(INDEX_POS_COL));
-		return queryStationsOfLine(lineID, posA, posB);
+		for(int i = 0;i < posnsB.length;++i){
+			posnsB[i] = posBc.getInt(posBc.getColumnIndex(INDEX_POS_COL));
+			posBc.moveToNext();
+		}
+		posBc.close();
+		if(posnsA.length == 1 && posnsB.length == 1)return queryStationsOfLine(lineID, posnsA[0], posnsB[0]);
+		int dA = 0;
+		int dB = 0;
+		int diff = Integer.MAX_VALUE;
+		for(int iA = 0;iA < posnsA.length;++iA){
+			for(int iB = 0;iB < posnsB.length;++iB){
+				int del = Math.abs(posnsA[iA] - posnsB[iB]);
+				diff = (del < diff)?del:diff;
+				if(diff == del){
+					dA = iA;
+					dB = iB;
+				}
+			}
+		}
+		return queryStationsOfLine(lineID, posnsA[dA], posnsB[dB]);
 	}
 	
 	public Cursor rawQuery(String query, String[] bindings){

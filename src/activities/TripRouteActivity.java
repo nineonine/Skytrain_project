@@ -16,8 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,8 +30,7 @@ public class TripRouteActivity extends Activity {
 	public static final int LOUGHEED_ID = 22;
 	public static final int BRIDGEPORT_ID = 40;
 	
-	private static final String lineQuery = "SELECT " + SkytrainOpenHelper.INDEX_LINE_COL + ", " + SkytrainOpenHelper.INDEX_STN_COL +
-			", " + SkytrainOpenHelper.INDEX_POS_COL + " FROM " + SkytrainOpenHelper.INDEX_TBL_NAME + " WHERE " + SkytrainOpenHelper.INDEX_STN_COL +
+	private static final String lineQuery = "SELECT * FROM " + SkytrainOpenHelper.INDEX_TBL_NAME + " WHERE " + SkytrainOpenHelper.INDEX_STN_COL +
 			" IN ( CAST( ? AS INTEGER), CAST( ? AS INTEGER) )";
 
 	private FragmentManager fragman;
@@ -39,8 +38,10 @@ public class TripRouteActivity extends Activity {
 	private int idB;
 	private int legCount;
 	private int legsDone;
+//	private int fareZone; //1-3 standard fare of that many zones; 4=Sea Island to Richmond ($5 + 1 zone); 5=Sea Island to elsewhere ($5 + 2 zones)
+	private int duration;
+	private boolean unsetTime;
 	private ProgressDialog pdlg;
-//	private TripLegFragment[] legs;
 	
 	private class LineQueryTask extends QueryAsyncTask{
 		
@@ -299,10 +300,45 @@ public class TripRouteActivity extends Activity {
 				fragman.beginTransaction().add(R.id.container, new TripLegFragment(result)).commit();
 				return;
 			}
+			FragmentInitTask fit = new FragmentInitTask();
+			fit.execute(result);
 		}
 	}
 	
-	
+	class FragmentInitTask extends AsyncTask<Cursor, Void, Void>{
+		
+		protected Void doInBackground(Cursor... params){
+			Cursor stns = params[0];
+			SkytrainOpenHelper dbHelp = new SkytrainOpenHelper(TripRouteActivity.this);
+			stns.moveToFirst();
+			stns.moveToNext();
+			int xferId = stns.getInt(stns.getColumnIndex(SkytrainOpenHelper.STN_ID_COL));
+			int line = dbHelp.findLineWithStations(idA, xferId);
+			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, idA, xferId)).commit();
+			if(legCount == 2){
+				line = dbHelp.findLineWithStations(xferId, idB);
+				fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferId, idB)).commit();
+				return null;
+			}
+			stns.moveToNext();
+			int xferYd = stns.getInt(stns.getColumnIndex(SkytrainOpenHelper.STN_ID_COL));
+			line = dbHelp.findLineWithStations(xferId, xferYd);
+			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferId, xferYd)).commit();
+			if(legCount == 3){
+				line = dbHelp.findLineWithStations(xferYd, idB);
+				fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferYd, idB)).commit();
+				return null;
+			}
+			stns.moveToNext();
+			xferId = stns.getInt(stns.getColumnIndex(SkytrainOpenHelper.STN_ID_COL));
+			line = dbHelp.findLineWithStations(xferYd, xferId);
+			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferYd, xferId)).commit();
+			//we'll never get more than four legs in a single trip.
+			line = dbHelp.findLineWithStations(xferId, idB);
+			fragman.beginTransaction().add(R.id.container, new TripLegFragment(line, xferId, idB));
+			return null;
+		}
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -352,7 +388,8 @@ public class TripRouteActivity extends Activity {
 		private boolean skipQuery;
 		private Cursor data;
 		private int line, stnA, stnB;
-		private ListView legView;
+		private SkytrainOpenHelper dbHelp;
+		private TextView boardingInstr;
 		
 		final String[] from = {SkytrainOpenHelper.STN_NAME_COL};
 		final int[] to = {android.R.id.text1};
@@ -361,12 +398,13 @@ public class TripRouteActivity extends Activity {
 
 			@Override
 			protected Cursor doInBackground(Void... params) {
-				SkytrainOpenHelper dbHelp = new SkytrainOpenHelper(TripRouteActivity.this);
 				return dbHelp.queryLineByStationId(line, stnA, stnB);
 			}
 
 			@Override
 			protected void onPostExecute(Cursor result) {
+				data = result;
+				setBoardingInstr();
 				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.activity_list_item, result, from, to, 0);
 				setListAdapter(sca);
 				legsDone++;
@@ -376,6 +414,7 @@ public class TripRouteActivity extends Activity {
 		}
 		
 		public TripLegFragment(int line, int stnA, int stnB) {
+			dbHelp = new SkytrainOpenHelper(TripRouteActivity.this);
 			this.line = line;
 			this.stnA = stnA;
 			this.stnB = stnB;
@@ -387,11 +426,102 @@ public class TripRouteActivity extends Activity {
 			skipQuery = true;
 		}
 		
+		private void setBoardingInstr(){
+			int lineCX = data.getColumnIndex(SkytrainOpenHelper.INDEX_LINE_COL);
+			int posCX = data.getColumnIndex(SkytrainOpenHelper.INDEX_POS_COL);
+			data.moveToFirst();
+			int myline = data.getInt(lineCX);
+			int posbegin = data.getInt(posCX);
+			data.moveToLast();
+			int posfinal = data.getInt(posCX);
+			String lineName;
+			String terminus;
+			if(posbegin < posfinal){
+				switch(myline){
+				case 0:
+					if(posfinal < 16){
+						lineName = "Expo Line to King George or Millennium";
+						terminus = "VCC-Clark";
+					}else{
+						lineName = "Expo";
+						terminus = "King George";
+					}
+					break;
+				case 1:
+					if(posfinal < 16){
+						lineName = "Expo Line to King George or Millennium";
+						terminus = "VCC-Clark";
+					}else{
+						lineName = "Millennium";
+						terminus = "VCC-Clark";
+					}
+					break;
+				case 2:
+					lineName = "Canada";
+					if(posfinal < 10){
+						terminus = "YVR-Airport or Richmond-Brighouse";
+					}else{
+						terminus = "YVR-Airport";
+					}
+					break;
+				case 3:
+					lineName = "Canada";
+					if(posfinal < 10){
+						terminus = "YVR-Airport or Richmond-Brighouse";
+					}else{
+						terminus = "Richmond-Brighouse";
+					}
+					break;
+				case 4:
+					lineName = "Evergreen";
+					terminus = "Lafarge Lake-Douglas";
+					break;
+				default:
+					lineName = "Most Convenient";
+					terminus = "your destination";
+					break;
+				}
+			}else{
+				switch(myline){
+				case 0:
+					if(posbegin < 16){
+						lineName = "Expo or Millennium";
+					}else{
+						lineName = "Expo";
+					}
+					terminus = "Waterfront";
+					break;
+				case 1:
+					if(posbegin < 16){
+						lineName = "Expo or Millennium";
+					}else{
+						lineName = "Millennium";
+					}
+					terminus = "Waterfront";
+					break;
+				case 2:
+				case 3:
+					lineName = "Canada";
+					terminus = "Waterfront";
+					break;
+				case 4:
+					lineName = "Evergreen";
+					terminus = "Lougheed Town Centre";
+					break;
+				default:
+					lineName = "Most Convenient";
+					terminus = "your destination";
+					break;
+				}
+			}
+			boardingInstr.setText(getResources().getString(R.string.boarding_instr_msg, lineName, terminus));
+		}
+		
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-			View rootView = inflater.inflate(android.R.layout.list_content, container, false);
-			legView = (ListView)rootView.findViewById(android.R.id.list);
-			legView.setScrollContainer(false);
+			View rootView = inflater.inflate(R.layout.fragment_trip_route, container, false);
+			boardingInstr = (TextView)rootView.findViewById(R.id.legBeginTxt);
 			if(skipQuery){
+				setBoardingInstr();
 				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.activity_list_item, data, from, to, 0);
 				setListAdapter(sca);
 				pdlg.dismiss();

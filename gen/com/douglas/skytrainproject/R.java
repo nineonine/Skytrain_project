@@ -43,15 +43,13 @@ public final class R {
     }
     public static final class id {
         public static final int action_settings=0x7f090017;
-        public static final int alphabet_letter=0x7f090007;
-        public static final int board_dir=0x7f090006;
+        public static final int alphabet_letter=0x7f090008;
         public static final int btnFindRoute=0x7f090004;
         public static final int button_search=0x7f09000e;
         public static final int container=0x7f090005;
         public static final int input_search_query=0x7f09000f;
         public static final int lblChoose=0x7f090001;
-        public static final int legEndText=0x7f090009;
-        public static final int legListView=0x7f090008;
+        public static final int legBeginTxt=0x7f090009;
         public static final int linearLayout1=0x7f090011;
         public static final int listview=0x7f09000a;
         public static final int rel_my_search=0x7f09000b;
@@ -65,6 +63,8 @@ public final class R {
         public static final int stationLocationTitle=0x7f090015;
         public static final int stationName=0x7f090013;
         public static final int tvname=0x7f09000d;
+        public static final int txt_fare=0x7f090006;
+        public static final int txt_time=0x7f090007;
         public static final int vgTripForm=0x7f090000;
     }
     public static final class layout {
@@ -84,6 +84,7 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f060005;
         public static final int app_name=0x7f060000;
+        public static final int boarding_instr_msg=0x7f06000c;
         public static final int go_nowhere_msg=0x7f060009;
         public static final int hello_world=0x7f060004;
         public static final int progress_form_msg=0x7f060008;
