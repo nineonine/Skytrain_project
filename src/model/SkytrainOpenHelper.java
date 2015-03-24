@@ -68,6 +68,15 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			INDEX_POS_COL + " INTEGER NOT NULL ON CONFLICT FAIL)";
 	private static ContentValues[] indexValues = makeIndexValues();
 	
+	public static String TIMES_TBL_NAME = "TravelTimes";
+	public static String TIMES_STN_A_COL = "station_idA";
+	public static String TIMES_STN_B_COL = "station_idB";
+	public static String TIMES_DURATION_COL = "duration";
+	String TIMES_TBL_CREATE = "CREATE TABLE " + TIMES_TBL_NAME + " (" +
+			TIMES_STN_A_COL + " INTEGER NOT NULL REFERENCES " + STN_TBL_NAME + "(" +
+			STN_ID_COL + "), " + TIMES_STN_B_COL + " INTEGER NOT NULL REFERENCES " +
+			STN_TBL_NAME + "(" + STN_ID_COL + "), " + TIMES_DURATION_COL + " FLOAT NOT NULL";
+	
 	private static String fkPragma = "PRAGMA foreign_keys = ON";
 	
 	private SQLiteDatabase db;
