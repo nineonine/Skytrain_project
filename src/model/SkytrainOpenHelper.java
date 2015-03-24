@@ -72,10 +72,64 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	public static String TIMES_STN_A_COL = "station_idA";
 	public static String TIMES_STN_B_COL = "station_idB";
 	public static String TIMES_DURATION_COL = "duration";
-	String TIMES_TBL_CREATE = "CREATE TABLE " + TIMES_TBL_NAME + " (" +
+	private static String TIMES_TBL_CREATE = "CREATE TABLE " + TIMES_TBL_NAME + " (" +
 			TIMES_STN_A_COL + " INTEGER NOT NULL REFERENCES " + STN_TBL_NAME + "(" +
 			STN_ID_COL + "), " + TIMES_STN_B_COL + " INTEGER NOT NULL REFERENCES " +
-			STN_TBL_NAME + "(" + STN_ID_COL + "), " + TIMES_DURATION_COL + " FLOAT NOT NULL";
+			STN_TBL_NAME + "(" + STN_ID_COL + "), " + TIMES_DURATION_COL +
+			" INTEGER NOT NULL, PRIMARY KEY (" + TIMES_STN_A_COL + ", " + TIMES_STN_B_COL +
+			"), CHECK (" + TIMES_STN_B_COL + " != " + TIMES_STN_A_COL + ") )";
+	private static int[][] expoTimes = {
+			{2, 3, 4, 6, 9,12,13,15,17,18,20,23,25,29,30,33,36,37,39},
+			   {1, 2, 4, 7,10,11,13,15,16,18,21,23,27,28,31,34,35,37},
+			      {1, 3, 6, 9,10,12,14,15,17,20,22,26,27,30,33,34,36},
+			         {2, 5, 8, 9,11,13,14,16,19,21,25,26,29,32,33,35},
+			            {3, 6, 7, 9,11,12,14,17,19,23,24,27,30,31,33},
+			               {3, 4, 6, 8, 9,11,14,16,20,21,24,27,28,30},
+			                  {1, 3, 5, 6, 8,11,13,17,18,21,24,25,27},
+			                     {2, 4, 5, 7,10,12,16,17,20,23,24,26},
+			                        {2, 3, 5, 8,10,14,15,18,21,22,24},
+			                           {1, 3, 6, 8,12,13,16,19,20,22},
+			                              {2, 5, 7,11,12,15,18,19,21},
+			                                 {3, 5, 9,10,13,16,17,19},
+			                                    {2, 6, 7,10,13,14,16},
+			                                       {4, 5, 8,11,12,14},
+			                                          {1, 4, 7, 8,10},
+			                                             {3, 6, 7, 9},
+			                                                {3, 4, 6},
+			                                                   {1, 3},
+			                                                      {2}};
+	private static int[][] millenTimes = {
+			{3, 5, 8,10,12,14,16,18,19,22,23,26,27},
+			   {2, 5, 7, 9,11,13,15,16,19,20,23,24},
+			      {3, 5, 7, 9,11,13,14,17,18,21,22},
+			         {2, 4, 6, 8,10,11,14,15,18,19},
+			            {2, 4, 6, 8, 9,12,13,16,17},
+			               {2, 4, 6, 7,10,11,14,15},
+			                  {2, 4, 5, 8, 9,12,13},
+			                     {2, 3, 6, 7,10,11},
+			                        {1, 4, 5, 8, 9},
+			                           {3, 4, 7, 8},
+			                              {1, 4, 5},
+			                                 {3, 4},
+			                                    {1}};
+	private static int[][] brighouseTimes = {
+			{2, 4, 6, 7, 9,12,14,17,19,21,23,25},
+			   {2, 4, 5, 7,10,12,15,17,19,21,23},
+			      {2, 3, 5, 8,10,13,15,17,19,21},
+			         {1, 3, 6, 8,11,13,15,17,19},
+			            {2, 5, 7,10,12,14,16,18},
+			               {3, 5, 8,10,12,14,16},
+			                  {2, 5, 7, 9,11,13},
+			                     {3, 5, 7, 9,11},
+			                        {2, 4, 6, 8},
+			                           {2, 4, 6},
+			                              {2, 4},
+			                                 {2}};
+	private static int[][] timesToSeaIsland = {
+			{22,20,18,16,15,13,10, 8, 5, 3},
+			{24,22,20,18,17,15,12,10, 7, 5, 2},
+			{26,24,22,20,19,17,14,12, 9, 7, 4, 2}};
+	private static ContentValues[] timeValues = buildTimeValues();
 	
 	private static String fkPragma = "PRAGMA foreign_keys = ON";
 	
@@ -93,6 +147,7 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			db.execSQL(LINE_TBL_CREATE);
 			db.execSQL(STN_TBL_CREATE);
 			db.execSQL(INDEX_TBL_CREATE);
+			db.execSQL(TIMES_TBL_CREATE);
 			for(ContentValues line : lineValues){
 				db.insert(LINE_TBL_NAME, null, line);
 			}
@@ -101,6 +156,9 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			}
 			for(ContentValues index : indexValues){
 				db.insert(INDEX_TBL_NAME, null, index);
+			}
+			for(ContentValues time : timeValues){
+				db.insert(TIMES_TBL_NAME, null, time);
 			}
 			db.setTransactionSuccessful();
 		}finally{
@@ -331,7 +389,7 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		return stns;
 	}
 	
-	private static ContentValues valuesOfTuple(int line, int stn, int index){
+	private static ContentValues valuesOfPosnTuple(int line, int stn, int index){
 		ContentValues res = new ContentValues();
 		res.put(INDEX_LINE_COL, line);
 		res.put(INDEX_STN_COL, stn);
@@ -347,119 +405,138 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		int i = 0;
 		//Expo-Millennium shared track:
 		while(i < 16){
-			accum.add(valuesOfTuple(0, i, i));
-			accum.add(valuesOfTuple(1, i, i));
+			accum.add(valuesOfPosnTuple(0, i, i));
+			accum.add(valuesOfPosnTuple(1, i, i));
 			++i;
 		}
 		//Expo track:
 		while(i < 20){
-			accum.add(valuesOfTuple(0, i, i));
+			accum.add(valuesOfPosnTuple(0, i, i));
 			++i;
 		}
 		//Millennium track up to Renfrew:
 		int posOffset = 4;
 		while(i < 31){
-			accum.add(valuesOfTuple(1, i, i - posOffset));
+			accum.add(valuesOfPosnTuple(1, i, i - posOffset));
 			++i;
 		}
 		//Commercial-Broadway Millenium platforms:
-		accum.add(valuesOfTuple(1, 5, i - posOffset));
+		accum.add(valuesOfPosnTuple(1, 5, i - posOffset));
 		--posOffset;
 		//VCC-Clark:
-		accum.add(valuesOfTuple(1, i, i - posOffset));
+		accum.add(valuesOfPosnTuple(1, i, i - posOffset));
 		//Waterfront Canada platforms:
-		accum.add(valuesOfTuple(2, 0, 0));
-		accum.add(valuesOfTuple(3, 0, 0));
+		accum.add(valuesOfPosnTuple(2, 0, 0));
+		accum.add(valuesOfPosnTuple(3, 0, 0));
 		//Canada Line shared track:
 		posOffset = i;
 		++i;
 		while(i < 41){
-			accum.add(valuesOfTuple(2, i, i - posOffset));
-			accum.add(valuesOfTuple(3, i, i - posOffset));
+			accum.add(valuesOfPosnTuple(2, i, i - posOffset));
+			accum.add(valuesOfPosnTuple(3, i, i - posOffset));
 			++i;
 		}
 		//Canada Line Airport:
 		while(i < 44){
-			accum.add(valuesOfTuple(2, i, i - posOffset));
+			accum.add(valuesOfPosnTuple(2, i, i - posOffset));
 			++i;
 		}
 		//Canada Line Richmond:
 		posOffset += 3;
 		while(i < 47){
-			accum.add(valuesOfTuple(3, i, i - posOffset));
+			accum.add(valuesOfPosnTuple(3, i, i - posOffset));
 			++i;
 		}
 		//Lougheed Evergreen platforms:
-		accum.add(valuesOfTuple(4, 22, 0));
+		accum.add(valuesOfPosnTuple(4, 22, 0));
 		//Evergreen Line track:
 		posOffset = i - 1;
 		while(i < 53){
-			accum.add(valuesOfTuple(4, i, i - posOffset));
+			accum.add(valuesOfPosnTuple(4, i, i - posOffset));
 			++i;
 		}
 		ContentValues[] result = new ContentValues[accum.size()];
 		return accum.toArray(result);
 	}
 	
-	public static ContentValues[] buildIndexValues(){
+	private static ContentValues valuesOfTimeTuple(int stnA, int stnB, int time){
+		ContentValues res = new ContentValues();
+		res.put(TIMES_STN_A_COL, stnA);
+		res.put(TIMES_STN_B_COL, stnB);
+		res.put(TIMES_DURATION_COL, time);
+		return res;
+	}
+	
+	private static ContentValues[] buildTimeValues(){
 		ArrayList<ContentValues> accum = new ArrayList<ContentValues>();
-		//Let's do the Evergreen Line first
-		int lineIx = 4;
-		//Inbound terminus is Lougheed, which should have ID 22
-		accum.add(valuesOfTuple(lineIx, 22, 0));
-		//The rest of the Evergreen line should have IDs 47-52 in order
-		int idOffset = 46;
-		for(int i = 1;i < 7;++i){
-			accum.add(valuesOfTuple(lineIx, idOffset + i, i));
+		
+		//Expo Times:
+		for(int i = 0;i < 19;++i){
+			for(int j = i;j < 19; ++j){
+				accum.add(valuesOfTimeTuple(i, j + 1, expoTimes[i][j - i]));
+			}
 		}
-		//The joined section of the Expo/Millennium Line:
-		//This'll be easy, because here ID==index
-		//up to Columbia, ID 15:
-		for(int i = 0;i < 16;++i){
-			//Expo:
-			accum.add(valuesOfTuple(0, i, i));
-			//Millennium:
-			accum.add(valuesOfTuple(1, i, i));
+		int idOffset = 20;
+		//Millennium times from Columbia:
+		int columID = activities.TripRouteActivity.COLUMBIA_ID;
+		int bdwyID = activities.TripRouteActivity.BROADWAY_ID;
+		columLoop:for(int i = 0;i < 13;++i){
+			if(i == 11){
+				accum.add(valuesOfTimeTuple(columID,bdwyID,millenTimes[0][11]));
+				continue;
+			}
+			if(i == 12){
+				accum.add(valuesOfTimeTuple(columID, i + idOffset, millenTimes[0][i]));
+				break columLoop;
+			}
+			accum.add(valuesOfTimeTuple(columID, i + 1 + idOffset, millenTimes[0][i]));
 		}
-		lineIx = 0;
-		//the rest of the Expo line is also ID==index
-		for(int i = 16;i < 20;++i){
-			accum.add(valuesOfTuple(lineIx, i, i));
+		//other Millennium times up to from Renfrew:
+		millenLoop:for(int i = 0;i < 11;++i){
+			for(int j = i;j < 12;++j){
+				if(j == 10){
+					accum.add(valuesOfTimeTuple(idOffset + i, bdwyID, millenTimes[i + 1][j - i]));
+					continue;
+				}
+				if(j == 11){
+					accum.add(valuesOfTimeTuple(idOffset + i, idOffset + j, millenTimes[i + 1][j - i]));
+					continue millenLoop;
+				}
+				accum.add(valuesOfTimeTuple(idOffset + i, 1 + idOffset + j, millenTimes[i + 1][j - i]));
+			}
 		}
-		idOffset = 20;
-		int posOffset = 16;
-		lineIx = 1;
-		//the rest of the Millennium Line:
+		//time from Commercial-Broadway to VCC-Clark:
+		accum.add(valuesOfTimeTuple(bdwyID, 31, millenTimes[12][0]));
+		idOffset = 31;
+		//Canada line times between Waterfront and Bridgeport:
+		for(int i = 0;i < 9;++i){
+			for(int j = i;j < 9;++j){
+				accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,j + 1 + idOffset,brighouseTimes[i][j - i]));
+			}
+		}
+		//Canada Line times from Waterfront to Templeton:
+		for(int i = 0;i < 10;++i){
+			accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,idOffset + 10,timesToSeaIsland[0][i]));
+		}
+		//to Sea Island Centre:
 		for(int i = 0;i < 11;++i){
-			accum.add(valuesOfTuple(lineIx, i + idOffset, i + posOffset));
+			accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,idOffset + 11,timesToSeaIsland[1][i]));
 		}
-		//Commercial-Broadway appears twice in the Millennium Line.
-		//Its ID is 5.
-		accum.add(valuesOfTuple(lineIx, 5, posOffset + 11));
-		accum.add(valuesOfTuple(lineIx, idOffset + 11, posOffset + 12));
-		//The two branches of the Canada Line have the same kind of
-		//arrangement as the Expo and Millennium Lines.
-		//The Canada Line's sole inbound terminus is Waterfront, ID 0:
-		accum.add(valuesOfTuple(2, 0, 0));
-		accum.add(valuesOfTuple(3, 0, 0));
-		idOffset = idOffset + 11;
-		for(int i = 1;i < 10;++i){
-			accum.add(valuesOfTuple(2, idOffset + i, i));
-			accum.add(valuesOfTuple(3, idOffset + i, i));
+		//to YVR-Airport:
+		for(int i = 0;i < 12;++i){
+			accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,idOffset + 12,timesToSeaIsland[2][i]));
 		}
-		idOffset += 10;
-		posOffset = 10;
-		//Airport branch:
+		//Canada Line times Bridgeport to Brighouse:
+		int bridgeID = activities.TripRouteActivity.BRIDGEPORT_ID;
+		int arrayOffset = 9;
+		idOffset = bridgeID + 3;
 		for(int i = 0;i < 3;++i){
-			accum.add(valuesOfTuple(2, idOffset + i, posOffset + i));
+			accum.add(valuesOfTimeTuple(bridgeID, idOffset + i, brighouseTimes[arrayOffset][i]));
 		}
-		idOffset += 3;
-		//Brighouse branch:
-		for(int i = 0;i < 3;++i){
-			accum.add(valuesOfTuple(3, idOffset + i, posOffset + i));
-		}
+		accum.add(valuesOfTimeTuple(idOffset, idOffset + 1, brighouseTimes[arrayOffset + 1][0]));
+		accum.add(valuesOfTimeTuple(idOffset, idOffset + 2, brighouseTimes[arrayOffset + 1][1]));
+		accum.add(valuesOfTimeTuple(idOffset + 1, idOffset + 2, brighouseTimes[arrayOffset + 2][0]));
 		ContentValues[] result = new ContentValues[accum.size()];
 		return accum.toArray(result);
 	}
-
 }
