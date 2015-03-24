@@ -66,9 +66,11 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			" (" + INDEX_LINE_COL + " INTEGER NOT NULL REFERENCES " + LINE_TBL_NAME + "(" + LINE_ID_COL + "), "+
 			INDEX_STN_COL + " INTEGER NOT NULL REFERENCES " + STN_TBL_NAME + "(" + STN_ID_COL + "), " +
 			INDEX_POS_COL + " INTEGER NOT NULL ON CONFLICT FAIL)";
-	private static ContentValues[] indexValues = buildIndexValues();
+	private static ContentValues[] indexValues = makeIndexValues();
 	
 	private static String fkPragma = "PRAGMA foreign_keys = ON";
+	
+	private SQLiteDatabase db;
 	
 	public SkytrainOpenHelper(Context context){
 		super(context, DBNAME, null, DBVER);
@@ -131,7 +133,7 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	 * @return
 	 */
 	public Station[] queryForStationArray(String where, String... binding){
-		SQLiteDatabase db = getReadableDatabase();
+		db = (db == null)?getReadableDatabase():db;
 		Cursor stnQuery = db.query(STN_TBL_NAME, null, where, binding, null, null, null);
 		int nameX = stnQuery.getColumnIndex(STN_NAME_COL);
 		int descX = stnQuery.getColumnIndex(STN_DESC_COL);
@@ -169,9 +171,70 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		return lines;
 	}
 	
+	public int findLineWithStations(int stnA, int stnB){
+		db = (db == null)?getReadableDatabase():db;
+		String[] cols = {INDEX_LINE_COL,INDEX_STN_COL};
+		String where = INDEX_STN_COL + " = CAST(? AS INTEGER)";
+		String[] whereArgs = {String.valueOf(stnA)};
+		Cursor crs = db.query(true, INDEX_TBL_NAME, cols, where, whereArgs, null, null, null, null);
+		int[] lines = new int[crs.getCount()];
+		crs.moveToFirst();
+		for(int i = 0;i < lines.length;++i){
+			lines[i] = crs.getInt(crs.getColumnIndex(INDEX_LINE_COL));
+		}
+		crs.close();
+		where = INDEX_STN_COL + " = CAST(? AS INTEGER)";
+		whereArgs[0] = String.valueOf(stnB);
+		crs = db.query(true, INDEX_TBL_NAME, cols, where, whereArgs, null, null, null, null);
+		for(int i = 0;i < crs.getCount();++i){
+			crs.moveToPosition(i);
+			int lineB = crs.getInt(crs.getColumnIndex(INDEX_LINE_COL));
+			for(int j = 0;j < lines.length;++j){
+				if(lines[j] == lineB)return lineB;
+			}
+		}
+		crs.close();
+		return -1;
+	}
+	
+	public int findLineFromTransfer(int xferId, int otherId){
+		switch(xferId){
+		case activities.TripRouteActivity.BROADWAY_ID:
+			if(otherId < 20)return 0;
+			if(otherId < 32)return 1;
+			return -1;
+		case activities.TripRouteActivity.WATERFRONT_ID:
+			if(otherId < 20)return 0;
+			if(otherId < 32)return 1;
+			if(otherId < 44)return 2;
+			if(otherId < 47)return 3;
+			return -1;
+		case activities.TripRouteActivity.BRIDGEPORT_ID:
+			if(otherId == 0)return 2;
+			if(otherId < 32)return -1;
+			if(otherId < 44)return 2;
+			if(otherId < 47)return 3;
+			return -1;
+		case activities.TripRouteActivity.COLUMBIA_ID:
+			if(otherId < 20)return 0;
+			if(otherId < 32)return 1;
+			return -1;
+		case activities.TripRouteActivity.LOUGHEED_ID:
+			if(otherId < 20){
+				if(otherId > 15)return -1;
+				return 1;
+			}
+			if(otherId < 32)return 1;
+			if(otherId < 47)return -1;
+			return 4;
+		default:
+			return -1;
+		}
+	}
+	
 	public Cursor query(String table, String[] columns, String where, String[] whereArgs,
 			String groupBy, String having, String orderBy){
-		SQLiteDatabase db = getReadableDatabase();
+		db = (db == null)?getReadableDatabase():db;
 		return db.query(table, columns, where, whereArgs, groupBy, having, orderBy);
 	}
 	
@@ -180,24 +243,63 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	}
 	
 	public Cursor queryStationsOfLine(int lineID, Integer from, Integer to){
-		String qstr = "SELECT * FROM " + STN_TBL_NAME + " NATURAL JOIN " + INDEX_TBL_NAME + " WHERE " + INDEX_LINE_COL + " = CAST( ? AS INTEGER)";
+		String qstr = "SELECT " + STN_ID_COL + " , " + INDEX_STN_COL + " , " + STN_NAME_COL + " , " + STN_ZONE_COL + " , " +
+						INDEX_LINE_COL + " , " + INDEX_POS_COL + " FROM " + STN_TBL_NAME + " JOIN " + INDEX_TBL_NAME + " ON " +
+						STN_ID_COL + "=" + INDEX_STN_COL + " WHERE " + INDEX_LINE_COL + " = CAST( ? AS INTEGER)";
 		if(from != null && to != null){
 			qstr = qstr + " AND " + INDEX_POS_COL + " BETWEEN CAST( ? AS INTEGER) AND CAST( ? AS INTEGER)";
 			if(from < to){
 				qstr = qstr + " ORDER BY " + INDEX_POS_COL + " ASC";
 			}else{
 				qstr = qstr + " ORDER BY " + INDEX_POS_COL + " DESC";
-				int tos = to;
-				to = from;
-				from = tos;
 			}
 		}
-		String[] bindings = {String.valueOf(lineID), String.valueOf(from), String.valueOf(to)};
+		String[] bindings = {String.valueOf(lineID), String.valueOf((from<to)?from:to), String.valueOf((from<to)?to:from)};
 		return rawQuery(qstr, bindings);
 	}
 	
+	public Cursor queryLineByStationId(int lineID, int stnA, int stnB){
+		String posAq = "SELECT " + INDEX_POS_COL + " , " + INDEX_LINE_COL + " , " + INDEX_STN_COL + " FROM " + INDEX_TBL_NAME +
+				" WHERE " + INDEX_LINE_COL + " = " + lineID + " AND " + INDEX_STN_COL + " = " + stnA;
+		Cursor posAc = rawQuery(posAq, null);
+		if(posAc.getCount() == 0)throw new NullPointerException("The line doesn't contain stnA!");//this shouldn't happen, but you never know.
+		int[] posnsA = new int[posAc.getCount()];
+		posAc.moveToFirst();
+		for(int i = 0;i < posnsA.length;++i){
+			posnsA[i] = posAc.getInt(posAc.getColumnIndex(INDEX_POS_COL));
+			posAc.moveToNext();
+		}
+		posAc.close();
+		String posBq = "SELECT " + INDEX_POS_COL + " , " + INDEX_LINE_COL + " , " + INDEX_STN_COL + " FROM " + INDEX_TBL_NAME +
+				" WHERE " + INDEX_LINE_COL + " = " + lineID + " AND " + INDEX_STN_COL + " = " + stnB;
+		Cursor posBc = rawQuery(posBq, null);
+		if(posBc.getCount() == 0)throw new NullPointerException("The line doesn't contain stnB!");//can't happen
+		int[] posnsB = new int[posBc.getCount()];
+		posBc.moveToFirst();
+		for(int i = 0;i < posnsB.length;++i){
+			posnsB[i] = posBc.getInt(posBc.getColumnIndex(INDEX_POS_COL));
+			posBc.moveToNext();
+		}
+		posBc.close();
+		if(posnsA.length == 1 && posnsB.length == 1)return queryStationsOfLine(lineID, posnsA[0], posnsB[0]);
+		int dA = 0;
+		int dB = 0;
+		int diff = Integer.MAX_VALUE;
+		for(int iA = 0;iA < posnsA.length;++iA){
+			for(int iB = 0;iB < posnsB.length;++iB){
+				int del = Math.abs(posnsA[iA] - posnsB[iB]);
+				diff = (del < diff)?del:diff;
+				if(diff == del){
+					dA = iA;
+					dB = iB;
+				}
+			}
+		}
+		return queryStationsOfLine(lineID, posnsA[dA], posnsB[dB]);
+	}
+	
 	public Cursor rawQuery(String query, String[] bindings){
-		SQLiteDatabase db = getReadableDatabase();
+		db = (db == null)?getReadableDatabase():db;
 		return db.rawQuery(query, bindings);
 	}
 	
@@ -228,7 +330,69 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		return res;
 	}
 	
-	private static ContentValues[] buildIndexValues(){
+	//This is a more systematic version of buildIndexValues(). I was getting weird bugs in the logic,
+	//and I couldn't figure out where they were coming from, so I decided to reduce the number of places
+	//where things can go wrong.
+	private static ContentValues[] makeIndexValues(){
+		ArrayList<ContentValues> accum = new ArrayList<ContentValues>();
+		int i = 0;
+		//Expo-Millennium shared track:
+		while(i < 16){
+			accum.add(valuesOfTuple(0, i, i));
+			accum.add(valuesOfTuple(1, i, i));
+			++i;
+		}
+		//Expo track:
+		while(i < 20){
+			accum.add(valuesOfTuple(0, i, i));
+			++i;
+		}
+		//Millennium track up to Renfrew:
+		int posOffset = 4;
+		while(i < 31){
+			accum.add(valuesOfTuple(1, i, i - posOffset));
+			++i;
+		}
+		//Commercial-Broadway Millenium platforms:
+		accum.add(valuesOfTuple(1, 5, i - posOffset));
+		--posOffset;
+		//VCC-Clark:
+		accum.add(valuesOfTuple(1, i, i - posOffset));
+		//Waterfront Canada platforms:
+		accum.add(valuesOfTuple(2, 0, 0));
+		accum.add(valuesOfTuple(3, 0, 0));
+		//Canada Line shared track:
+		posOffset = i;
+		++i;
+		while(i < 41){
+			accum.add(valuesOfTuple(2, i, i - posOffset));
+			accum.add(valuesOfTuple(3, i, i - posOffset));
+			++i;
+		}
+		//Canada Line Airport:
+		while(i < 44){
+			accum.add(valuesOfTuple(2, i, i - posOffset));
+			++i;
+		}
+		//Canada Line Richmond:
+		posOffset += 3;
+		while(i < 47){
+			accum.add(valuesOfTuple(3, i, i - posOffset));
+			++i;
+		}
+		//Lougheed Evergreen platforms:
+		accum.add(valuesOfTuple(4, 22, 0));
+		//Evergreen Line track:
+		posOffset = i - 1;
+		while(i < 53){
+			accum.add(valuesOfTuple(4, i, i - posOffset));
+			++i;
+		}
+		ContentValues[] result = new ContentValues[accum.size()];
+		return accum.toArray(result);
+	}
+	
+	public static ContentValues[] buildIndexValues(){
 		ArrayList<ContentValues> accum = new ArrayList<ContentValues>();
 		//Let's do the Evergreen Line first
 		int lineIx = 4;

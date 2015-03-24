@@ -12,5 +12,7 @@
     <string name="progress_form_msg">Loading Stations…</string>
     <string name="go_nowhere_msg">You go nowhere. Please select differing start and end stations.</string>
     <string name="title_activity_trip_route">TripRouteActivity</string>
+    <string name="progress_route_msg">Calculating Route…</string>
+    <string name="boarding_instr_msg">Board the %1$s Line to %2$s at the first station below:</string>
 
 </resources>

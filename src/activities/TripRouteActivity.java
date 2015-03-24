@@ -5,8 +5,9 @@ import com.douglas.skytrainproject.R;
 import model.QueryAsyncTask;
 import model.SkytrainOpenHelper;
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,7 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,16 +30,20 @@ public class TripRouteActivity extends Activity {
 	public static final int LOUGHEED_ID = 22;
 	public static final int BRIDGEPORT_ID = 40;
 	
-	private static final String lineQuery = "SELECT " + SkytrainOpenHelper.INDEX_LINE_COL + ", " + SkytrainOpenHelper.INDEX_STN_COL +
-			", " + SkytrainOpenHelper.INDEX_POS_COL + " FROM " + SkytrainOpenHelper.INDEX_TBL_NAME + " WHERE " + SkytrainOpenHelper.INDEX_STN_COL +
-			" IS IN { CAST( ? AS INTEGER), CAST( ? AS INTEGER) }";
+	private static final String lineQuery = "SELECT * FROM " + SkytrainOpenHelper.INDEX_TBL_NAME + " WHERE " + SkytrainOpenHelper.INDEX_STN_COL +
+			" IN ( CAST( ? AS INTEGER), CAST( ? AS INTEGER) )";
 
 	private FragmentManager fragman;
 	private int idA;
 	private int idB;
 	private int legCount;
 	private int legsDone;
+//	private int fareZone; //1-3 standard fare of that many zones; 4=Sea Island to Richmond ($5 + 1 zone); 5=Sea Island to elsewhere ($5 + 2 zones)
+	private int duration;
+	private boolean unsetTime;
 	private ProgressDialog pdlg;
+	private int[] xferIds;
+	private SkytrainOpenHelper dbHelp;
 	
 	private class LineQueryTask extends QueryAsyncTask{
 		
@@ -54,15 +60,7 @@ public class TripRouteActivity extends Activity {
 	
 	private class TransferQueryTask extends AsyncTask<Cursor, Void, Cursor>{
 		
-		private final String xferBase = "SELECT " + SkytrainOpenHelper.STN_ID_COL + " , " +
-				SkytrainOpenHelper.STN_NAME_COL + " , " + SkytrainOpenHelper.STN_ZONE_COL +
-				" FROM " + SkytrainOpenHelper.STN_TBL_NAME + " WHERE " +
-				SkytrainOpenHelper.STN_ID_COL + " IN ( ";
-		
-		private SkytrainOpenHelper dbHelp;
-		
 		public TransferQueryTask() {
-			dbHelp = new SkytrainOpenHelper(TripRouteActivity.this);
 		}
 
 		@Override
@@ -109,51 +107,65 @@ public class TripRouteActivity extends Activity {
 				//if stnA is on the Millennium Line and stnB is in Surrey, or vice versa:
 				if((lineA == 0 && lineB == 1)||(lineB == 0 && lineA == 1)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + COLUMBIA_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[] {idA,COLUMBIA_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on Millennium and stnB is on Evergreen or vice versa:
 				if((lineA == 1 && lineB == 4)||(lineB == 1 && lineA == 4)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[] {idA,LOUGHEED_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Surrey and stnB is on Evergreen or vice versa:
-				if((lineA == 0 && lineB == 4)||(lineB == 0 && lineA == 4)){
+				if(lineA == 0 && lineB == 4){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + COLUMBIA_ID + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,COLUMBIA_ID,LOUGHEED_ID,idB};
+					return null;
+				}
+				if(lineB == 0 && lineA == 4){
+					legCount = 3;
+					xferIds = new int[]{idA,LOUGHEED_ID,COLUMBIA_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on Sea Island and stnB is elsewhere in Richmond, or vice versa:
 				if((lineA == 2 && lineB == 3)||(lineB == 2 && lineA == 3)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + BRIDGEPORT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,BRIDGEPORT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Richmond and stnB is in Surrey, or vice versa:
 				if(((lineA == 2 || lineA == 3) && lineB == 0)||((lineB == 2 || lineB == 3) && lineA == 0)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Richmond and stnB is on the Millennium Line, or vice versa:
-				if(((lineA == 2 || lineA == 3) && lineB == 1)||((lineB == 2 || lineB == 3) && lineA == 1)){
+				if((lineA == 2 || lineA == 3) && lineB == 1){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,idB};
+					return null;
+				}
+				if((lineB == 2 || lineB == 3) && lineA == 1){
+					legCount = 3;
+					xferIds = new int[]{idA,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is in Richmond and stnB is on the Evergreen Line, or vice versa:
-				if(((lineA == 2 || lineA == 3) && lineB == 4)||((lineB == 2 || lineB == 3) && lineA == 4)){
+				if((lineA == 2 || lineA == 3) && lineB == 4){
 					legCount = 4;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " +
-											LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,LOUGHEED_ID,idB};
+					return null;
+				}
+				if((lineB == 2 || lineB == 3) && lineA == 4){
+					legCount = 4;
+					xferIds = new int[]{idA,LOUGHEED_ID,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 			}
 			
@@ -174,8 +186,8 @@ public class TripRouteActivity extends Activity {
 								return dbHelp.queryStationsOfLine(lineA, posA, posB);
 							}else{
 								legCount = 2;
-								String xferQuery = xferBase + idA + " , " + BROADWAY_ID + " , " + idB + " )";
-								return dbHelp.rawQuery(xferQuery, null);
+								xferIds = new int[]{idA,BROADWAY_ID,idB};
+								return null;
 							}
 						}else{
 							legCount = 1;
@@ -193,22 +205,22 @@ public class TripRouteActivity extends Activity {
 				//if stnB is on the Expo Line:
 				if(stnBLines.contains(0)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnB is on the Millennium Line:
 				if(stnBLines.contains(1)){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,idB};
+					return null;
 				}
 				
 				//if stnB is on the Evergreen Line:
 				if(stnBLines.contains(4)){
 					legCount = 4;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,BROADWAY_ID,LOUGHEED_ID,idB};
+					return null;
 				}
 			}
 			
@@ -218,22 +230,22 @@ public class TripRouteActivity extends Activity {
 				//if stnA is on the Expo Line:
 				if(stnALines.contains(0)){
 					legCount = 2;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on the Millennium Line:
 				if(stnALines.contains(1)){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 				
 				//if stnA is on the Evergreen Line:
 				if(stnALines.contains(4)){
 					legCount = 4;
-					String xferQuery = xferBase + idA + " , " + WATERFRONT_ID + " , " + BROADWAY_ID + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,LOUGHEED_ID,BROADWAY_ID,WATERFRONT_ID,idB};
+					return null;
 				}
 			}
 			
@@ -244,40 +256,81 @@ public class TripRouteActivity extends Activity {
 			if(stnALines.contains(0)){
 				
 				//if stnA is near or past Commercial-Broadway:
-				if(idA < 7){
+				if(idA < 8){
 					legCount = 3;
-					String xferQuery = xferBase + idA + " , " + BROADWAY_ID + " , " + LOUGHEED_ID + " , " + idB + " )";
-					return dbHelp.rawQuery(xferQuery, null);
+					xferIds = new int[]{idA,BROADWAY_ID,LOUGHEED_ID,idB};
+					return null;
 				}
 				
 				//otherwise:
 				legCount = 2;
-				String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + idB + " )";
-				return dbHelp.rawQuery(xferQuery, null);
+				xferIds = new int[]{idA,LOUGHEED_ID,idB};
+				return null;
 			}
 			
-			if(idB < 7){
+			if(idB < 8){
 				legCount = 3;
-				String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + BROADWAY_ID + " , " + idB + " )";
-				return dbHelp.rawQuery(xferQuery, null);
+				xferIds = new int[]{idA,LOUGHEED_ID,BROADWAY_ID,idB};
+				return null;
 			}
 			
 			legCount = 2;
-			String xferQuery = xferBase + idA + " , " + LOUGHEED_ID + " , " + idB + " )";
-			return dbHelp.rawQuery(xferQuery, null);
+			xferIds = new int[]{idA,LOUGHEED_ID,idB};
+			return null;
 		}
 		
 		protected void onPostExecute(Cursor result){
-			Toast.makeText(TripRouteActivity.this, "Number of Legs: " + legCount + ". Returning: " + result.getClass().getName(), Toast.LENGTH_LONG).show();
+			if(legCount == 1){
+				fragman.beginTransaction().add(R.id.container, new TripLegFragment(result)).commit();
+				return;
+			}
+			TripLegFragment[] legs = new TripLegFragment[legCount];
+			int xferId = xferIds[1];
+			int line = dbHelp.findLineFromTransfer(xferId, idA);
+			legs[0] = new TripLegFragment(line, idA, xferId);
+			if(legCount == 2){
+				line = dbHelp.findLineFromTransfer(xferId, idB);
+				legs[1] = new TripLegFragment(line, xferId, idB);
+				FragmentTransaction fragtxn = fragman.beginTransaction();
+				for(int i = 0;i < legCount;++i){
+					fragtxn.add(R.id.container, legs[i]);
+				}
+				fragtxn.commit();
+				return;
+			}
+			int xferYd = xferIds[2];
+			line = dbHelp.findLineFromTransfer(xferId, xferYd);
+			legs[1] = new TripLegFragment(line, xferId, xferYd);
+			if(legCount == 3){
+				line = dbHelp.findLineFromTransfer(xferYd, idB);
+				legs[2] = new TripLegFragment(line, xferYd, idB);
+				FragmentTransaction fragtxn = fragman.beginTransaction();
+				for(int i = 0;i < legCount;++i){
+					fragtxn.add(R.id.container, legs[i]);
+				}
+				fragtxn.commit();
+				return;
+			}
+			xferId = xferIds[3];
+			line = dbHelp.findLineFromTransfer(xferYd, xferId);
+			legs[2] = new TripLegFragment(line, xferYd, xferId);
+			//we'll never get more than four legs in a single trip.
+			line = dbHelp.findLineFromTransfer(xferId, idB);
+			legs[3] = new TripLegFragment(line, xferId, idB);
+			FragmentTransaction fragtxn = fragman.beginTransaction();
+			for(int i = 0;i < legCount;++i){
+				fragtxn.add(R.id.container, legs[i]);
+			}
+			fragtxn.commit();
 		}
 	}
 	
-	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		dbHelp = new SkytrainOpenHelper(this);
 		idA = getIntent().getIntExtra(TripFormActivity.EXTRA_STNA_ID, -1);
 		idB = getIntent().getIntExtra(TripFormActivity.EXTRA_STNB_ID, -1);
+		legsDone = 0;
 		if(idA == -1 || idB == -1){
 			// TODO handle this in some graceful manner, even though it shouldn't ever happen.
 		}
@@ -285,8 +338,13 @@ public class TripRouteActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		fragman = getFragmentManager();
 		LineQueryTask lqt = new LineQueryTask();
+		pdlg = new ProgressDialog(this);
+		pdlg.setTitle(R.string.progress_title);
+		pdlg.setMessage(getResources().getText(R.string.progress_route_msg));
+		
 		setContentView(R.layout.activity_trip_route);
-		lqt.execute(lineQuery);
+		pdlg.show();
+		lqt.execute(lineQuery, String.valueOf(idA), String.valueOf(idB));
 	}
 
 	@Override
@@ -311,16 +369,150 @@ public class TripRouteActivity extends Activity {
 	/**
 	 * A fragment that queries and displays a single leg of a trip.
 	 */
-	public class TripLegFragment extends Fragment {
+	public class TripLegFragment extends ListFragment {
 
-		public TripLegFragment() {
+		private boolean skipQuery;
+		private Cursor data;
+		private int line, stnA, stnB;
+		private TextView boardingInstr;
+		
+		final String[] from = {SkytrainOpenHelper.STN_NAME_COL};
+		final int[] to = {android.R.id.text1};
+		
+		private class LegQueryTask extends AsyncTask<Void, Void, Cursor>{
+
+			@Override
+			protected Cursor doInBackground(Void... params) {
+				return dbHelp.queryLineByStationId(line, stnA, stnB);
+			}
+
+			@Override
+			protected void onPostExecute(Cursor result) {
+				data = result;
+				setBoardingInstr();
+				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.activity_list_item, result, from, to, 0);
+				setListAdapter(sca);
+				legsDone++;
+				if(legsDone == legCount) pdlg.dismiss();
+			}
+			
 		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_trip_route,
-					container, false);
+		
+		public TripLegFragment(int line, int stnA, int stnB) {
+			this.line = line;
+			this.stnA = stnA;
+			this.stnB = stnB;
+			skipQuery = false;
+		}
+		
+		public TripLegFragment(Cursor data){
+			this.data = data;
+			skipQuery = true;
+		}
+		
+		private void setBoardingInstr(){
+			int lineCX = data.getColumnIndex(SkytrainOpenHelper.INDEX_LINE_COL);
+			int posCX = data.getColumnIndex(SkytrainOpenHelper.INDEX_POS_COL);
+			data.moveToFirst();
+			int myline = data.getInt(lineCX);
+			int posbegin = data.getInt(posCX);
+			data.moveToLast();
+			int posfinal = data.getInt(posCX);
+			String lineName;
+			String terminus;
+			if(posbegin < posfinal){
+				switch(myline){
+				case 0:
+					if(posfinal < 16){
+						lineName = "Expo Line to King George or Millennium";
+						terminus = "VCC-Clark";
+					}else{
+						lineName = "Expo";
+						terminus = "King George";
+					}
+					break;
+				case 1:
+					if(posfinal < 16){
+						lineName = "Expo Line to King George or Millennium";
+						terminus = "VCC-Clark";
+					}else{
+						lineName = "Millennium";
+						terminus = "VCC-Clark";
+					}
+					break;
+				case 2:
+					lineName = "Canada";
+					if(posfinal < 10){
+						terminus = "YVR-Airport or Richmond-Brighouse";
+					}else{
+						terminus = "YVR-Airport";
+					}
+					break;
+				case 3:
+					lineName = "Canada";
+					if(posfinal < 10){
+						terminus = "YVR-Airport or Richmond-Brighouse";
+					}else{
+						terminus = "Richmond-Brighouse";
+					}
+					break;
+				case 4:
+					lineName = "Evergreen";
+					terminus = "Lafarge Lake-Douglas";
+					break;
+				default:
+					lineName = "Most Convenient";
+					terminus = "your destination";
+					break;
+				}
+			}else{
+				switch(myline){
+				case 0:
+					if(posbegin < 16){
+						lineName = "Expo or Millennium";
+					}else{
+						lineName = "Expo";
+					}
+					terminus = "Waterfront";
+					break;
+				case 1:
+					if(posbegin < 16){
+						lineName = "Expo or Millennium";
+					}else{
+						lineName = "Millennium";
+					}
+					terminus = "Waterfront";
+					break;
+				case 2:
+				case 3:
+					lineName = "Canada";
+					terminus = "Waterfront";
+					break;
+				case 4:
+					lineName = "Evergreen";
+					terminus = "Lougheed Town Centre";
+					break;
+				default:
+					lineName = "Most Convenient";
+					terminus = "your destination";
+					break;
+				}
+			}
+			boardingInstr.setText(getResources().getString(R.string.boarding_instr_msg, lineName, terminus));
+		}
+		
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+			View rootView = inflater.inflate(R.layout.fragment_trip_route, container, false);
+			boardingInstr = (TextView)rootView.findViewById(R.id.legBeginTxt);
+			if(skipQuery){
+				setBoardingInstr();
+				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.activity_list_item, data, from, to, 0);
+				setListAdapter(sca);
+				pdlg.dismiss();
+			}else{
+				LegQueryTask lqt = new LegQueryTask();
+				lqt.execute();
+			}
 			return rootView;
 		}
 	}
