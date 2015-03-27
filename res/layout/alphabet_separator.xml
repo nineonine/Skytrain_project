@@ -16,6 +16,8 @@
         android:textAppearance="?android:attr/textAppearanceSmallInverse"
         android:textColor="@color/white"
         android:textSize="13dp"
+        android:clickable="true"
+        android:onClick="evade"
         android:textStyle="bold" />
 
 </RelativeLayout>

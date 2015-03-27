@@ -3,6 +3,7 @@ package activities;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import com.douglas.skytrainproject.R;
 
@@ -37,8 +38,8 @@ public class MainActivity extends Activity implements TextWatcher,
 	
 	ListView listView;
 	List<Items> items;
-	List<Items> filterArray = new ArrayList<Items>();
-	StationDAO stationDao = new StationDAO();
+	List<Items> filterArray;
+	StationDAO stationDao;
 
 	ArrayList<Item> itemsSection = new ArrayList<Item>();
 
@@ -53,17 +54,20 @@ public class MainActivity extends Activity implements TextWatcher,
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		filterArray = new ArrayList<Items>();
+		stationDao = new StationDAO();
+		
 		
 		listView = (ListView) findViewById(R.id.listview);
 		listView.setOnItemClickListener(this);
 		mySearch = (EditText) findViewById(R.id.input_search_query);
 		mySearch.addTextChangedListener(this);
 
-		// XML Parsing Using AsyncTask...
+		// Parsing Using AsyncTask...
 		if (isNetworkAvailable()) {
 			new MyTask().execute();
 		} else {
-			showToast("No Internet Connection");
+			showToast("No DB Connection");
 			this.finish();
 		}
 	}
@@ -155,8 +159,8 @@ public class MainActivity extends Activity implements TextWatcher,
 
 		if (items.size() > 0 && searchString.length() > 0) {
 			for (Items name : items) {
-				if (name.getName().toLowerCase()
-						.startsWith(searchString.toLowerCase())) {
+				if (name.getName().toLowerCase(Locale.CANADA)
+						.startsWith(searchString.toLowerCase(Locale.CANADA))) {
 
 					filterArray.add(name);
 				}
@@ -214,6 +218,11 @@ public class MainActivity extends Activity implements TextWatcher,
 		}
 
 	}
+	
+	//some crash evasion - when one taps at alphabetical section panel
+	public void evade(View v) {
+		
+	}
 
 
 	// Check Internet Connection!!!
@@ -249,7 +258,7 @@ public class MainActivity extends Activity implements TextWatcher,
 
 		alert.setTitle("Not Found!!!");
 		alert.setMessage("Can not find name Like '" + searchString + "'");
-		alert.setButton(0, "Ok", new DialogInterface.OnClickListener() {
+		alert.setButton("Ok", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

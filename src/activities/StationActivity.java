@@ -8,15 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.douglas.skytrainproject.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class StationActivity extends Activity {
 	private GoogleMap googleMap;
-	static final LatLng TutorialsPoint = new LatLng(21 , 57);
+	static LatLng StationLatLng = new LatLng(21 , 57);
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,15 +37,23 @@ public class StationActivity extends Activity {
 		stationName.setText(station.getName());
 		stationDescription.setText(station.getDescription());
 		stationLocation.setText(station.getLocation());
-
+		
+		//vars for map (we should get values in the constructor from object ) 
+		LatLng StationLatLng = new LatLng(49.285833, -123.1116671);
 		try {
 			if (googleMap == null) {
 				googleMap = ((MapFragment) getFragmentManager().
 			               findFragmentById(R.id.map)).getMap();
+				
 			}
 			googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+			googleMap.setMyLocationEnabled(true);
+			googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 			Marker TP = googleMap.addMarker(new MarkerOptions().position(
-					TutorialsPoint).title("TutorialsPoint"));
+					StationLatLng).title(station.getName()));
+			CameraPosition cameraPosition = new CameraPosition.Builder().target(StationLatLng).zoom(14).build();
+			googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
