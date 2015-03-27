@@ -69,13 +69,14 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_trip_form=0x7f030000;
-        public static final int activity_trip_route=0x7f030001;
-        public static final int alphabet_separator=0x7f030002;
-        public static final int fragment_trip_route=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int row=0x7f030005;
-        public static final int search_bar=0x7f030006;
-        public static final int station=0x7f030007;
+        public static final int activity_trip_fragment=0x7f030001;
+        public static final int activity_trip_route=0x7f030002;
+        public static final int alphabet_separator=0x7f030003;
+        public static final int fragment_trip_route=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int row=0x7f030006;
+        public static final int search_bar=0x7f030007;
+        public static final int station=0x7f030008;
     }
     public static final class menu {
         public static final int trip_form=0x7f080000;
