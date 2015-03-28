@@ -370,6 +370,15 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		return db.rawQuery(query, bindings);
 	}
 	
+	public int queryTravelTime(int idA, int idB){
+		String[] whereArgs = {String.valueOf(idA), String.valueOf(idB)};
+		String where = TIMES_STN_A_COL + " = CAST(? AS INTEGER) AND " + TIMES_STN_B_COL + " = CAST(? AS INTEGER)";
+		Cursor times = query(TIMES_TBL_NAME, null, where, whereArgs);
+		if(times.getCount() < 1) throw new IllegalArgumentException("No travel time between those stations.");
+		times.moveToFirst();
+		return times.getInt(times.getColumnIndexOrThrow(TIMES_DURATION_COL));
+	}
+	
 	private static ContentValues[] buildStationsValues(){
 		ContentValues[] stns = new ContentValues[53];
 		for(int i = 0;i < 53;++i){

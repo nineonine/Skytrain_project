@@ -14,5 +14,6 @@
     <string name="title_activity_trip_route">TripRouteActivity</string>
     <string name="progress_route_msg">Calculating Route…</string>
     <string name="boarding_instr_msg">Board the %1$s Line to %2$s at the first station below:</string>
+    <string name="time_msg">This trip will take %1$s minutes of travel, not counting time spent waiting for trains.</string>
 
 </resources>

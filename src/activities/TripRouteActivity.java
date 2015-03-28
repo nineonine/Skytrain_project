@@ -12,14 +12,21 @@ import com.douglas.skytrainproject.R;
 import model.SkytrainOpenHelper;
 import model.QueryAsyncTask;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 public class TripRouteActivity extends Activity {
 	
@@ -34,10 +41,14 @@ public class TripRouteActivity extends Activity {
 	
 	private int idStnA;
 	private int idStnB;
+	private int posStnA;
+	private int posStnB;
 	private int legCount;
 	private int legsDone;
+	private int tripTime;
+	private boolean unsetTime;
 	private ProgressDialog pdlg;
-	private ViewGroup fragtainer;
+	private FragmentManager fragman;
 	private SkytrainOpenHelper dbHelp;
 	
 	private class LineQueryTask extends QueryAsyncTask{
@@ -85,6 +96,8 @@ public class TripRouteActivity extends Activity {
 			if(lineCountA == 1 && lineCountB == 1){
 				int lineA = stnALines.get(0);
 				int lineB = stnBLines.get(0);
+				posStnA = stnAPosns.get(0);
+				posStnB = stnBPosns.get(0);
 				
 				//if A and B are on the same line:
 				if(lineA == lineB){
@@ -147,11 +160,357 @@ public class TripRouteActivity extends Activity {
 					return new int[]{idStnA, lineA, LOUGHEED_ID, 1, BROADWAY_ID, 0, WATERFRONT_ID, lineB, idStnB};
 				}
 			}
-			return null;
+			
+			//This loops through the indices, returning if there's a match between lines
+			//for A and B:
+			for(int iA = 0;iA < lineCountA;++iA){
+				int lineA = stnALines.get(iA);
+				for(int iB = 0;iB < lineCountB;++iB){
+					int lineB = stnBLines.get(iB);
+					if(lineA == lineB){
+						int posA = stnAPosns.get(iA);
+						int posB = stnBPosns.get(iB);
+						posStnA = posA;
+						posStnB = posB;
+						//the Millennium loop makes things awkward.
+						if(lineA == 1){
+							if(posA == 5 && posB > 16){
+								legCount = 1;
+								posStnA = 27;
+								return new int[]{idStnA, 1, idStnB};
+							}else if(posB == 5 && posA > 16){
+								legCount = 1;
+								posStnB = 27;
+								return new int[]{idStnA, 1, idStnB};
+							}else if((posA < 5 && posB > 16)){
+								legCount = 2;
+								return new int[]{idStnA, 0, BROADWAY_ID, 1, idStnB};
+							}else if(posB < 5 && posA > 16){
+								legCount = 2;
+								return new int[]{idStnA, 1, BROADWAY_ID, 0, idStnB};
+							}else if(Math.abs(posB - posA) < 14){
+								legCount = 1;
+								return new int[]{idStnA, 1, idStnB};
+							}else{
+								legCount = 2;
+								return new int[]{idStnA, 1, BROADWAY_ID, 1, idStnB};
+							}
+						}
+						legCount = 1;
+						return new int[]{idStnA, lineA, idStnB};
+					}
+				}
+			}
+			//if the program reaches here, the two sets of lines are completely disjoint,
+			//and at least one of them has more than one member.
+			
+			//if A is on the Airport Canada Line:
+			if(stnALines.contains(2)){
+				posStnA = stnAPosns.get(stnALines.indexOf(2));
+				//if B is on the Expo Line:
+				if(stnBLines.contains(0)){
+					legCount = 2;
+					posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+					return new int[]{idStnA, 2, WATERFRONT_ID, 0, idStnB};
+				}
+				//if B is on the Millennium Line:
+				if(stnBLines.contains(1)){
+					legCount = 3;
+					posStnB = stnBPosns.get(stnBPosns.indexOf(1));
+					return new int[]{idStnA, 2, WATERFRONT_ID, 0, BROADWAY_ID, 1, idStnB};
+				}
+				//if B is on the Evergreen Line:
+				if(stnBLines.contains(4)){
+					legCount = 4;
+					posStnB = stnBPosns.get(stnBPosns.indexOf(4));
+					return new int[]{idStnA, 2, WATERFRONT_ID, 0, BROADWAY_ID, 1, LOUGHEED_ID, 4, idStnB};
+				}
+			}
+			//if A is on the Brighouse Canada Line:
+			if(stnALines.contains(3)){
+				posStnA = stnAPosns.get(stnALines.indexOf(3));
+				//if B is on the Expo Line:
+				if(stnBLines.contains(0)){
+					legCount = 2;
+					posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+					return new int[]{idStnA, 3, WATERFRONT_ID, 0, idStnB};
+				}
+				//if B is on the Millennium Line:
+				if(stnBLines.contains(1)){
+					legCount = 3;
+					posStnB = stnBPosns.get(stnBPosns.indexOf(1));
+					return new int[]{idStnA, 3, WATERFRONT_ID, 0, BROADWAY_ID, 1, idStnB};
+				}
+				//if B is on the Evergreen Line:
+				if(stnBLines.contains(4)){
+					legCount = 4;
+					posStnB = stnBPosns.get(stnBPosns.indexOf(4));
+					return new int[]{idStnA, 3, WATERFRONT_ID, 0, BROADWAY_ID, 1, LOUGHEED_ID, 4, idStnB};
+				}
+			}
+			//if B is on the Airport Canada Line:
+			if(stnBLines.contains(2)){
+				posStnB = stnBPosns.get(stnBLines.indexOf(2));
+				//if A is on the Expo Line:
+				if(stnALines.contains(0)){
+					legCount = 2;
+					posStnA = stnAPosns.get(stnAPosns.indexOf(0));
+					return new int[]{idStnA, 0, WATERFRONT_ID, 2, idStnB};
+				}
+				//if A is on the Millennium Line:
+				if(stnALines.contains(1)){
+					legCount = 3;
+					posStnA = stnAPosns.get(stnAPosns.indexOf(1));
+					return new int[]{idStnA, 1, BROADWAY_ID, 0, WATERFRONT_ID, 2, idStnB};
+				}
+				//if A is on the Evergreen Line:
+				if(stnALines.contains(4)){
+					legCount = 4;
+					posStnA = stnAPosns.get(stnAPosns.indexOf(4));
+					return new int[]{idStnA, 4, LOUGHEED_ID, 1, BROADWAY_ID, 0, WATERFRONT_ID, 2, idStnB};
+				}
+			}
+			//if B is on the Brighouse Canada Line:
+			if(stnBLines.contains(3)){
+				posStnB = stnBPosns.get(stnBLines.indexOf(3));
+				//if A is on the Expo Line:
+				if(stnALines.contains(0)){
+					legCount = 2;
+					posStnA = stnAPosns.get(stnAPosns.indexOf(0));
+					return new int[]{idStnA, 0, WATERFRONT_ID, 3, idStnB};
+				}
+				//if A is on the Millennium Line:
+				if(stnALines.contains(1)){
+					legCount = 3;
+					posStnA = stnAPosns.get(stnAPosns.indexOf(1));
+					return new int[]{idStnA, 1, BROADWAY_ID, 0, WATERFRONT_ID, 3, idStnB};
+				}
+				//if A is on the Evergreen Line:
+				if(stnALines.contains(4)){
+					legCount = 4;
+					posStnA = stnAPosns.get(stnAPosns.indexOf(4));
+					return new int[]{idStnA, 4, LOUGHEED_ID, 1, BROADWAY_ID, 0, WATERFRONT_ID, 3, idStnB};
+				}
+			}
+			//SPECIAL CASE: Lougheed Town Centre is on two lines.
+			if((idStnA == LOUGHEED_ID && stnBLines.contains(0))){
+				posStnA = stnAPosns.get(stnAPosns.indexOf(1));
+				posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+				legCount = 2;
+				return new int[]{LOUGHEED_ID, 1, COLUMBIA_ID, 0, idStnB};
+			}
+			if(idStnB == LOUGHEED_ID && stnALines.contains(0)){
+				posStnB = stnBPosns.get(stnBPosns.indexOf(1));
+				posStnA = stnAPosns.get(stnAPosns.indexOf(0));
+				legCount = 2;
+				return new int[]{idStnA, 0, COLUMBIA_ID, 1, LOUGHEED_ID};
+			}
+			//the only remaining possibility is that one station is on the Expo/Millennium
+			//shared track, and the other is on the Evergreen Line.
+			if(stnALines.contains(0)){
+				posStnA = stnAPosns.get(stnAPosns.indexOf(0));
+				posStnB = stnBPosns.get(stnBPosns.indexOf(4));
+				if(posStnA < 5){
+					legCount = 3;
+					return new int[]{idStnA, 0, BROADWAY_ID, 1, LOUGHEED_ID, 4, idStnB};
+				}
+				if(posStnA == 5){
+					posStnA = 27;
+					legCount = 2;
+					return new int[]{idStnA, 1, LOUGHEED_ID, 4, idStnB};
+				}
+				if(Math.abs(22 - posStnA) > 14){
+					legCount = 3;
+					return new int[]{idStnA, 0, BROADWAY_ID, 1, LOUGHEED_ID, 4, idStnB};
+				}
+				legCount = 2;
+				return new int[]{idStnA, 1, LOUGHEED_ID, 4, idStnB};
+			}
+			posStnA = stnAPosns.get(stnAPosns.indexOf(4));
+			posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+			if(posStnB < 5){
+				legCount = 3;
+				return new int[]{idStnA, 4, LOUGHEED_ID, 1, BROADWAY_ID, 0, idStnB};
+			}
+			if(posStnB == 5){
+				posStnB = 27;
+				legCount = 2;
+				return new int[]{idStnA, 4, LOUGHEED_ID, 1, idStnB};
+			}
+			if((22 - posStnB) > 14){
+				legCount = 3;
+				return new int[]{idStnA, 4, LOUGHEED_ID, 1, BROADWAY_ID, 0, idStnB};
+			}
+			legCount = 2;
+			return new int[]{idStnA, 4, LOUGHEED_ID, 1, idStnB};
+		}
+
+
+		@Override
+		protected void onPostExecute(int[] result) {
+			FragmentTransaction trx = fragman.beginTransaction();
+			for(int i = 1;i < result.length - 1;i += 2){
+				switch(result[i]){
+				case 0:
+					trx.add(R.id.container, new ExpoLegFragment(result[i - 1], result[i + 1]));
+					break;
+				case 1:
+					trx.add(R.id.container, new MillenFragment(result[i - 1], result[i + 1]));
+					break;
+				case 2:
+					trx.add(R.id.container, new AirportFragment(result[i - 1], result[i + 1]));
+					break;
+				case 3:
+					trx.add(R.id.container, new BrighouseFragment(result[i - 1], result[i + 1]));
+					break;
+				case 4:
+					trx.add(R.id.container, new EvergreenFragment(result[i - 1], result[i + 1]));
+				}
+			}
+			trx.commit();
+		}
+	}
+	
+	abstract class LegListFragment extends ListFragment{
+		
+		protected TextView beginText;
+		protected boolean outbound;
+		private int line, startPos, endPos;
+		private String[] fromCols = {SkytrainOpenHelper.STN_NAME_COL};
+		private int[] toCols = {android.R.id.text1};
+		
+		private class LegQueryTask extends AsyncTask<Void, Void, Cursor>{
+
+			@Override
+			protected Cursor doInBackground(Void... params) {
+				Cursor stnQ = dbHelp.queryStationsOfLine(line, startPos, endPos);
+				stnQ.moveToFirst();
+				int idA = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ID_COL));
+				stnQ.moveToLast();
+				int idB = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ID_COL));
+				try{
+					if(line == 1 && idA < 15 && idB > 15){
+						tripTime += dbHelp.queryTravelTime(idA, COLUMBIA_ID);
+						tripTime += dbHelp.queryTravelTime(COLUMBIA_ID, idB);
+					}else if(line == 1 && idA > 15 && idB < 15){
+						tripTime += dbHelp.queryTravelTime(idB, COLUMBIA_ID);
+						tripTime += dbHelp.queryTravelTime(COLUMBIA_ID, idA);
+					}else{
+						int id1 = (idA < idB)?idA:idB;
+						int id2 = (idA < idB)?idB:idA;
+						tripTime += dbHelp.queryTravelTime(id1, id2);
+					}
+				}catch(IllegalArgumentException ill){
+					unsetTime = true;
+				}
+				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.simple_list_item_1, stnQ, fromCols, toCols, 0);
+				LegListFragment.this.setListAdapter(sca);
+				return stnQ;
+			}
+
+			@Override
+			protected void onPostExecute(Cursor result) {
+				++legsDone;
+				LegListFragment.this.setBeginText();
+				if(legsDone == legCount){
+					TextView txtTime = (TextView)TripRouteActivity.this.findViewById(R.id.timeTxt);
+					String val = unsetTime?"an unknown number of":String.valueOf(tripTime);
+					txtTime.setText(getString(R.string.time_msg, val));
+					pdlg.dismiss();
+				}
+			}
+			
+			
 		}
 		
+		LegListFragment(int line, int idStart, int idEnd){
+			this.line = line;
+			this.startPos = idStart;
+			this.endPos = idEnd;
+			outbound = (idStart < idEnd);
+			if(idEnd == BROADWAY_ID && (27 - idStart) < 14 && idStart != 27)outbound = true;
+		}
+		
+		protected abstract void setBeginText();
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View root = inflater.inflate(R.layout.fragment_trip_route, container, false);
+			beginText = (TextView)root.findViewById(R.id.legBeginTxt);
+			LegQueryTask lqt = new LegQueryTask();
+			lqt.execute();
+			return root;
+		}
 	}
 
+	private class ExpoLegFragment extends LegListFragment{
+		
+		ExpoLegFragment(int start, int end){
+			super(0, start, end);
+		}
+
+		@Override
+		protected void setBeginText() {
+			String line = "Expo";
+			String dest = (super.outbound)?"King George":"Waterfront";
+			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+		}
+	}
+
+	private class MillenFragment extends LegListFragment{
+		
+		MillenFragment(int start, int end){
+			super(1, start, end);
+		}
+		
+		@Override
+		protected void setBeginText(){
+			String line = "Millennium";
+			String dest = (super.outbound)?"VCC-Clark":"Waterfront";
+			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+		}
+	}
+	
+	private class AirportFragment extends LegListFragment{
+		
+		AirportFragment(int start, int end){
+			super(2, start, end);
+		}
+		
+		protected void setBeginText(){
+			String line = "Canada";
+			String dest = super.outbound?"YVR-Airport":"Waterfront";
+			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+		}
+	}
+	
+	private class BrighouseFragment extends LegListFragment{
+		
+		BrighouseFragment(int start, int end){
+			super(3, start, end);
+		}
+		
+		protected void setBeginText(){
+			String line = "Canada";
+			String dest = super.outbound?"Richmond-Brighouse":"Waterfront";
+			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+		}
+	}
+	
+	private class EvergreenFragment extends LegListFragment{
+		
+		EvergreenFragment(int start, int end){
+			super(4, start, end);
+		}
+		
+		protected void setBeginText(){
+			String line = "Evergreen";
+			String dest = super.outbound?"Lafarge Lake-Douglas":"Lougheed Town Centre";
+			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+		}
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -165,9 +524,10 @@ public class TripRouteActivity extends Activity {
 		pdlg = new ProgressDialog(this);
 		pdlg.setTitle(R.string.progress_title);
 		pdlg.setMessage(getText(R.string.progress_route_msg));
+		legsDone = 0;
 		setContentView(R.layout.activity_trip_route);
 		pdlg.show();
-		fragtainer = (ViewGroup)findViewById(R.id.container);
+		fragman = getFragmentManager();
 		LineQueryTask lqt = new LineQueryTask();
 		lqt.execute(lineQuery, String.valueOf(idStnA), String.valueOf(idStnB));
 	}
