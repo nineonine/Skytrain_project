@@ -8,7 +8,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="activities.TripRouteActivity" >
     
-    <RelativeLayout >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
         
         <LinearLayout
         android:id="@+id/container"
@@ -22,7 +24,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/container"
         android:layout_alignParentRight="true"
-        android:textAlignment="viewEnd" />
+        android:textAlignment="viewEnd"
+        android:gravity="end" />
+    
+    <TextView
+        android:id="@+id/fareTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeTxt"
+        android:layout_alignParentLeft="true"
+        android:textAlignment="viewStart"
+        android:gravity="start" />
         
     </RelativeLayout>
     

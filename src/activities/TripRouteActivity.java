@@ -9,6 +9,8 @@ import com.douglas.skytrainproject.R;
 
 
 
+
+
 import model.SkytrainOpenHelper;
 import model.QueryAsyncTask;
 import android.app.Activity;
@@ -17,6 +19,8 @@ import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,6 +40,10 @@ public class TripRouteActivity extends Activity {
 	public static final int LOUGHEED_ID = 22;
 	public static final int BRIDGEPORT_ID = 40;
 	
+	public enum Zone{
+		ONE, TWO, THREE
+	}
+	
 	private static final String lineQuery = "SELECT * FROM " + SkytrainOpenHelper.INDEX_TBL_NAME + " WHERE " + SkytrainOpenHelper.INDEX_STN_COL +
 			" IN ( CAST( ? AS INTEGER), CAST( ? AS INTEGER) )";
 	
@@ -47,9 +55,12 @@ public class TripRouteActivity extends Activity {
 	private int legsDone;
 	private int tripTime;
 	private boolean unsetTime;
+	private boolean crosses1_2, crosses2_3;
+	private Zone startZone;
 	private ProgressDialog pdlg;
 	private FragmentManager fragman;
 	private SkytrainOpenHelper dbHelp;
+	private Resources res;
 	
 	private class LineQueryTask extends QueryAsyncTask{
 		
@@ -386,8 +397,32 @@ public class TripRouteActivity extends Activity {
 				Cursor stnQ = dbHelp.queryStationsOfLine(line, startPos, endPos);
 				stnQ.moveToFirst();
 				int idA = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ID_COL));
+				int znA = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ZONE_COL));
+				if(startZone == null){
+					switch(znA){
+					case 1:
+						startZone = Zone.ONE;
+						break;
+					case 2:
+						startZone = Zone.TWO;
+						break;
+					case 3:
+						startZone = Zone.THREE;
+						break;
+					default:
+						startZone = null;
+						break;
+					}
+				}
 				stnQ.moveToLast();
 				int idB = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ID_COL));
+				int znB = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ZONE_COL));
+				if((znA == 1 && znB == 2)||(znA == 2 && znB == 1))crosses1_2 = true;
+				if((znA == 2 && znB == 3)||(znA == 3 && znB == 2))crosses2_3 = true;
+				if((znA == 1 && znB == 3)||(znA == 3 && znB == 1)){
+					crosses1_2 = true;
+					crosses2_3 = true;
+				}
 				try{
 					if(line == 1 && idA < 15 && idB > 15){
 						tripTime += dbHelp.queryTravelTime(idA, COLUMBIA_ID);
@@ -403,19 +438,71 @@ public class TripRouteActivity extends Activity {
 				}catch(IllegalArgumentException ill){
 					unsetTime = true;
 				}
-				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.simple_list_item_1, stnQ, fromCols, toCols, 0);
-				LegListFragment.this.setListAdapter(sca);
 				return stnQ;
 			}
 
 			@Override
 			protected void onPostExecute(Cursor result) {
+				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.simple_list_item_1, result, fromCols, toCols, 0);
+				LegListFragment.this.setListAdapter(sca);
 				++legsDone;
 				LegListFragment.this.setBeginText();
 				if(legsDone == legCount){
-					TextView txtTime = (TextView)TripRouteActivity.this.findViewById(R.id.timeTxt);
+					TextView txt = (TextView)TripRouteActivity.this.findViewById(R.id.timeTxt);
 					String val = unsetTime?"an unknown number of":String.valueOf(tripTime);
-					txtTime.setText(getString(R.string.time_msg, val));
+					txt.setText(getString(R.string.time_msg, val));
+					float fare = 0.0f;
+					int zones = 0;
+					boolean yvr = false;
+					float yvrFare = 0.0f;
+					TypedArray fares = res.obtainTypedArray(R.array.fares);
+					switch(startZone){
+					case ONE:
+						if(crosses2_3){
+							fare += fares.getFloat(2, 5.5f);
+							zones = 3;
+							break;
+						}
+						if(crosses1_2){
+							fare += fares.getFloat(1, 4.0f);
+							zones = 2;
+							break;
+						}
+						fare += fares.getFloat(0, 2.75f);
+						zones = 1;
+						break;
+					case TWO:
+						if(crosses1_2||crosses2_3){
+							fare += fares.getFloat(1, 4.0f);
+							zones = 2;
+						}else{
+							fare += fares.getFloat(0, 2.75f);
+							zones = 1;
+						}
+						if(idStnA > BRIDGEPORT_ID && (idStnA - BRIDGEPORT_ID) < 4 && (idStnB > (BRIDGEPORT_ID + 3) || idStnB <= BRIDGEPORT_ID)){
+							yvrFare = fares.getFloat(3, 5.0f);
+							fare += yvrFare;
+							yvr = true;
+						}
+						break;
+					case THREE:
+						if(crosses1_2){
+							fare += fares.getFloat(2, 5.5f);
+							zones = 3;
+							break;
+						}
+						if(crosses2_3){
+							fare += fares.getFloat(1, 4.0f);
+							zones = 2;
+							break;
+						}
+						fare += fares.getFloat(0, 2.75f);
+						zones = 1;
+						break;
+					}
+					fares.recycle();
+					txt = (TextView)findViewById(R.id.timeTxt);
+					txt.setText(getString(yvr?R.string.yvr_fare_msg:R.string.fare_msg, zones, fare, yvrFare));
 					pdlg.dismiss();
 				}
 			}
@@ -525,6 +612,9 @@ public class TripRouteActivity extends Activity {
 		pdlg.setTitle(R.string.progress_title);
 		pdlg.setMessage(getText(R.string.progress_route_msg));
 		legsDone = 0;
+		crosses1_2 = false;
+		crosses2_3 = false;
+		res = getResources();
 		setContentView(R.layout.activity_trip_route);
 		pdlg.show();
 		fragman = getFragmentManager();

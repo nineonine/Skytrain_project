@@ -40,8 +40,6 @@ public class RouteFragmentActivity extends Activity {
 	private int legCount;
 	private int legsDone;
 //	private int fareZone; //1-3 standard fare of that many zones; 4=Sea Island to Richmond ($5 + 1 zone); 5=Sea Island to elsewhere ($5 + 2 zones)
-	private int duration;
-	private boolean unsetTime;
 	private ProgressDialog pdlg;
 	private int[] xferIds;
 	private SkytrainOpenHelper dbHelp;

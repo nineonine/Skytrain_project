@@ -15,5 +15,7 @@
     <string name="progress_route_msg">Calculating Route…</string>
     <string name="boarding_instr_msg">Board the %1$s Line to %2$s at the first station below:</string>
     <string name="time_msg">This trip will take %1$s minutes of travel, not counting time spent waiting for trains.</string>
+    <string name="fare_msg">This trip will require a %1$d-zone fare, costing $%2$.2f.</string>
+    <string name="yvr_fare_msg">This trip will require a %1$d-zone fare plus the $%3$.2f YVR AddFare, costing a total of $%2$.2f.</string>
 
 </resources>
