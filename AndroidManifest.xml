@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:maxSdkVersion="22"
-        android:minSdkVersion="14"
+        android:minSdkVersion="17"
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -35,10 +35,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.RUN" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="activities.RouteFragmentActivity"
-            android:label="@string/title_activity_trip_route" >
         </activity>
         <activity
             android:name="activities.TripRouteActivity"

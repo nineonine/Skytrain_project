@@ -13,14 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentStart="true" />
 
-    <ListView
-        android:isScrollContainer="false"
+    <LinearLayout
+        android:orientation="vertical"
         android:id="@android:id/list"
         android:layout_below="@id/legBeginTxt"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" ></ListView>
+        android:layout_height="wrap_content" ></LinearLayout>
 
 </RelativeLayout>

@@ -4,19 +4,12 @@ import java.util.ArrayList;
 
 import com.douglas.skytrainproject.R;
 
-
-
-
-
-
-
-
 import model.SkytrainOpenHelper;
 import model.QueryAsyncTask;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -382,11 +375,12 @@ public class TripRouteActivity extends Activity {
 		}
 	}
 	
-	abstract class LegListFragment extends ListFragment{
+	abstract class LegListFragment extends Fragment{
 		
 		protected TextView beginText;
+		protected ViewGroup list;
 		protected boolean outbound;
-		private int line, startPos, endPos;
+		private int line, idA, idB;
 		private String[] fromCols = {SkytrainOpenHelper.STN_NAME_COL};
 		private int[] toCols = {android.R.id.text1};
 		
@@ -394,7 +388,39 @@ public class TripRouteActivity extends Activity {
 
 			@Override
 			protected Cursor doInBackground(Void... params) {
-				Cursor stnQ = dbHelp.queryStationsOfLine(line, startPos, endPos);
+				Cursor posnQ = dbHelp.queryStationIndices(line, idA);
+				int[] aPosns = new int[posnQ.getCount()];
+				posnQ.moveToFirst();
+				for(int i = 0;i < aPosns.length;++i){
+					aPosns[i] = posnQ.getInt(posnQ.getColumnIndexOrThrow(SkytrainOpenHelper.INDEX_POS_COL));
+					posnQ.moveToNext();
+				}
+				posnQ.close();
+				posnQ = dbHelp.queryStationIndices(line, idB);
+				int[] bPosns = new int[posnQ.getCount()];
+				posnQ.moveToFirst();
+				for(int i = 0;i < bPosns.length;++i){
+					bPosns[i] = posnQ.getInt(posnQ.getColumnIndexOrThrow(SkytrainOpenHelper.INDEX_POS_COL));
+					posnQ.moveToNext();
+				}
+				posnQ.close();
+				int mA = 0;
+				int mB = 0;
+				if (aPosns.length > 1 || bPosns.length > 1) {
+					int iA, iB;
+					int mindiff = Integer.MAX_VALUE;
+					for (iA = 0; iA < aPosns.length; ++iA) {
+						for (iB = 0; iB < bPosns.length; ++iB) {
+							int diff = Math.abs(aPosns[iA] - bPosns[iB]);
+							mindiff = (mindiff < diff) ? mindiff : diff;
+							if (mindiff == diff) {
+								mA = iA;
+								mB = iB;
+							}
+						}
+					}
+				}
+				Cursor stnQ = dbHelp.queryStationsOfLine(line, aPosns[mA], bPosns[mB]);
 				stnQ.moveToFirst();
 				int idA = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ID_COL));
 				int znA = stnQ.getInt(stnQ.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ZONE_COL));
@@ -424,7 +450,15 @@ public class TripRouteActivity extends Activity {
 					crosses2_3 = true;
 				}
 				try{
-					if(line == 1 && idA < 15 && idB > 15){
+					if(line == 1 && idA > 19 && idA < 31 && idB == BROADWAY_ID){
+						tripTime += dbHelp.queryTravelTime(idA, BROADWAY_ID);
+					}else if(line == 1 && idA == 31 && idB == BROADWAY_ID){
+						tripTime += dbHelp.queryTravelTime(BROADWAY_ID, idA);
+					}else if(line == 1 && idA == BROADWAY_ID && idB > 19 && idB < 31){
+						tripTime += dbHelp.queryTravelTime(idB, BROADWAY_ID);
+					}else if(line == 1 && idA == BROADWAY_ID && idB == 31){
+						tripTime += dbHelp.queryTravelTime(idA, idB);
+					}else if(line == 1 && idA < 15 && idB > 15){
 						tripTime += dbHelp.queryTravelTime(idA, COLUMBIA_ID);
 						tripTime += dbHelp.queryTravelTime(COLUMBIA_ID, idB);
 					}else if(line == 1 && idA > 15 && idB < 15){
@@ -444,7 +478,9 @@ public class TripRouteActivity extends Activity {
 			@Override
 			protected void onPostExecute(Cursor result) {
 				SimpleCursorAdapter sca = new SimpleCursorAdapter(TripRouteActivity.this, android.R.layout.simple_list_item_1, result, fromCols, toCols, 0);
-				LegListFragment.this.setListAdapter(sca);
+				for(int i = 0;i < sca.getCount();++i){
+					list.addView(sca.getView(i, null, list));
+				}
 				++legsDone;
 				LegListFragment.this.setBeginText();
 				if(legsDone == legCount){
@@ -501,7 +537,7 @@ public class TripRouteActivity extends Activity {
 						break;
 					}
 					fares.recycle();
-					txt = (TextView)findViewById(R.id.timeTxt);
+					txt = (TextView)findViewById(R.id.fareTxt);
 					txt.setText(getString(yvr?R.string.yvr_fare_msg:R.string.fare_msg, zones, fare, yvrFare));
 					pdlg.dismiss();
 				}
@@ -512,10 +548,10 @@ public class TripRouteActivity extends Activity {
 		
 		LegListFragment(int line, int idStart, int idEnd){
 			this.line = line;
-			this.startPos = idStart;
-			this.endPos = idEnd;
+			this.idA = idStart;
+			this.idB = idEnd;
 			outbound = (idStart < idEnd);
-			if(idEnd == BROADWAY_ID && (27 - idStart) < 14 && idStart != 27)outbound = true;
+			if(line == 1 && idStart == BROADWAY_ID && idEnd > 16)outbound = false;
 		}
 		
 		protected abstract void setBeginText();
@@ -525,6 +561,7 @@ public class TripRouteActivity extends Activity {
 				Bundle savedInstanceState) {
 			View root = inflater.inflate(R.layout.fragment_trip_route, container, false);
 			beginText = (TextView)root.findViewById(R.id.legBeginTxt);
+			list = (ViewGroup)root.findViewById(android.R.id.list);
 			LegQueryTask lqt = new LegQueryTask();
 			lqt.execute();
 			return root;
@@ -540,8 +577,8 @@ public class TripRouteActivity extends Activity {
 		@Override
 		protected void setBeginText() {
 			String line = "Expo";
-			String dest = (super.outbound)?"King George":"Waterfront";
-			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+			String dest = (outbound)?"King George":"Waterfront";
+			beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
 		}
 	}
 
@@ -554,8 +591,8 @@ public class TripRouteActivity extends Activity {
 		@Override
 		protected void setBeginText(){
 			String line = "Millennium";
-			String dest = (super.outbound)?"VCC-Clark":"Waterfront";
-			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+			String dest = (outbound)?"VCC-Clark":"Waterfront";
+			beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
 		}
 	}
 	
@@ -567,8 +604,8 @@ public class TripRouteActivity extends Activity {
 		
 		protected void setBeginText(){
 			String line = "Canada";
-			String dest = super.outbound?"YVR-Airport":"Waterfront";
-			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+			String dest = outbound?"YVR-Airport":"Waterfront";
+			beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
 		}
 	}
 	
@@ -580,8 +617,8 @@ public class TripRouteActivity extends Activity {
 		
 		protected void setBeginText(){
 			String line = "Canada";
-			String dest = super.outbound?"Richmond-Brighouse":"Waterfront";
-			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+			String dest = outbound?"Richmond-Brighouse":"Waterfront";
+			beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
 		}
 	}
 	
@@ -593,8 +630,8 @@ public class TripRouteActivity extends Activity {
 		
 		protected void setBeginText(){
 			String line = "Evergreen";
-			String dest = super.outbound?"Lafarge Lake-Douglas":"Lougheed Town Centre";
-			super.beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
+			String dest = outbound?"Lafarge Lake-Douglas":"Lougheed Town Centre";
+			beginText.setText(getString(R.string.boarding_instr_msg, line, dest));
 		}
 	}
 	

@@ -193,6 +193,19 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 
 	}
 	
+	public Cursor queryStationIndices(int... args){
+		String where = INDEX_LINE_COL + " IS CAST(? AS INTEGER) AND " + INDEX_STN_COL + " IN (CAST(? AS INTEGER)";
+		String[] whereArgs = new String[args.length];
+		whereArgs[0] = String.valueOf(args[0]);
+		for(int i = 1;i < args.length - 1;++i){
+			where = where + ", CAST(? AS INTEGER)";
+			whereArgs[i] = String.valueOf(args[i]);
+		}
+		whereArgs[args.length - 1] = String.valueOf(args[args.length - 1]);
+		where = where + ")";
+		return query(INDEX_TBL_NAME, null, where, whereArgs);
+	}
+	
 	/**
 	 * 
 	 * @param where
