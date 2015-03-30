@@ -56,17 +56,20 @@ public class MainActivity extends Activity implements TextWatcher,
 		filterArray = new ArrayList<Items>();
 		stationDao = new StationDAO(this);
 		setContentView(R.layout.main);
+		filterArray = new ArrayList<Items>();
+		stationDao = new StationDAO();
+		
 		
 		listView = (ListView) findViewById(R.id.listview);
 		listView.setOnItemClickListener(this);
 		mySearch = (EditText) findViewById(R.id.input_search_query);
 		mySearch.addTextChangedListener(this);
 
-		// XML Parsing Using AsyncTask...
+		// Parsing Using AsyncTask...
 		if (isNetworkAvailable()) {
 			new MyTask().execute();
 		} else {
-			showToast("No Internet Connection");
+			showToast("No DB Connection");
 			this.finish();
 		}
 	}
@@ -217,6 +220,11 @@ public class MainActivity extends Activity implements TextWatcher,
 		}
 
 	}
+	
+	//some crash evasion - when one taps at alphabetical section panel
+	public void evade(View v) {
+		
+	}
 
 
 	// Check Internet Connection!!!
@@ -252,7 +260,7 @@ public class MainActivity extends Activity implements TextWatcher,
 
 		alert.setTitle("Not Found!!!");
 		alert.setMessage("Can not find name Like '" + searchString + "'");
-		alert.setButton(0, "Ok", new DialogInterface.OnClickListener() {
+		alert.setButton("Ok", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
