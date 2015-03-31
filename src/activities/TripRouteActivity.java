@@ -37,8 +37,8 @@ public class TripRouteActivity extends Activity {
 		ONE, TWO, THREE
 	}
 	
-	private static final String lineQuery = "SELECT * FROM " + SkytrainOpenHelper.INDEX_TBL_NAME + " WHERE " + SkytrainOpenHelper.INDEX_STN_COL +
-			" IN ( CAST( ? AS INTEGER), CAST( ? AS INTEGER) )";
+	private static final String lineQuery = "SELECT * FROM " + SkytrainOpenHelper.INDEX_TBL_NAME + " WHERE " +
+			SkytrainOpenHelper.INDEX_STN_COL + " IN ( CAST( ? AS INTEGER), CAST( ? AS INTEGER) )";
 	
 	private int idStnA;
 	private int idStnB;

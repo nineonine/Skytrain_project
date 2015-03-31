@@ -4,6 +4,8 @@ import com.douglas.skytrainproject.R;
 
 import model.QueryAsyncTask;
 import model.SkytrainOpenHelper;
+import model.Station;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,11 +23,14 @@ public class TripFormActivity extends Activity implements OnClickListener {
 
 	private static String query = "SELECT " + SkytrainOpenHelper.STN_ID_COL +
 			", " + SkytrainOpenHelper.STN_NAME_COL + " FROM " + SkytrainOpenHelper.STN_TBL_NAME;
+	private static String where = " WHERE " + SkytrainOpenHelper.STN_NAME_COL + " = '";
 	
 	private View btnRoute;
 	private Spinner spnStnA;
 	private Spinner spnStnB;
+	private SimpleCursorAdapter sca;
 	private ProgressDialog loadPD;
+	private Station toStn;
 	private int idCol;
 	
 	public static final String EXTRA_STNA_ID = "com.douglas.skytrainproject.STNA";
@@ -39,12 +44,17 @@ public class TripFormActivity extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(Cursor result) {
 			idCol = result.getColumnIndex(SkytrainOpenHelper.STN_ID_COL);
-			SimpleCursorAdapter sca = new SimpleCursorAdapter(TripFormActivity.this,
+			sca = new SimpleCursorAdapter(TripFormActivity.this,
 					android.R.layout.simple_spinner_item, result, fromCols, toViews, 0);
 			sca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spnStnA.setAdapter(sca);
 			spnStnB.setAdapter(sca);
-			loadPD.dismiss();
+			if(toStn != null){
+				DestinationIDTask didt = new DestinationIDTask();
+				didt.execute(query + where + toStn.getName() + "'");
+			}else{
+				loadPD.dismiss();
+			}
 		}
 
 		PopulateSpinnerTask(){
@@ -52,9 +62,30 @@ public class TripFormActivity extends Activity implements OnClickListener {
 		}
 	}
 	
+	private class DestinationIDTask extends QueryAsyncTask{
+		
+		protected void onPostExecute(Cursor result){
+			result.moveToFirst();
+			long stnID = result.getLong(result.getColumnIndexOrThrow(SkytrainOpenHelper.STN_ID_COL));
+			result.close();
+			int i = 0;
+			seek:while(i < sca.getCount()){
+				if(sca.getItemId(i) == stnID)break seek;
+				++i;
+			}
+			spnStnB.setSelection(i);
+			loadPD.dismiss();
+		}
+		
+		DestinationIDTask(){
+			super(TripFormActivity.this);
+		}
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		toStn = getIntent().getParcelableExtra(StationActivity.EXTRA_STATION_OBJECT);
 		PopulateSpinnerTask pst = new PopulateSpinnerTask();
 		setContentView(R.layout.activity_trip_form);
 		spnStnA = (Spinner)findViewById(R.id.spnStnA);

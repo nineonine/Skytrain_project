@@ -686,12 +686,15 @@ containing a value of this type.
         public static final int fare_msg=0x7f060034;
         public static final int go_nowhere_msg=0x7f06002f;
         public static final int hello_world=0x7f06002a;
+        public static final int placeholder=0x7f060036;
         public static final int progress_form_msg=0x7f06002e;
         public static final int progress_route_msg=0x7f060031;
         public static final int progress_title=0x7f06002d;
         public static final int routing_btn_text=0x7f06002c;
         public static final int searchname=0x7f060027;
         public static final int stationLocTitle=0x7f060028;
+        public static final int stn_act_route_btn=0x7f060038;
+        public static final int stn_img_condesc=0x7f060037;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
         public static final int time_msg=0x7f060033;

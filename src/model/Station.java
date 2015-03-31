@@ -10,11 +10,11 @@ public class Station implements Parcelable {
 	//we decided to keep everything ins String
 	
 	private String name;
-	public String zone;
+	private String zone;
 	private String description;
 	private String location;
-	public String latX;
-	public String longY;
+	private String latX;
+	private String longY;
 	//we should also store the R.drawable id of the station's picture
 	private String image;
 

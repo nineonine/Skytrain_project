@@ -219,12 +219,15 @@ int string decline 0x7f060003
 int string fare_msg 0x7f060034
 int string go_nowhere_msg 0x7f06002f
 int string hello_world 0x7f06002a
+int string placeholder 0x7f060036
 int string progress_form_msg 0x7f06002e
 int string progress_route_msg 0x7f060031
 int string progress_title 0x7f06002d
 int string routing_btn_text 0x7f06002c
 int string searchname 0x7f060027
 int string stationLocTitle 0x7f060028
+int string stn_act_route_btn 0x7f060038
+int string stn_img_condesc 0x7f060037
 int string store_picture_message 0x7f060001
 int string store_picture_title 0x7f060000
 int string time_msg 0x7f060033

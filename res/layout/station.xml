@@ -17,8 +17,7 @@
             android:id="@+id/stationImage"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/stn_img_condesc"
             android:layout_marginTop="14dp"
             android:src="@drawable/placeholder" />
 
@@ -26,12 +25,10 @@
             android:id="@+id/stationName"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@+id/stationImage"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="14dp"
+            android:layout_marginStart="14dp"
             android:layout_marginTop="20dp"
             android:shadowColor="@color/black"
-            android:text="Station name"
+            android:text="@string/placeholder"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -39,20 +36,16 @@
             android:id="@+id/stationDescription"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignLeft="@+id/stationImage"
-            android:layout_below="@+id/stationName"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="5dp"
-            android:text="TextView" />
+            android:text="@string/placeholder" />
 
         <TextView
             android:id="@+id/stationLocationTitle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@+id/stationImage"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:shadowColor="@color/black"
             android:text="@string/stationLocTitle"
@@ -63,12 +56,10 @@
             android:id="@+id/stationLocation"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignLeft="@+id/stationImage"
-            android:layout_below="@+id/stationName"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="18dp"
-            android:text="TextView" />
+            android:text="@string/placeholder" />
 
         <fragment
             android:id="@+id/map"
@@ -84,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:text="Create Route" />
+            android:text="@string/stn_act_route_btn" />
 
     </LinearLayout>
 
