@@ -3,6 +3,8 @@ package model;
 import android.content.ContentValues;
 
 public class StationDetails {
+	
+	public static String UPDATE_WHERE = SkytrainOpenHelper.STN_NAME_COL + " = ?";
 
 	private String[] desc;
 	private String[] loc;
@@ -380,6 +382,8 @@ public class StationDetails {
 		ContentValues cv = new ContentValues();
 		cv.put(SkytrainOpenHelper.STN_DESC_COL, desc[a]);
 		cv.put(SkytrainOpenHelper.STN_LOC_COL, loc[a]);
+		cv.put(SkytrainOpenHelper.STN_LAT_COL, Float.parseFloat(lat[a]));
+		cv.put(SkytrainOpenHelper.STN_LON_COL, Float.parseFloat(lon[a]));
 		return cv;
 	}
 }

@@ -112,23 +112,24 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			                              {1, 4, 5},
 			                                 {3, 4},
 			                                    {1}};
-	private static int[][] brighouseTimes = {
-			{2, 4, 6, 7, 9,12,14,17,19,21,23,25},
-			   {2, 4, 5, 7,10,12,15,17,19,21,23},
-			      {2, 3, 5, 8,10,13,15,17,19,21},
-			         {1, 3, 6, 8,11,13,15,17,19},
-			            {2, 5, 7,10,12,14,16,18},
-			               {3, 5, 8,10,12,14,16},
-			                  {2, 5, 7, 9,11,13},
-			                     {3, 5, 7, 9,11},
-			                        {2, 4, 6, 8},
-			                           {2, 4, 6},
-			                              {2, 4},
-			                                 {2}};
+	private static int[][] wf_bp_times = {
+		{2, 4, 6, 7, 9,12,14,17,19},
+		   {2, 4, 5, 7,10,12,15,17},
+		      {2, 3, 5, 8,10,13,15},
+		         {1, 3, 6, 8,11,13},
+		            {2, 5, 7,10,12},
+		               {3, 5, 8,10},
+		                  {2, 5, 7},
+		                     {3, 5},
+		                        {2}};
 	private static int[][] timesToSeaIsland = {
 			{22,20,18,16,15,13,10, 8, 5, 3},
 			{24,22,20,18,17,15,12,10, 7, 5, 2},
 			{26,24,22,20,19,17,14,12, 9, 7, 4, 2}};
+	private static int[][] timesToRichmond = {
+			{21,19,17,15,14,12, 9, 7, 4, 2},
+			{23,21,19,17,16,14,11, 9, 6, 4, 2},
+			{25,23,21,19,18,16,13,11, 8, 6, 4, 2}};
 	private static ContentValues[] timeValues = buildTimeValues();
 	
 	private static String fkPragma = "PRAGMA foreign_keys = ON";
@@ -168,16 +169,20 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		//will need to work. PLEASE DO NOT ALTER IT WITHOUT MY INPUT.
 		//This second transaction is a place to put "extra" data.
 		//First, I'll create a sample piece of data:
-		ContentValues wfDesc = new ContentValues();
-		wfDesc.put(STN_LOC_COL, "Waterfront Station is located in the former CPR station at the west end of Gastown.");
+//		ContentValues wfDesc = new ContentValues();
+//		wfDesc.put(STN_LOC_COL, "Waterfront Station is located in the former CPR station at the west end of Gastown.");
 		//now, begin:
+		StationDetails sd = new StationDetails();
 		db.beginTransaction();
 		try{
 			//Example:
-			db.update(STN_TBL_NAME, wfDesc, STN_NAME_COL + " = 'Waterfront'", null);
+			//db.update(STN_TBL_NAME, wfDesc, STN_NAME_COL + " = 'Waterfront'", null);
 			
 			//insert database update code here:
-			
+			for(int i = 0;i < 53;++i){
+				String[] whereVals = {sd.getName(i)};
+				db.update(STN_TBL_NAME, sd.getValues(i), StationDetails.UPDATE_WHERE, whereVals);
+			}
 			
 			
 			//NO DATABASE WORK BELOW THIS LINE
@@ -492,72 +497,61 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	private static ContentValues[] buildTimeValues(){
 		ArrayList<ContentValues> accum = new ArrayList<ContentValues>();
 		
-		//Expo Times:
+		//Expo times:
 		for(int i = 0;i < 19;++i){
-			for(int j = i;j < 19; ++j){
-				accum.add(valuesOfTimeTuple(i, j + 1, expoTimes[i][j - i]));
+			for(int j = i + 1;j < 20;++j){
+				accum.add(valuesOfTimeTuple(i, j, expoTimes[i][j - (i + 1)]));
 			}
 		}
-		int idOffset = 20;
+		
+		int idOffset = 19;
 		//Millennium times from Columbia:
-		int columID = activities.TripRouteActivity.COLUMBIA_ID;
-		int bdwyID = activities.TripRouteActivity.BROADWAY_ID;
-		columLoop:for(int i = 0;i < 13;++i){
-			if(i == 11){
-				accum.add(valuesOfTimeTuple(columID,bdwyID,millenTimes[0][11]));
-				continue;
-			}
-			if(i == 12){
-				accum.add(valuesOfTimeTuple(columID, i + idOffset, millenTimes[0][i]));
-				break columLoop;
-			}
-			accum.add(valuesOfTimeTuple(columID, i + 1 + idOffset, millenTimes[0][i]));
+		for(int i = 0;i < 13;++i){
+			int id = (i == 11)?activities.TripRouteActivity.BROADWAY_ID:idOffset + i + 1;
+			if(i == 12)--id;
+			accum.add(valuesOfTimeTuple(activities.TripRouteActivity.COLUMBIA_ID, id, millenTimes[0][i]));
 		}
-		//other Millennium times up to from Renfrew:
-		millenLoop:for(int i = 0;i < 11;++i){
-			for(int j = i;j < 12;++j){
-				if(j == 10){
-					accum.add(valuesOfTimeTuple(idOffset + i, bdwyID, millenTimes[i + 1][j - i]));
-					continue;
+		//remaining Millennium times:
+		for(int i = 1;i < 13;++i){
+			int id = (i == 12)?activities.TripRouteActivity.BROADWAY_ID:idOffset + i;
+			for(int j = i + 1;j < 14;++j){
+				int jd = (j == 12)?activities.TripRouteActivity.BROADWAY_ID:idOffset + j;
+				if(j == 13)--jd;
+				accum.add(valuesOfTimeTuple(id, jd, millenTimes[i][j - (i + 1)]));
+			}
+		}
+		
+		idOffset += 13;
+		//Canada Line times from Waterfront:
+		wf:for(int i = 0;i < 12;++i){
+			if(i < 9){
+				accum.add(valuesOfTimeTuple(0, idOffset + i, wf_bp_times[0][i]));
+				continue wf;
+			}
+			accum.add(valuesOfTimeTuple(0, idOffset + i, timesToSeaIsland[i - 9][0]));
+			accum.add(valuesOfTimeTuple(0, idOffset + i + 3, timesToRichmond[i - 9][0]));
+		}
+		//Canada Line times from shared stns:
+		for(int i = 1;i < 10;++i){
+			int id = idOffset + i - 1;
+			van:for(int j = i;j < 12;++j){
+				if(j < 9){
+					accum.add(valuesOfTimeTuple(id, idOffset + j, wf_bp_times[i][j - i]));
+					continue van;
 				}
-				if(j == 11){
-					accum.add(valuesOfTimeTuple(idOffset + i, idOffset + j, millenTimes[i + 1][j - i]));
-					continue millenLoop;
-				}
-				accum.add(valuesOfTimeTuple(idOffset + i, 1 + idOffset + j, millenTimes[i + 1][j - i]));
+				accum.add(valuesOfTimeTuple(id, idOffset + j, timesToSeaIsland[j - 9][i]));
+				accum.add(valuesOfTimeTuple(id, idOffset + j + 3, timesToRichmond[j - 9][i]));
 			}
 		}
-		//time from Commercial-Broadway to VCC-Clark:
-		accum.add(valuesOfTimeTuple(bdwyID, 31, millenTimes[12][0]));
-		idOffset = 31;
-		//Canada line times between Waterfront and Bridgeport:
-		for(int i = 0;i < 9;++i){
-			for(int j = i;j < 9;++j){
-				accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,j + 1 + idOffset,brighouseTimes[i][j - i]));
-			}
-		}
-		//Canada Line times from Waterfront to Templeton:
-		for(int i = 0;i < 10;++i){
-			accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,idOffset + 10,timesToSeaIsland[0][i]));
-		}
-		//to Sea Island Centre:
-		for(int i = 0;i < 11;++i){
-			accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,idOffset + 11,timesToSeaIsland[1][i]));
-		}
-		//to YVR-Airport:
-		for(int i = 0;i < 12;++i){
-			accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,idOffset + 12,timesToSeaIsland[2][i]));
-		}
-		//Canada Line times Bridgeport to Brighouse:
-		int bridgeID = activities.TripRouteActivity.BRIDGEPORT_ID;
-		int arrayOffset = 9;
-		idOffset = bridgeID + 4;
-		for(int i = 0;i < 3;++i){
-			accum.add(valuesOfTimeTuple(bridgeID, idOffset + i, brighouseTimes[arrayOffset][i]));
-		}
-		accum.add(valuesOfTimeTuple(idOffset, idOffset + 1, brighouseTimes[arrayOffset + 1][0]));
-		accum.add(valuesOfTimeTuple(idOffset, idOffset + 2, brighouseTimes[arrayOffset + 1][1]));
-		accum.add(valuesOfTimeTuple(idOffset + 1, idOffset + 2, brighouseTimes[arrayOffset + 2][0]));
+		int bpid = activities.TripRouteActivity.BRIDGEPORT_ID;
+		//Remaining Sea Island times:
+		accum.add(valuesOfTimeTuple(bpid + 1, bpid + 2, timesToSeaIsland[1][10]));
+		accum.add(valuesOfTimeTuple(bpid + 1, bpid + 3, timesToSeaIsland[2][10]));
+		accum.add(valuesOfTimeTuple(bpid + 2, bpid + 3, timesToSeaIsland[2][11]));
+		//Remaining Richmond times:
+		accum.add(valuesOfTimeTuple(bpid + 4, bpid + 5, timesToRichmond[1][10]));
+		accum.add(valuesOfTimeTuple(bpid + 4, bpid + 6, timesToRichmond[2][10]));
+		accum.add(valuesOfTimeTuple(bpid + 5, bpid + 6, timesToRichmond[2][11]));
 		ContentValues[] result = new ContentValues[accum.size()];
 		return accum.toArray(result);
 	}
