@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements TextWatcher,
 		stationDao = new StationDAO(this);
 		setContentView(R.layout.main);
 		filterArray = new ArrayList<Items>();
-		stationDao = new StationDAO();
+		stationDao = new StationDAO(this);
 		
 		
 		listView = (ListView) findViewById(R.id.listview);
@@ -260,7 +260,7 @@ public class MainActivity extends Activity implements TextWatcher,
 
 		alert.setTitle("Not Found!!!");
 		alert.setMessage("Can not find name Like '" + searchString + "'");
-		alert.setButton("Ok", new DialogInterface.OnClickListener() {
+		alert.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

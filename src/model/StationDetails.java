@@ -1,5 +1,7 @@
 package model;
 
+import android.content.ContentValues;
+
 public class StationDetails {
 
 	private String[] desc;
@@ -372,5 +374,12 @@ public class StationDetails {
 	
 	public String getName(int a){
 		return name[a];
+	}
+	
+	public ContentValues getValues(int a){
+		ContentValues cv = new ContentValues();
+		cv.put(SkytrainOpenHelper.STN_DESC_COL, desc[a]);
+		cv.put(SkytrainOpenHelper.STN_LOC_COL, loc[a]);
+		return cv;
 	}
 }

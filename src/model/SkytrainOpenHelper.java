@@ -279,27 +279,27 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 	
 	public int findLineFromTransfer(int xferId, int otherId){
 		switch(xferId){
-		case activities.RouteFragmentActivity.BROADWAY_ID:
+		case activities.TripRouteActivity.BROADWAY_ID:
 			if(otherId < 20)return 0;
 			if(otherId < 32)return 1;
 			return -1;
-		case activities.RouteFragmentActivity.WATERFRONT_ID:
+		case activities.TripRouteActivity.WATERFRONT_ID:
 			if(otherId < 20)return 0;
 			if(otherId < 32)return 1;
 			if(otherId < 44)return 2;
 			if(otherId < 47)return 3;
 			return -1;
-		case activities.RouteFragmentActivity.BRIDGEPORT_ID:
+		case activities.TripRouteActivity.BRIDGEPORT_ID:
 			if(otherId == 0)return 2;
 			if(otherId < 32)return -1;
 			if(otherId < 44)return 2;
 			if(otherId < 47)return 3;
 			return -1;
-		case activities.RouteFragmentActivity.COLUMBIA_ID:
+		case activities.TripRouteActivity.COLUMBIA_ID:
 			if(otherId < 20)return 0;
 			if(otherId < 32)return 1;
 			return -1;
-		case activities.RouteFragmentActivity.LOUGHEED_ID:
+		case activities.TripRouteActivity.LOUGHEED_ID:
 			if(otherId < 20){
 				if(otherId > 15)return -1;
 				return 1;
@@ -500,8 +500,8 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 		}
 		int idOffset = 20;
 		//Millennium times from Columbia:
-		int columID = activities.RouteFragmentActivity.COLUMBIA_ID;
-		int bdwyID = activities.RouteFragmentActivity.BROADWAY_ID;
+		int columID = activities.TripRouteActivity.COLUMBIA_ID;
+		int bdwyID = activities.TripRouteActivity.BROADWAY_ID;
 		columLoop:for(int i = 0;i < 13;++i){
 			if(i == 11){
 				accum.add(valuesOfTimeTuple(columID,bdwyID,millenTimes[0][11]));
@@ -549,9 +549,9 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			accum.add(valuesOfTimeTuple((i == 0)?i:i + idOffset,idOffset + 12,timesToSeaIsland[2][i]));
 		}
 		//Canada Line times Bridgeport to Brighouse:
-		int bridgeID = activities.RouteFragmentActivity.BRIDGEPORT_ID;
+		int bridgeID = activities.TripRouteActivity.BRIDGEPORT_ID;
 		int arrayOffset = 9;
-		idOffset = bridgeID + 3;
+		idOffset = bridgeID + 4;
 		for(int i = 0;i < 3;++i){
 			accum.add(valuesOfTimeTuple(bridgeID, idOffset + i, brighouseTimes[arrayOffset][i]));
 		}

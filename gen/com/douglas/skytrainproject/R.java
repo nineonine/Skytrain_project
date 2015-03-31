@@ -8,6 +8,9 @@
 package com.douglas.skytrainproject;
 
 public final class R {
+    public static final class array {
+        public static final int fares=0x7f0a0000;
+    }
     public static final class attr {
         /** 
     The size of the ad. It must be one of BANNER, FULL_BANNER, LEADERBOARD,
@@ -437,6 +440,17 @@ containing a value of this type.
         public static final int wallet_secondary_text_holo_dark=0x7f070022;
         public static final int white=0x7f07001b;
     }
+    public static final class dimen {
+        /**  Default screen margins, per the Android Design guidelines. 
+
+         Example customization of dimensions originally defined in res/values/dimens.xml
+         (such as screen margins) for screens with more than 820dp of available width. This
+         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
+    
+         */
+        public static final int activity_horizontal_margin=0x7f090000;
+        public static final int activity_vertical_margin=0x7f090001;
+    }
     public static final class drawable {
         public static final int alphabet_default=0x7f020000;
         public static final int alphabet_selected=0x7f020001;
@@ -480,62 +494,84 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020027;
     }
     public static final class id {
-        public static final int adjust_height=0x7f090000;
-        public static final int adjust_width=0x7f090001;
-        public static final int alphabet_letter=0x7f090018;
-        public static final int book_now=0x7f090010;
-        public static final int button_search=0x7f09001d;
-        public static final int buyButton=0x7f09000c;
-        public static final int buy_now=0x7f090011;
-        public static final int buy_with_google=0x7f090012;
-        public static final int classic=0x7f090014;
-        public static final int donate_with_google=0x7f090013;
-        public static final int goToRoute=0x7f090026;
-        public static final int grayscale=0x7f090015;
-        public static final int holo_dark=0x7f090007;
-        public static final int holo_light=0x7f090008;
-        public static final int hybrid=0x7f090003;
-        public static final int input_search_query=0x7f09001e;
-        public static final int linearLayout1=0x7f09001f;
-        public static final int listview=0x7f090019;
-        public static final int map=0x7f090025;
-        public static final int match_parent=0x7f09000e;
-        public static final int monochrome=0x7f090016;
-        public static final int none=0x7f090002;
-        public static final int normal=0x7f090004;
-        public static final int production=0x7f090009;
-        public static final int rel_my_search=0x7f09001a;
-        public static final int relativelay=0x7f09001b;
-        public static final int sandbox=0x7f09000a;
-        public static final int satellite=0x7f090005;
-        public static final int selectionDetails=0x7f09000d;
-        public static final int slide=0x7f090017;
-        public static final int stationDescription=0x7f090022;
-        public static final int stationImage=0x7f090020;
-        public static final int stationLocation=0x7f090024;
-        public static final int stationLocationTitle=0x7f090023;
-        public static final int stationName=0x7f090021;
-        public static final int strict_sandbox=0x7f09000b;
-        public static final int terrain=0x7f090006;
-        public static final int tvname=0x7f09001c;
-        public static final int wrap_content=0x7f09000f;
+        public static final int action_settings=0x7f0c0032;
+        public static final int adjust_height=0x7f0c0000;
+        public static final int adjust_width=0x7f0c0001;
+        public static final int alphabet_letter=0x7f0c0022;
+        public static final int book_now=0x7f0c0010;
+        public static final int btnFindRoute=0x7f0c001c;
+        public static final int button_search=0x7f0c0028;
+        public static final int buyButton=0x7f0c000c;
+        public static final int buy_now=0x7f0c0011;
+        public static final int buy_with_google=0x7f0c0012;
+        public static final int classic=0x7f0c0014;
+        public static final int container=0x7f0c001d;
+        public static final int donate_with_google=0x7f0c0013;
+        public static final int fareTxt=0x7f0c0021;
+        public static final int goToRoute=0x7f0c0031;
+        public static final int grayscale=0x7f0c0015;
+        public static final int holo_dark=0x7f0c0007;
+        public static final int holo_light=0x7f0c0008;
+        public static final int hybrid=0x7f0c0003;
+        public static final int input_search_query=0x7f0c0029;
+        public static final int lblChoose=0x7f0c0019;
+        public static final int legBeginTxt=0x7f0c0023;
+        public static final int linearLayout1=0x7f0c002a;
+        public static final int listview=0x7f0c0024;
+        public static final int map=0x7f0c0030;
+        public static final int match_parent=0x7f0c000e;
+        public static final int monochrome=0x7f0c0016;
+        public static final int none=0x7f0c0002;
+        public static final int normal=0x7f0c0004;
+        public static final int production=0x7f0c0009;
+        public static final int rel_my_search=0x7f0c0025;
+        public static final int relativelay=0x7f0c0026;
+        public static final int sandbox=0x7f0c000a;
+        public static final int satellite=0x7f0c0005;
+        public static final int selectionDetails=0x7f0c000d;
+        public static final int slide=0x7f0c0017;
+        public static final int spnStnA=0x7f0c001a;
+        public static final int spnStnB=0x7f0c001b;
+        public static final int stationDescription=0x7f0c002d;
+        public static final int stationImage=0x7f0c002b;
+        public static final int stationLocation=0x7f0c002f;
+        public static final int stationLocationTitle=0x7f0c002e;
+        public static final int stationName=0x7f0c002c;
+        public static final int strict_sandbox=0x7f0c000b;
+        public static final int terrain=0x7f0c0006;
+        public static final int timeTxt=0x7f0c0020;
+        public static final int tvname=0x7f0c0027;
+        public static final int txt_fare=0x7f0c001e;
+        public static final int txt_time=0x7f0c001f;
+        public static final int vgTripForm=0x7f0c0018;
+        public static final int wrap_content=0x7f0c000f;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f080000;
     }
     public static final class layout {
-        public static final int alphabet_separator=0x7f030000;
-        public static final int main=0x7f030001;
-        public static final int row=0x7f030002;
-        public static final int search_bar=0x7f030003;
-        public static final int station=0x7f030004;
+        public static final int activity_trip_form=0x7f030000;
+        public static final int activity_trip_fragment=0x7f030001;
+        public static final int activity_trip_route=0x7f030002;
+        public static final int alphabet_separator=0x7f030003;
+        public static final int fragment_trip_route=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int row=0x7f030006;
+        public static final int search_bar=0x7f030007;
+        public static final int station=0x7f030008;
+    }
+    public static final class menu {
+        public static final int trip_form=0x7f0b0000;
+        public static final int trip_route=0x7f0b0001;
     }
     public static final class raw {
         public static final int gtm_analytics=0x7f040000;
     }
     public static final class string {
         public static final int accept=0x7f060002;
+        public static final int action_settings=0x7f06002b;
         public static final int app_name=0x7f060026;
+        public static final int boarding_instr_msg=0x7f060032;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f060009;
@@ -647,14 +683,25 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f060005;
         public static final int create_calendar_title=0x7f060004;
         public static final int decline=0x7f060003;
+        public static final int fare_msg=0x7f060034;
+        public static final int go_nowhere_msg=0x7f06002f;
+        public static final int hello_world=0x7f06002a;
+        public static final int progress_form_msg=0x7f06002e;
+        public static final int progress_route_msg=0x7f060031;
+        public static final int progress_title=0x7f06002d;
+        public static final int routing_btn_text=0x7f06002c;
         public static final int searchname=0x7f060027;
         public static final int stationLocTitle=0x7f060028;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
+        public static final int time_msg=0x7f060033;
+        public static final int title_activity_trip_form=0x7f060029;
+        public static final int title_activity_trip_route=0x7f060030;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f060025;
+        public static final int yvr_fare_msg=0x7f060035;
     }
     public static final class style {
         /** 
