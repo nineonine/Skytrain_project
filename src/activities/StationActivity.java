@@ -32,8 +32,6 @@ public class StationActivity extends Activity implements View.OnClickListener {
 		TextView stationDescription = (TextView) findViewById(R.id.stationDescription);
 		TextView stationLocation = (TextView) findViewById(R.id.stationLocation);
 		ImageView stationImage = (ImageView) findViewById(R.id.stationImage);
-		View btnRouteTo = findViewById(R.id.goToRoute);
-		btnRouteTo.setOnClickListener(this);
 
 		// Getting passed object
 		Intent intent = this.getIntent();
@@ -65,6 +63,8 @@ public class StationActivity extends Activity implements View.OnClickListener {
 			e.printStackTrace();
 		}
 
+		View btnRouteTo = findViewById(R.id.goToRoute);
+		btnRouteTo.setOnClickListener(this);
 	}
 
 	@Override

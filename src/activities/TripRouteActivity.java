@@ -93,6 +93,7 @@ public class TripRouteActivity extends Activity {
 				}
 				in.moveToNext();
 			}
+			in.close();
 			int lineCountA = stnAPosns.size();
 			int lineCountB = stnBPosns.size();
 			if(lineCountA == 0 || lineCountB == 0)throw new IllegalArgumentException("Useless Cursor!");
