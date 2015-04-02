@@ -494,55 +494,53 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020027;
     }
     public static final class id {
-        public static final int action_settings=0x7f0c0032;
+        public static final int action_settings=0x7f0c0030;
         public static final int adjust_height=0x7f0c0000;
         public static final int adjust_width=0x7f0c0001;
-        public static final int alphabet_letter=0x7f0c0022;
+        public static final int alphabet_letter=0x7f0c0020;
         public static final int book_now=0x7f0c0010;
         public static final int btnFindRoute=0x7f0c001c;
-        public static final int button_search=0x7f0c0028;
+        public static final int button_search=0x7f0c0026;
         public static final int buyButton=0x7f0c000c;
         public static final int buy_now=0x7f0c0011;
         public static final int buy_with_google=0x7f0c0012;
         public static final int classic=0x7f0c0014;
         public static final int container=0x7f0c001d;
         public static final int donate_with_google=0x7f0c0013;
-        public static final int fareTxt=0x7f0c0021;
-        public static final int goToRoute=0x7f0c0031;
+        public static final int fareTxt=0x7f0c001f;
+        public static final int goToRoute=0x7f0c002f;
         public static final int grayscale=0x7f0c0015;
         public static final int holo_dark=0x7f0c0007;
         public static final int holo_light=0x7f0c0008;
         public static final int hybrid=0x7f0c0003;
-        public static final int input_search_query=0x7f0c0029;
+        public static final int input_search_query=0x7f0c0027;
         public static final int lblChoose=0x7f0c0019;
-        public static final int legBeginTxt=0x7f0c0023;
-        public static final int linearLayout1=0x7f0c002a;
-        public static final int listview=0x7f0c0024;
-        public static final int map=0x7f0c0030;
+        public static final int legBeginTxt=0x7f0c0021;
+        public static final int linearLayout1=0x7f0c0028;
+        public static final int listview=0x7f0c0022;
+        public static final int map=0x7f0c002e;
         public static final int match_parent=0x7f0c000e;
         public static final int monochrome=0x7f0c0016;
         public static final int none=0x7f0c0002;
         public static final int normal=0x7f0c0004;
         public static final int production=0x7f0c0009;
-        public static final int rel_my_search=0x7f0c0025;
-        public static final int relativelay=0x7f0c0026;
+        public static final int rel_my_search=0x7f0c0023;
+        public static final int relativelay=0x7f0c0024;
         public static final int sandbox=0x7f0c000a;
         public static final int satellite=0x7f0c0005;
         public static final int selectionDetails=0x7f0c000d;
         public static final int slide=0x7f0c0017;
         public static final int spnStnA=0x7f0c001a;
         public static final int spnStnB=0x7f0c001b;
-        public static final int stationDescription=0x7f0c002d;
-        public static final int stationImage=0x7f0c002b;
-        public static final int stationLocation=0x7f0c002f;
-        public static final int stationLocationTitle=0x7f0c002e;
-        public static final int stationName=0x7f0c002c;
+        public static final int stationDescription=0x7f0c002b;
+        public static final int stationImage=0x7f0c0029;
+        public static final int stationLocation=0x7f0c002d;
+        public static final int stationLocationTitle=0x7f0c002c;
+        public static final int stationName=0x7f0c002a;
         public static final int strict_sandbox=0x7f0c000b;
         public static final int terrain=0x7f0c0006;
-        public static final int timeTxt=0x7f0c0020;
-        public static final int tvname=0x7f0c0027;
-        public static final int txt_fare=0x7f0c001e;
-        public static final int txt_time=0x7f0c001f;
+        public static final int timeTxt=0x7f0c001e;
+        public static final int tvname=0x7f0c0025;
         public static final int vgTripForm=0x7f0c0018;
         public static final int wrap_content=0x7f0c000f;
     }
@@ -551,14 +549,13 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int activity_trip_form=0x7f030000;
-        public static final int activity_trip_fragment=0x7f030001;
-        public static final int activity_trip_route=0x7f030002;
-        public static final int alphabet_separator=0x7f030003;
-        public static final int fragment_trip_route=0x7f030004;
-        public static final int main=0x7f030005;
-        public static final int row=0x7f030006;
-        public static final int search_bar=0x7f030007;
-        public static final int station=0x7f030008;
+        public static final int activity_trip_route=0x7f030001;
+        public static final int alphabet_separator=0x7f030002;
+        public static final int fragment_trip_route=0x7f030003;
+        public static final int main=0x7f030004;
+        public static final int row=0x7f030005;
+        public static final int search_bar=0x7f030006;
+        public static final int station=0x7f030007;
     }
     public static final class menu {
         public static final int trip_form=0x7f0b0000;
