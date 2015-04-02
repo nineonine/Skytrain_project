@@ -95,6 +95,8 @@ public class TripFormActivity extends Activity implements OnClickListener {
 		pst.execute(query);
 		btnRoute = findViewById(R.id.btnFindRoute);
 		btnRoute.setOnClickListener(this);
+		View btnSwap = findViewById(R.id.btnSwap);
+		btnSwap.setOnClickListener(this);
 	}
 
 	@Override
@@ -131,6 +133,13 @@ public class TripFormActivity extends Activity implements OnClickListener {
 			routeIntent.putExtra(EXTRA_STNA_ID, idA);
 			routeIntent.putExtra(EXTRA_STNB_ID, idB);
 			startActivity(routeIntent);
+			return;
+		}
+		if(v.getId() == R.id.btnSwap){
+			int selA = spnStnA.getSelectedItemPosition();
+			int selB = spnStnB.getSelectedItemPosition();
+			spnStnA.setSelection(selB);
+			spnStnB.setSelection(selA);
 			return;
 		}
 	}

@@ -20,5 +20,6 @@
     <string name="placeholder">This text should be replaced with actual information.</string>
     <string name="stn_img_condesc">A photograph or architect\'s concept drawing of the station.</string>
     <string name="stn_act_route_btn">Find Route to Here</string>
+    <string name="swap_btn_text">Swap Stations</string>
 
 </resources>

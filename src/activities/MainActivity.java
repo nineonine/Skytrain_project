@@ -56,8 +56,6 @@ public class MainActivity extends Activity implements TextWatcher,
 		filterArray = new ArrayList<Items>();
 		stationDao = new StationDAO(this);
 		setContentView(R.layout.main);
-		filterArray = new ArrayList<Items>();
-		stationDao = new StationDAO(this);
 		
 		
 		listView = (ListView) findViewById(R.id.listview);
@@ -66,12 +64,14 @@ public class MainActivity extends Activity implements TextWatcher,
 		mySearch.addTextChangedListener(this);
 
 		// Parsing Using AsyncTask...
-		if (isNetworkAvailable()) {
-			new MyTask().execute();
-		} else {
+//		if (isNetworkAvailable()) {
+		//Note that SkytrainOpenHelper doesn't need network connectivity.
+		//The SQLite database is hosted entirely on the android device.
+		new MyTask().execute();
+		/*} else {
 			showToast("No DB Connection");
 			this.finish();
-		}
+		}*/
 	}
 
 	class MyTask extends AsyncTask<Void, Void, Void> {
@@ -106,38 +106,53 @@ public class MainActivity extends Activity implements TextWatcher,
 			 } else {
 				 setAdapterToListview(items);
 			 }
-
-			super.onPostExecute(result);
 		}
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
-		//code for testing
-		TextView tv = (TextView)view.findViewById(R.id.tvname);
-		String stationName = (String) tv.getText();
-		
-		Intent intent = new Intent(this, StationActivity.class);
-		intent.putExtra("station", new Station(stationName,
-				"zone",
-				"Lorem Ipsum is simply dummy text of the printing and "
-				+ "typesetting industry. Lorem Ipsum has been the industry's "
-				+ "standard dummy text ever since the 1500s, when an unknown "
-				+ "printer took a galley of type and scrambled it to make a type "
-				+ "specimen book. It has survived not only five centuries, but also "
-				+ "the leap into electronic typesetting, remaining essentially unchanged. "
-				+ "It was popularised in the 1960s with the release of Letraset "
-				+ "sheets containing Lorem Ipsum passages, and more recently "
-				+ "with desktop publishing software like Aldus PageMaker including "
-				+ "versions of Lorem Ipsum.",
-				"Some useful information about location of the station. Here you might also find"
-				+ " this random text !",
-				"lat",
-				"lon"));
-		this.startActivityForResult(intent,0);
-
+		//Are we even getting into the onItemClick method?
+		showToast("Entered method onItemClick(AdapterView<?>, View, int, long)");
+		boolean useDummyStation = false;
+		if (useDummyStation) {
+			//code for testing
+			TextView tv = (TextView) view.findViewById(R.id.tvname);
+			String stationName = (String) tv.getText();
+			Intent intent = new Intent(this, StationActivity.class);
+			intent.putExtra(
+					StationActivity.EXTRA_STATION_OBJECT,
+					new Station(
+							stationName,
+							"zone",
+							"Lorem Ipsum is simply dummy text of the printing and "
+									+ "typesetting industry. Lorem Ipsum has been the industry's "
+									+ "standard dummy text ever since the 1500s, when an unknown "
+									+ "printer took a galley of type and scrambled it to make a type "
+									+ "specimen book. It has survived not only five centuries, but also "
+									+ "the leap into electronic typesetting, remaining essentially unchanged. "
+									+ "It was popularised in the 1960s with the release of Letraset "
+									+ "sheets containing Lorem Ipsum passages, and more recently "
+									+ "with desktop publishing software like Aldus PageMaker including "
+									+ "versions of Lorem Ipsum.",
+							"Some useful information about location of the station. Here you might also find"
+									+ " this random text !", "lat", "lon"));
+			//Why is this statement startActivityForResult(Intent, int) and not startActivity(Intent)?
+			this.startActivityForResult(intent, 0);
+		}
+		//This guard isn't really necessary with only one AdapterView in the activity, but it's habit.
+		if(parent.getId() == R.id.listview){
+			//since we know that listview's adapter is objAdapter...
+			Item selItem = objAdapter.getItem(position);
+			//Do we reach this point in the code?
+			showToast(selItem.getClass().getName() + ": " + selItem.toString());
+			if(selItem.isSectionItem())return;//if it's a section header, do nothing else.
+			Items selStn = (Items)selItem;
+			Station stnObj = stationDao.getStation(selStn.getName());
+			Intent intent = new Intent(this, StationActivity.class);
+			intent.putExtra(StationActivity.EXTRA_STATION_OBJECT, stnObj);
+			startActivity(intent);
+		}
 	}
 
 	@Override
@@ -218,6 +233,8 @@ public class MainActivity extends Activity implements TextWatcher,
 		} else {
 			objAdapter.notifyDataSetChanged();
 		}
+		//since I can't figure out why the onItemClick method never gets called,
+		
 
 	}
 	
