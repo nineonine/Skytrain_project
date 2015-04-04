@@ -71,13 +71,13 @@ public class StationActivity extends Activity implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-//		switch(v.getId()){
-//		case R.id.goToRoute:
-//			Intent in = new Intent(this, TripFormActivity.class);
-//			in.putExtra(EXTRA_STATION_OBJECT, getIntent().getParcelableExtra(EXTRA_STATION_OBJECT));
-//			startActivity(in);
-//			break;
-//		}
+		switch(v.getId()){
+		case R.id.goToRoute:
+			Intent in = new Intent(this, TripFormActivity.class);
+			in.putExtra(EXTRA_STATION_OBJECT, getIntent().getParcelableExtra(EXTRA_STATION_OBJECT));
+			startActivity(in);
+			break;
+		}
 	}
 	
 	@Override
