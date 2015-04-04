@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.douglas.skytrainproject.TripFormActivity" >
+
+    <item
+        android:id="@+id/stationList"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/stationList"/>
+    <item
+        android:id="@+id/fares"
+        android:orderInCategory="200"
+        android:showAsAction="never"
+        android:title="@string/faresMenuItem"/>
+    <item
+        android:id="@+id/schedule"
+        android:orderInCategory="300"
+        android:showAsAction="never"
+        android:title="@string/scheduleMenuItem"/>
+    <item
+        android:id="@+id/tripPlanner"
+        android:orderInCategory="400"
+        android:showAsAction="never"
+        android:title="@string/tripPlannerMenuItem"/>
+
+</menu>

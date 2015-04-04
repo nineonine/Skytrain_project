@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vgTripForm"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="activities.TripFormActivity" >
+
+    <TextView
+        android:id="@+id/lblChoose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/hello_world"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+
+    <Spinner
+        android:id="@+id/spnStnA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblChoose"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:id="@+id/spnStnB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spnStnA"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/lineButtons"
+        android:orientation="horizontal"
+        android:layout_below="@id/spnStnB"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/buttonBarStyle" >
+
+        <Button
+            android:id="@+id/btnFindRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/routing_btn_text"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@color/pale_cyan"
+            android:layout_margin="4dp" />
+
+        <Button
+            android:id="@+id/btnSwap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/swap_btn_text"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@color/pale_cyan"
+            android:layout_margin="4dp" />
+    </LinearLayout>
+
+</RelativeLayout>
