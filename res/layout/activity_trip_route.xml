@@ -12,40 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
         
-        <TextView
-            android:id="@+id/route_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="@string/route_title_msg"
-            style="@style/TitleText" />
-        
         <LinearLayout
-	        android:id="@+id/container"
-    	    android:orientation="vertical"
-        	android:layout_width="match_parent"
-        	android:layout_height="match_parent"
-        	android:layout_below="@id/route_title" />
+        android:id="@+id/container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" ></LinearLayout>
     
-	    <TextView
-    	    android:id="@+id/timeTxt"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_below="@id/container"
-        	android:layout_alignParentRight="true"
-        	android:text="@string/placeholder"
-        	android:gravity="end"
-        	style="@style/InfoText" />
+    <TextView
+        android:id="@+id/timeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/container"
+        android:layout_alignParentRight="true"
+        android:gravity="end" />
     
-    	<TextView
-        	android:id="@+id/fareTxt"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_below="@id/timeTxt"
-        	android:layout_alignParentLeft="true"
-        	android:text="@string/placeholder"
-        	android:gravity="start"
-        	style="@style/InfoText" />
+    <TextView
+        android:id="@+id/fareTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeTxt"
+        android:layout_alignParentLeft="true"
+        android:gravity="start" />
+        
     </RelativeLayout>
     
 </ScrollView>

@@ -375,18 +375,6 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int useViewLifecycle=0x7f010013;
-        /**  Defines the set of transition to be used between activities 
-         <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>slide</code></td><td>1</td><td></td></tr>
-<tr><td><code>none</code></td><td>2</td><td></td></tr>
-</table>
-         */
-        public static final int windowTransitionStyle=0x7f010025;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -411,11 +399,9 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f070006;
         public static final int common_signin_btn_light_text_focused=0x7f070007;
         public static final int common_signin_btn_light_text_pressed=0x7f070005;
-        public static final int common_signin_btn_text_dark=0x7f070022;
-        public static final int common_signin_btn_text_light=0x7f070023;
-        public static final int deep_blue=0x7f070020;
+        public static final int common_signin_btn_text_dark=0x7f070020;
+        public static final int common_signin_btn_text_light=0x7f070021;
         public static final int grey=0x7f07001d;
-        public static final int pale_blue=0x7f070021;
         public static final int pale_cyan=0x7f07001f;
         public static final int section_endcolor=0x7f070018;
         public static final int section_endcolor_selected=0x7f07001a;
@@ -439,8 +425,8 @@ containing a value of this type.
         public static final int wallet_hint_foreground_holo_light=0x7f070011;
         public static final int wallet_holo_blue_light=0x7f070015;
         public static final int wallet_link_text_light=0x7f070016;
-        public static final int wallet_primary_text_holo_light=0x7f070024;
-        public static final int wallet_secondary_text_holo_dark=0x7f070025;
+        public static final int wallet_primary_text_holo_light=0x7f070022;
+        public static final int wallet_secondary_text_holo_dark=0x7f070023;
         public static final int white=0x7f07001b;
     }
     public static final class dimen {
@@ -552,163 +538,70 @@ containing a value of this type.
     public static final class id {
         public static final int adjust_height=0x7f0c0000;
         public static final int adjust_width=0x7f0c0001;
-        public static final int alphabet_letter=0x7f0c0077;
+        public static final int alphabet_letter=0x7f0c0021;
         public static final int book_now=0x7f0c0010;
-        public static final int btnFindRoute=0x7f0c0071;
-        public static final int btnSwap=0x7f0c0072;
-        public static final int button_search=0x7f0c0080;
+        public static final int btnFindRoute=0x7f0c001c;
+        public static final int btnSwap=0x7f0c001d;
+        public static final int button_search=0x7f0c0027;
         public static final int buyButton=0x7f0c000c;
         public static final int buy_now=0x7f0c0011;
         public static final int buy_with_google=0x7f0c0012;
-        public static final int child_txt=0x7f0c0078;
         public static final int classic=0x7f0c0014;
-        public static final int container=0x7f0c0074;
+        public static final int container=0x7f0c001e;
         public static final int donate_with_google=0x7f0c0013;
-        public static final int exp_list=0x7f0c007f;
-        public static final int fareTxt=0x7f0c0076;
-        public static final int fares=0x7f0c008b;
-        public static final int goToRoute=0x7f0c0089;
+        public static final int fareTxt=0x7f0c0020;
+        public static final int fares=0x7f0c0032;
+        public static final int goToRoute=0x7f0c0030;
         public static final int grayscale=0x7f0c0015;
         public static final int holo_dark=0x7f0c0007;
         public static final int holo_light=0x7f0c0008;
         public static final int hybrid=0x7f0c0003;
-        public static final int input_search_query=0x7f0c0081;
-        public static final int lblChoose=0x7f0c006d;
-        public static final int legBeginTxt=0x7f0c0079;
-        public static final int lineButtons=0x7f0c0070;
-        public static final int linearLayout1=0x7f0c0082;
-        public static final int listview=0x7f0c007a;
-        public static final int map=0x7f0c0088;
+        public static final int input_search_query=0x7f0c0028;
+        public static final int lblChoose=0x7f0c0018;
+        public static final int legBeginTxt=0x7f0c0022;
+        public static final int lineButtons=0x7f0c001b;
+        public static final int linearLayout1=0x7f0c0029;
+        public static final int listview=0x7f0c0023;
+        public static final int map=0x7f0c002f;
         public static final int match_parent=0x7f0c000e;
         public static final int monochrome=0x7f0c0016;
         public static final int none=0x7f0c0002;
         public static final int normal=0x7f0c0004;
-        public static final int parent_txt=0x7f0c007c;
         public static final int production=0x7f0c0009;
-        public static final int rel_my_search=0x7f0c007b;
-        public static final int relativelay=0x7f0c007d;
-        public static final int route_title=0x7f0c0073;
+        public static final int rel_my_search=0x7f0c0024;
+        public static final int relativelay=0x7f0c0025;
         public static final int sandbox=0x7f0c000a;
         public static final int satellite=0x7f0c0005;
-        public static final int schedule=0x7f0c008c;
+        public static final int schedule=0x7f0c0033;
         public static final int selectionDetails=0x7f0c000d;
-        public static final int slide=0x7f0c0017;
-        public static final int spnStnA=0x7f0c006e;
-        public static final int spnStnB=0x7f0c006f;
-        public static final int stationDescription=0x7f0c0085;
-        public static final int stationImage=0x7f0c0083;
-        public static final int stationList=0x7f0c008a;
-        public static final int stationLocation=0x7f0c0087;
-        public static final int stationLocationTitle=0x7f0c0086;
-        public static final int stationName=0x7f0c0084;
+        public static final int spnStnA=0x7f0c0019;
+        public static final int spnStnB=0x7f0c001a;
+        public static final int stationDescription=0x7f0c002c;
+        public static final int stationImage=0x7f0c002a;
+        public static final int stationList=0x7f0c0031;
+        public static final int stationLocation=0x7f0c002e;
+        public static final int stationLocationTitle=0x7f0c002d;
+        public static final int stationName=0x7f0c002b;
         public static final int strict_sandbox=0x7f0c000b;
-        public static final int tableLayout1=0x7f0c0018;
-        public static final int tableLayout2=0x7f0c002c;
-        public static final int tableLayout3=0x7f0c0040;
-        public static final int tableLayout4=0x7f0c0054;
-        public static final int tableLayout5=0x7f0c0060;
-        public static final int tableLayoutx1=0x7f0c001f;
-        public static final int tableLayoutx2=0x7f0c0033;
-        public static final int tableLayoutx3=0x7f0c0047;
-        public static final int tableLayoutx4=0x7f0c005b;
-        public static final int tableRow1=0x7f0c0019;
-        public static final int tableRow10=0x7f0c003c;
-        public static final int tableRow11=0x7f0c0041;
-        public static final int tableRow12=0x7f0c0043;
-        public static final int tableRow13=0x7f0c0048;
-        public static final int tableRow14=0x7f0c004c;
-        public static final int tableRow15=0x7f0c0050;
-        public static final int tableRow16=0x7f0c0055;
-        public static final int tableRow17=0x7f0c0057;
-        public static final int tableRow18=0x7f0c005c;
-        public static final int tableRow19=0x7f0c0061;
-        public static final int tableRow2=0x7f0c001b;
-        public static final int tableRow20=0x7f0c0063;
-        public static final int tableRow21=0x7f0c0066;
-        public static final int tableRow22=0x7f0c0069;
-        public static final int tableRow3=0x7f0c0020;
-        public static final int tableRow4=0x7f0c0024;
-        public static final int tableRow5=0x7f0c0028;
-        public static final int tableRow6=0x7f0c002d;
-        public static final int tableRow7=0x7f0c002f;
-        public static final int tableRow8=0x7f0c0034;
-        public static final int tableRow9=0x7f0c0038;
         public static final int terrain=0x7f0c0006;
-        public static final int textView1=0x7f0c001a;
-        public static final int textView10=0x7f0c0027;
-        public static final int textView11=0x7f0c0029;
-        public static final int textView12=0x7f0c002a;
-        public static final int textView13=0x7f0c002b;
-        public static final int textView14=0x7f0c002e;
-        public static final int textView15=0x7f0c0030;
-        public static final int textView16=0x7f0c0031;
-        public static final int textView17=0x7f0c0032;
-        public static final int textView18=0x7f0c0035;
-        public static final int textView19=0x7f0c0036;
-        public static final int textView2=0x7f0c001c;
-        public static final int textView20=0x7f0c0037;
-        public static final int textView21=0x7f0c0039;
-        public static final int textView22=0x7f0c003a;
-        public static final int textView23=0x7f0c003b;
-        public static final int textView24=0x7f0c003d;
-        public static final int textView25=0x7f0c003e;
-        public static final int textView26=0x7f0c003f;
-        public static final int textView27=0x7f0c0042;
-        public static final int textView28=0x7f0c0044;
-        public static final int textView29=0x7f0c0045;
-        public static final int textView3=0x7f0c001d;
-        public static final int textView30=0x7f0c0046;
-        public static final int textView31=0x7f0c0049;
-        public static final int textView32=0x7f0c004a;
-        public static final int textView33=0x7f0c004b;
-        public static final int textView34=0x7f0c004d;
-        public static final int textView35=0x7f0c004e;
-        public static final int textView36=0x7f0c004f;
-        public static final int textView37=0x7f0c0051;
-        public static final int textView38=0x7f0c0052;
-        public static final int textView39=0x7f0c0053;
-        public static final int textView4=0x7f0c001e;
-        public static final int textView40=0x7f0c0056;
-        public static final int textView41=0x7f0c0058;
-        public static final int textView42=0x7f0c0059;
-        public static final int textView43=0x7f0c005a;
-        public static final int textView44=0x7f0c005d;
-        public static final int textView45=0x7f0c005e;
-        public static final int textView46=0x7f0c005f;
-        public static final int textView47=0x7f0c0062;
-        public static final int textView48=0x7f0c0064;
-        public static final int textView49=0x7f0c0065;
-        public static final int textView5=0x7f0c0021;
-        public static final int textView50=0x7f0c0067;
-        public static final int textView51=0x7f0c0068;
-        public static final int textView52=0x7f0c006a;
-        public static final int textView53=0x7f0c006b;
-        public static final int textView6=0x7f0c0022;
-        public static final int textView7=0x7f0c0023;
-        public static final int textView8=0x7f0c0025;
-        public static final int textView9=0x7f0c0026;
-        public static final int timeTxt=0x7f0c0075;
-        public static final int tripPlanner=0x7f0c008d;
-        public static final int tvname=0x7f0c007e;
-        public static final int vgTripForm=0x7f0c006c;
+        public static final int timeTxt=0x7f0c001f;
+        public static final int tripPlanner=0x7f0c0034;
+        public static final int tvname=0x7f0c0026;
+        public static final int vgTripForm=0x7f0c0017;
         public static final int wrap_content=0x7f0c000f;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f080000;
     }
     public static final class layout {
-        public static final int activity_fares=0x7f030000;
-        public static final int activity_trip_form=0x7f030001;
-        public static final int activity_trip_route=0x7f030002;
-        public static final int alphabet_separator=0x7f030003;
-        public static final int child_layout=0x7f030004;
-        public static final int fragment_trip_route=0x7f030005;
-        public static final int main=0x7f030006;
-        public static final int parent_layout=0x7f030007;
-        public static final int row=0x7f030008;
-        public static final int schedule_train=0x7f030009;
-        public static final int search_bar=0x7f03000a;
-        public static final int station=0x7f03000b;
+        public static final int activity_trip_form=0x7f030000;
+        public static final int activity_trip_route=0x7f030001;
+        public static final int alphabet_separator=0x7f030002;
+        public static final int fragment_trip_route=0x7f030003;
+        public static final int main=0x7f030004;
+        public static final int row=0x7f030005;
+        public static final int search_bar=0x7f030006;
+        public static final int station=0x7f030007;
     }
     public static final class menu {
         public static final int menu=0x7f0b0000;
@@ -718,9 +611,9 @@ containing a value of this type.
     }
     public static final class string {
         public static final int accept=0x7f060002;
-        public static final int action_settings=0x7f06002b;
-        public static final int app_name=0x7f060026;
-        public static final int boarding_instr_msg=0x7f060032;
+        public static final int action_settings=0x7f060028;
+        public static final int app_name=0x7f060023;
+        public static final int boarding_instr_msg=0x7f06002f;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f060009;
@@ -790,12 +683,6 @@ containing a value of this type.
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
         public static final int common_google_play_services_notification_ticker=0x7f060006;
-        /**  Message in confirmation dialog informing the user that the account could not be signed in. [CHAR LIMIT=NONE] 
-         */
-        public static final int common_google_play_services_sign_in_failed_text=0x7f060024;
-        /**  Title of confirmation dialog informing the user that the account could not be signed in. [CHAR LIMIT=40] 
-         */
-        public static final int common_google_play_services_sign_in_failed_title=0x7f060023;
         /**  Message in confirmation dialog informing user there is an unknown issue in Google Play
         services [CHAR LIMIT=NONE] 
          */
@@ -826,41 +713,36 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060020;
-        /**  Message in confirmation dialog informing the user that one of the APIs they attepmt to access is not available. [CHAR LIMIT=NONE] 
-         */
-        public static final int commono_google_play_services_api_unavailable_text=0x7f060022;
         public static final int create_calendar_message=0x7f060005;
         public static final int create_calendar_title=0x7f060004;
         public static final int decline=0x7f060003;
-        public static final int fare_msg=0x7f060034;
-        public static final int faresMenuItem=0x7f06003d;
-        public static final int go_nowhere_msg=0x7f06002f;
-        public static final int hello_world=0x7f06002a;
-        public static final int placeholder=0x7f060036;
-        public static final int progress_form_msg=0x7f06002e;
-        public static final int progress_route_msg=0x7f060031;
-        public static final int progress_title=0x7f06002d;
-        public static final int route_title_msg=0x7f06003f;
-        public static final int routing_btn_text=0x7f06002c;
-        public static final int scheduleMenuItem=0x7f06003b;
-        public static final int searchname=0x7f060027;
-        public static final int stationList=0x7f06003c;
-        public static final int stationLocTitle=0x7f060028;
-        public static final int stn_act_route_btn=0x7f060038;
-        public static final int stn_img_condesc=0x7f060037;
+        public static final int fare_msg=0x7f060031;
+        public static final int faresMenuItem=0x7f06003a;
+        public static final int go_nowhere_msg=0x7f06002c;
+        public static final int hello_world=0x7f060027;
+        public static final int placeholder=0x7f060033;
+        public static final int progress_form_msg=0x7f06002b;
+        public static final int progress_route_msg=0x7f06002e;
+        public static final int progress_title=0x7f06002a;
+        public static final int routing_btn_text=0x7f060029;
+        public static final int scheduleMenuItem=0x7f060038;
+        public static final int searchname=0x7f060024;
+        public static final int stationList=0x7f060039;
+        public static final int stationLocTitle=0x7f060025;
+        public static final int stn_act_route_btn=0x7f060035;
+        public static final int stn_img_condesc=0x7f060034;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
-        public static final int swap_btn_text=0x7f060039;
-        public static final int time_msg=0x7f060033;
-        public static final int title_activity_fares=0x7f06003e;
-        public static final int title_activity_trip_form=0x7f060029;
-        public static final int title_activity_trip_route=0x7f060030;
-        public static final int tripPlannerMenuItem=0x7f06003a;
+        public static final int swap_btn_text=0x7f060036;
+        public static final int time_msg=0x7f060030;
+        public static final int title_activity_trip_form=0x7f060026;
+        public static final int title_activity_trip_route=0x7f06002d;
+        public static final int tripPlannerMenuItem=0x7f060037;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
-        public static final int wallet_buy_button_place_holder=0x7f060025;
-        public static final int yvr_fare_msg=0x7f060035;
+        public static final int wallet_buy_button_place_holder=0x7f060022;
+        public static final int yvr_fare_msg=0x7f060032;
     }
     public static final class style {
         /** 
@@ -889,9 +771,7 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f050006;
-        public static final int InfoText=0x7f050007;
         public static final int Theme_IAPTheme=0x7f050000;
-        public static final int TitleText=0x7f050008;
         public static final int WalletFragmentDefaultButtonTextAppearance=0x7f050003;
         public static final int WalletFragmentDefaultDetailsHeaderTextAppearance=0x7f050002;
         public static final int WalletFragmentDefaultDetailsTextAppearance=0x7f050001;
@@ -978,38 +858,6 @@ containing a value of this type.
           @attr name com.douglas.skytrainproject:adUnitId
         */
         public static final int AdsAttrs_adUnitId = 2;
-        /**  Attributes that can be specified to define a custom theme 
-           <p>Includes the following attributes:</p>
-           <table>
-           <colgroup align="left" />
-           <colgroup align="left" />
-           <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #CustomWalletTheme_windowTransitionStyle com.douglas.skytrainproject:windowTransitionStyle}</code></td><td> Defines the set of transition to be used between activities </td></tr>
-           </table>
-           @see #CustomWalletTheme_windowTransitionStyle
-         */
-        public static final int[] CustomWalletTheme = {
-            0x7f010025
-        };
-        /**
-          <p>
-          @attr description
-           Defines the set of transition to be used between activities 
-
-
-          <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>slide</code></td><td>1</td><td></td></tr>
-<tr><td><code>none</code></td><td>2</td><td></td></tr>
-</table>
-          <p>This is a private symbol.
-          @attr name com.douglas.skytrainproject:windowTransitionStyle
-        */
-        public static final int CustomWalletTheme_windowTransitionStyle = 0;
         /**  Attributes for LoadingImageView 
            <p>Includes the following attributes:</p>
            <table>

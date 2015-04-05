@@ -16,7 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-//import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class StationActivity extends Activity implements View.OnClickListener {
@@ -56,7 +56,7 @@ public class StationActivity extends Activity implements View.OnClickListener {
 			googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 			googleMap.setMyLocationEnabled(true);
 			googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-			/*Marker TP = */googleMap.addMarker(new MarkerOptions().position(
+			Marker TP = googleMap.addMarker(new MarkerOptions().position(
 					StationLatLng).title(station.getName()));	
 			CameraPosition cameraPosition = new CameraPosition.Builder().target(StationLatLng).zoom(14).build();
 			googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -92,12 +92,10 @@ public class StationActivity extends Activity implements View.OnClickListener {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-//		int id = item.getItemId();
+		int id = item.getItemId();
 //		if (id == R.id.action_settings) {
 //			return true;
 //		}
-		boolean isHandled = MenuHandler.handleMenuItemClick(this, item);
-		if(isHandled)return true;
 		return super.onOptionsItemSelected(item);
 	}
 }

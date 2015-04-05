@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/placeholder"
-        style="@style/InfoText" />
+        android:layout_alignParentLeft="true" />
 
     <LinearLayout
         android:orientation="vertical"
