@@ -27,8 +27,7 @@
             android:layout_marginTop="5dp"
             android:shadowColor="@color/black"
             android:text="@string/placeholder"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            style="@style/TitleText" />
 
         <TextView
             android:id="@+id/stationDescription"

@@ -11,7 +11,7 @@
     <string name="progress_title">Please Wait</string>
     <string name="progress_form_msg">Loading Stations…</string>
     <string name="go_nowhere_msg">You go nowhere. Please select differing start and end stations.</string>
-    <string name="title_activity_trip_route">TripRouteActivity</string>
+    <string name="title_activity_trip_route">Your Route</string>
     <string name="progress_route_msg">Calculating Route…</string>
     <string name="boarding_instr_msg">Board the %1$s Line to %2$s at the first station below:</string>
     <string name="time_msg">This trip will take %1$s minutes of travel, not counting time spent waiting for trains.</string>
@@ -25,5 +25,7 @@
     <string name="scheduleMenuItem">Schedule</string>
     <string name="stationList">Stations List</string>
     <string name="faresMenuItem">Fares Table</string>
+    <string name="title_activity_fares">Cost to Travel</string>
+    <string name="route_title_msg">Your Route:</string>
 
 </resources>
