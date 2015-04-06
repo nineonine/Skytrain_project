@@ -44,22 +44,22 @@ public class StationDAO {
 			ArrayList<String> temporaryList = new ArrayList<String>(
 					Arrays.asList("22nd Street", "29th Avenue", "Aberdeen",
 							"Braid", "Brentwood Town Centre", "Bridgeport",
-							"Broadway City Hall", "Burrard", "Columbia",
-							"Commercial Broadway", "Edmonds", "Gateway",
+							"Broadway-City Hall", "Burrard", "Columbia",
+							"Commercial-Broadway", "Edmonds", "Gateway",
 							"Gilmore", "Granville", "Holdom",
-							"Joyce Collingwood", "King Edward", "King George",
-							"Lake City Way", "Langara 49th Avenue",
+							"Joyce-Collingwood", "King Edward", "King George",
+							"Lake City Way", "Langara-49th Avenue",
 							"Lansdowne", "Lougheed Town Centre",
-							"Main Street Science World", "Marine Drive",
+							"Main Street-Science World", "Marine Drive",
 							"Metrotown", "Nanaimo", "New Westminster",
-							"Oakridge 41st Avenue", "Olympic Village",
-							"Patterson", "Production Way University",
-							"Renfrew", "Richmond Brighouse", "Royal Oak",
+							"Oakridge-41st Avenue", "Olympic Village",
+							"Patterson", "Production Way-University",
+							"Renfrew", "Richmond-Brighouse", "Royal Oak",
 							"Rupert", "Sapperton", "Scott Road",
-							"Sea Island Centre", "Sperling Burnaby Lake",
-							"Stadium Chinatown", "Surrey Central", "Templeton",
-							"Vancouver City Centre", "VCC Clark", "Waterfront",
-							"Yaletown Roundhouse", "YVR Airport"));
+							"Sea Island Centre", "Sperling-Burnaby Lake",
+							"Stadium-Chinatown", "Surrey Central", "Templeton",
+							"Vancouver City Centre", "VCC-Clark", "Waterfront",
+							"Yaletown-Roundhouse", "YVR-Airport"));
 			return temporaryList;
 		}
 		String[] cols = {SkytrainOpenHelper.STN_NAME_COL};

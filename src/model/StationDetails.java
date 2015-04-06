@@ -270,13 +270,13 @@ public class StationDetails {
 		img[5] = String.valueOf(R.drawable.bridgeport);
 		name[5] = "Bridgeport";
 		img[6] = String.valueOf(R.drawable.broadway_cityhall);
-		name[6] = "BroadwayCity Hall";
+		name[6] = "Broadway-City Hall";
 		img[7] = String.valueOf(R.drawable.burrard);
 		name[7] = "Burrard";
 		img[8] = String.valueOf(R.drawable.columbia);
 		name[8] = "Columbia";
 		img[9] = String.valueOf(R.drawable.commercial_broadway);
-		name[9] = "CommercialBroadway";
+		name[9] = "Commercial-Broadway";
 		img[10] = String.valueOf(R.drawable.edmonds);
 		name[10] = "Edmonds";
 		img[11] = String.valueOf(R.drawable.gateway);
@@ -288,7 +288,7 @@ public class StationDetails {
 		img[14] = String.valueOf(R.drawable.holdom);
 		name[14] = "Holdom";
 		img[15] = String.valueOf(R.drawable.joycecollingswood);
-		name[15] = "JoyceCollingwood";
+		name[15] = "Joyce-Collingwood";
 		img[16] = String.valueOf(R.drawable.king_edwards);
 		name[16] = "King Edward";
 		img[17] = String.valueOf(R.drawable.king_george);
@@ -296,13 +296,13 @@ public class StationDetails {
 		img[18] = String.valueOf(R.drawable.lake_city_way);
 		name[18] = "Lake City Way";
 		img[19] = String.valueOf(R.drawable.langara_49);
-		name[19] = "Langara49th Avenue";
+		name[19] = "Langara-49th Avenue";
 		img[20] = String.valueOf(R.drawable.lansdowne);
 		name[20] = "Lansdowne";
 		img[21] = String.valueOf(R.drawable.lougheed);
 		name[21] = "Lougheed Town Centre";
 		img[22] = String.valueOf(R.drawable.main_street_science_world);
-		name[22] = "Main Street Science World";
+		name[22] = "Main Street-Science World";
 		img[23] = String.valueOf(R.drawable.marine_drive);
 		name[23] = "Marine Drive";
 		img[24] = String.valueOf(R.drawable.metrotown);
@@ -312,17 +312,17 @@ public class StationDetails {
 		img[26] = String.valueOf(R.drawable.new_westminster);
 		name[26] = "New Westminster";
 		img[27] = String.valueOf(R.drawable.oakridge41st_avenue);
-		name[27] = "Oakridge 41st Avenue";
+		name[27] = "Oakridge-41st Avenue";
 		img[28] = String.valueOf(R.drawable.olympic_village);
 		name[28] = "Olympic Village";
 		img[29] = String.valueOf(R.drawable.patterson);
 		name[29] = "Patterson";
 		img[30] = String.valueOf(R.drawable.productionwayuniversity);
-		name[30] = "Production Way University";
+		name[30] = "Production Way-University";
 		img[31] = String.valueOf(R.drawable.renfrew);
 		name[31] = "Renfrew";
 		img[32] = String.valueOf(R.drawable.richmond_brighthouse);
-		name[32] = "Richmond Brighouse";
+		name[32] = "Richmond-Brighouse";
 		img[33] = String.valueOf(R.drawable.royaloak);
 		name[33] = "Royal Oak";
 		img[34] = String.valueOf(R.drawable.rupert);
@@ -334,9 +334,9 @@ public class StationDetails {
 		img[37] = String.valueOf(R.drawable.seaislandcentre);
 		name[37] = "Sea Island Centre";
 		img[38] = String.valueOf(R.drawable.sperlingburnabylake);
-		name[38] = "Sperling Burnaby Lake";
+		name[38] = "Sperling-Burnaby Lake";
 		img[39] = String.valueOf(R.drawable.stadiumchinatown);
-		name[39] = "Stadium Chinatown";
+		name[39] = "Stadium-Chinatown";
 		img[40] = String.valueOf(R.drawable.surrey_central);
 		name[40] = "Surrey Central";
 		img[41] = String.valueOf(R.drawable.templeton);
@@ -344,13 +344,13 @@ public class StationDetails {
 		img[42] = String.valueOf(R.drawable.vancouver_city_centre);
 		name[42] = "Vancouver City Centre";
 		img[43] = String.valueOf(R.drawable.vcc_clark);
-		name[43] = "VCC Clark";
+		name[43] = "VCC-Clark";
 		img[44] = String.valueOf(R.drawable.waterfront);
 		name[44] = "Waterfront";
 		img[45] = String.valueOf(R.drawable.yaletown_roundhouse);
-		name[45] = "Yaletown Roundhouse";
+		name[45] = "Yaletown-Roundhouse";
 		img[46] = String.valueOf(R.drawable.yvrairport);
-		name[46] = "YVR Airport";
+		name[46] = "YVR-Airport";
 		img[47] = String.valueOf(R.drawable.burquitlam)	;
 		name[47] = "Burquitlam";
 		img[48] = String.valueOf(R.drawable.moodyctr);
@@ -362,7 +362,7 @@ public class StationDetails {
 		img[51] = String.valueOf(R.drawable.lincolnstation);
 		name[51] = "Lincoln";
 		img[52] = String.valueOf(R.drawable.lafarge);
-		name[52] = "Lafarge Lake Douglas";
+		name[52] = "Lafarge Lake-Douglas";
 	}
 
 	public String getDesc(int a) {

@@ -34,18 +34,18 @@ public class SkytrainOpenHelper extends SQLiteOpenHelper {
 			STN_ZONE_COL + " INT NOT NULL ON CONFLICT FAIL, " +
 			STN_IMG_COL + " INT DEFAULT " + String.valueOf(R.drawable.placeholder) + ")";
 	private static String[] stnnames = {"Waterfront", "Burrard", "Granville",
-		"Stadium Chinatown", "Main Street-Science World", "Commercial Broadway",
-		"Nanaimo", "29th Avenue", "Joyce Collingwood", "Patterson", "Metrotown",
+		"Stadium-Chinatown", "Main Street-Science World", "Commercial-Broadway",
+		"Nanaimo", "29th Avenue", "Joyce-Collingwood", "Patterson", "Metrotown",
 		"Royal Oak", "Edmonds", "22nd Street", "New Westminster", "Columbia",
 		"Scott Road", "Gateway", "Surrey Central", "King George", "Sapperton",
-		"Braid", "Lougheed Town Centre", "Production Way University",
-		"Lake City Way", "Sperling Burnaby Lake", "Holdom", "Brentwood Town Centre",
-		"Gilmore", "Rupert", "Renfrew", "VCC Clark", "Vancouver City Centre",
-		"Yaletown Roundhouse", "Olympic Village", "Broadway City Hall",
-		"King Edward", "Oakridge 41st Avenue", "Langara 49th Avenue", "Marine Drive",
-		"Bridgeport", "Templeton", "Sea Island Centre", "YVR Airport", "Aberdeen",
-		"Lansdowne", "Richmond Brighouse", "Burquitlam", "Moody Centre",
-		"Inlet Centre", "Coquitlam Central", "Lincoln", "Lafarge Lake Douglas"};
+		"Braid", "Lougheed Town Centre", "Production Way-University",
+		"Lake City Way", "Sperling-Burnaby Lake", "Holdom", "Brentwood Town Centre",
+		"Gilmore", "Rupert", "Renfrew", "VCC-Clark", "Vancouver City Centre",
+		"Yaletown-Roundhouse", "Olympic Village", "Broadway-City Hall",
+		"King Edward", "Oakridge-41st Avenue", "Langara-49th Avenue", "Marine Drive",
+		"Bridgeport", "Templeton", "Sea Island Centre", "YVR-Airport", "Aberdeen",
+		"Lansdowne", "Richmond-Brighouse", "Burquitlam", "Moody Centre",
+		"Inlet Centre", "Coquitlam Central", "Lincoln", "Lafarge Lake-Douglas"};
 	private static ContentValues[] stnValues = buildStationsValues();
 	
 	public static String LINE_TBL_NAME = "Lines";
