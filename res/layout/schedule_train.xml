@@ -6,15 +6,16 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context="com.example.navigationdrawer.MainActivity" >
+   >
 
     <ExpandableListView
         android:id="@+id/exp_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
-        android:divider="#A4C739"
-        android:dividerHeight="2dp" >
+        android:divider="@color/pale_cyan"
+        android:dividerHeight="2dp"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft" >
+
     </ExpandableListView>
 
 </RelativeLayout>

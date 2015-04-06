@@ -19,12 +19,12 @@
 			android:layout_height="fill_parent" 
 			android:orientation="vertical">
             
-			<TableLayout 
+			<TableLayout
 			    android:id="@+id/tableLayout1"
 			    android:layout_width="fill_parent"
 			    android:layout_height="75dp"
-			    android:background="@color/deep_blue"
-			    android:padding="10dp">
+			    android:background="@color/pale_cyan"
+			    android:padding="10dp" >
 			    
 			    <TableRow 
 			        android:id="@+id/tableRow1"
@@ -32,7 +32,7 @@
 			        android:layout_height="wrap_content">
 			        
 			        <TextView 
-			            android:id="@+id/textView1"
+			            android:id="@+id/title"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_span="3"
@@ -160,12 +160,12 @@
 			    </TableRow>
 			</TableLayout>
 			
-			<TableLayout 
+			<TableLayout
 			    android:id="@+id/tableLayout2"
 			    android:layout_width="fill_parent"
 			    android:layout_height="75dp"
-			    android:background="@color/deep_blue"
-			    android:padding="10dp">
+			    android:background="@color/pale_cyan"
+			    android:padding="10dp" >
 			    
 			    <TableRow 
 			        android:id="@+id/tableRow6"
@@ -301,12 +301,12 @@
 			    </TableRow>
 			</TableLayout>
 			
-			<TableLayout 
+			<TableLayout
 			    android:id="@+id/tableLayout3"
 			    android:layout_width="fill_parent"
 			    android:layout_height="80dp"
-			    android:background="@color/deep_blue"
-			    android:padding="10dp">
+			    android:background="@color/pale_cyan"
+			    android:padding="10dp" >
 			    
 			    <TableRow 
 			        android:id="@+id/tableRow11"
@@ -447,7 +447,7 @@
 			    android:id="@+id/tableLayout4"
 			    android:layout_width="fill_parent"
 			    android:layout_height="75dp"
-			    android:background="@color/deep_blue"
+			    android:background="@color/pale_cyan"
 			    android:layout_marginTop="10dp"
 			    android:padding="10dp">
 			    
@@ -573,7 +573,7 @@
 			            android:id="@+id/textView49"
 			            android:layout_width="150dp"
 			            android:layout_height="135dp"
-			            android:background="@color/pale_blue"
+			            android:background="@color/pale_cyan"
 			            android:padding="10dp"
 			            android:text="Single fares and FareSaver Tickets can be used up to 90 minutes."
 			            android:textSize="15sp"/>
@@ -589,7 +589,7 @@
 			            android:id="@+id/textView50"
 			            android:layout_width="150dp"
 			            android:layout_height="135dp"
-			            android:background="@color/pale_blue"
+			            android:background="@color/pale_cyan"
 			            android:padding="10dp"
 			            android:text="Additional Zone"
 			            android:textSize="15sp"/>
@@ -620,8 +620,9 @@
 			            android:id="@+id/textView53"
 			            android:layout_width="150dp"
 			            android:layout_height="135dp"
-			            android:background="@color/pale_blue"
+			            android:background="@color/pale_cyan"
 			            android:padding="10dp"
+			            android:paddingLeft="15dp" 
 			            android:text="Additional $5 will be applied from stations on Sea Islan for using cash, debit or credit card."
 			            android:textSize="15sp"/>
 			    </TableRow>

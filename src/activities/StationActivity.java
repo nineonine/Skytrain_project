@@ -15,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+
 import com.google.android.gms.maps.model.LatLng;
 //import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -24,7 +25,7 @@ public class StationActivity extends Activity implements View.OnClickListener {
 	public static final String EXTRA_STATION_OBJECT = "com.douglas.skytrainproject.STATION";
 	
 	private GoogleMap googleMap;
-	static LatLng StationLatLng = new LatLng(21 , 57);
+	//static LatLng StationLatLng = new LatLng(21 , 57);
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
