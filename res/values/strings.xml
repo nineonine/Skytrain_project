@@ -27,5 +27,17 @@
     <string name="faresMenuItem">Fares Table</string>
     <string name="title_activity_fares">Cost to Travel</string>
     <string name="route_title_msg">Your Route:</string>
+    <string name="view_schedule">View Schedule</string>
+    <string name="schedule_icon_condesc">Schedule icon</string>
+    <string name="plan_trip_txt">Plan your trip</string>
+    <string name="planner_icon_condesc">Trip Planner icon</string>
+    <string name="stn_list_txt">List all stations</string>
+    <string name="list_icon_condesc">Station List icon</string>
+    <string name="fares_txt">Check Fares</string>
+    <string name="fares_icon_condesc">Fares icon</string>
+    <string name="yoeng_saam">Yoeng Saam</string>
+    <string name="oleksandr_dudarenko">Oleksandr Dudarenko</string>
+    <string name="aidan_pitt_brooke">Aidan Pitt-Brooke</string>
+    <string name="devlist_leader">Developed by:</string>
 
 </resources>

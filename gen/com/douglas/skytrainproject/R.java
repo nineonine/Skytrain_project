@@ -732,6 +732,7 @@ containing a value of this type.
     public static final class string {
         public static final int accept=0x7f060002;
         public static final int action_settings=0x7f06002b;
+        public static final int aidan_pitt_brooke=0x7f06004a;
         public static final int app_name=0x7f060026;
         public static final int boarding_instr_msg=0x7f060032;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
@@ -845,22 +846,31 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f060005;
         public static final int create_calendar_title=0x7f060004;
         public static final int decline=0x7f060003;
+        public static final int devlist_leader=0x7f06004b;
         public static final int fare_msg=0x7f060034;
         public static final int faresMenuItem=0x7f06003d;
+        public static final int fares_icon_condesc=0x7f060047;
+        public static final int fares_txt=0x7f060046;
         public static final int go_nowhere_msg=0x7f06002f;
         public static final int hello_world=0x7f06002a;
+        public static final int list_icon_condesc=0x7f060045;
+        public static final int oleksandr_dudarenko=0x7f060049;
         public static final int placeholder=0x7f060036;
+        public static final int plan_trip_txt=0x7f060042;
+        public static final int planner_icon_condesc=0x7f060043;
         public static final int progress_form_msg=0x7f06002e;
         public static final int progress_route_msg=0x7f060031;
         public static final int progress_title=0x7f06002d;
         public static final int route_title_msg=0x7f06003f;
         public static final int routing_btn_text=0x7f06002c;
         public static final int scheduleMenuItem=0x7f06003b;
+        public static final int schedule_icon_condesc=0x7f060041;
         public static final int searchname=0x7f060027;
         public static final int stationList=0x7f06003c;
         public static final int stationLocTitle=0x7f060028;
         public static final int stn_act_route_btn=0x7f060038;
         public static final int stn_img_condesc=0x7f060037;
+        public static final int stn_list_txt=0x7f060044;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
         public static final int swap_btn_text=0x7f060039;
@@ -869,10 +879,12 @@ containing a value of this type.
         public static final int title_activity_trip_form=0x7f060029;
         public static final int title_activity_trip_route=0x7f060030;
         public static final int tripPlannerMenuItem=0x7f06003a;
+        public static final int view_schedule=0x7f060040;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f060025;
+        public static final int yoeng_saam=0x7f060048;
         public static final int yvr_fare_msg=0x7f060035;
     }
     public static final class style {
