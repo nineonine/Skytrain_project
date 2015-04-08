@@ -1,5 +1,6 @@
 package model;
 
+import com.douglas.skytrainproject.R;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,12 +9,14 @@ public class Station implements Parcelable {
 	//HERE IS OUR STATION MODEL
 	//we decided to keep everything ins String
 	
-	public String name;
-	public String zone;
-	public String description;
-	public String location;
-	public String latX;
-	public String longY;
+	private String name;
+	private String zone;
+	private String description;
+	private String location;
+	private String latX;
+	private String longY;
+	//we should also store the R.drawable id of the station's picture
+	private String image;
 
 	//Standard Constructor
 	public Station(String name, String zone, String description,
@@ -25,13 +28,14 @@ public class Station implements Parcelable {
 		this.location = location;
 		this.latX = latX;
 		this.longY = longY;
+		image = String.valueOf(R.drawable.placeholder);
 	}
 
 	// used to inflate the POJO once it has
 	// reached its destination activity
 	private Station(Parcel in) {
 
-		String[] data = new String[6];
+		String[] data = new String[7];
 		in.readStringArray(data);
 		this.name = data[0];
 		this.zone = data[1];
@@ -39,6 +43,16 @@ public class Station implements Parcelable {
 		this.location = data[3];
 		this.latX = data[4];
 		this.longY = data[5];
+		this.image = data[6];
+	}
+	
+	//getter and setter
+	
+	public String getImage(){
+		return image;
+	}
+	public void setImage(String image){
+		this.image = image;
 	}
 
 	@Override
@@ -51,7 +65,8 @@ public class Station implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 
 		dest.writeStringArray(new String[] { this.name, this.zone,
-				this.description, this.location, this.latX, this.longY });
+				this.description, this.location, this.latX,
+				this.longY, this.image });
 
 	}
 

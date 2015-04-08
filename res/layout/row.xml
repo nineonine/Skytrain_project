@@ -14,7 +14,6 @@
         android:padding="10dp"
         android:textColor="#000000"
         android:textSize="18dp"
-        android:onClick="evade"
         android:textStyle="bold" />
 
 </RelativeLayout>

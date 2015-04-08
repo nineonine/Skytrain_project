@@ -1,7 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">SkyTrainProject</string>
     <string name="searchname">Enter Station</string>
     <string name="stationLocTitle">Location</string>
+    <string name="title_activity_trip_form">Trip Planning Form</string>
+    <string name="hello_world">Please select starting and ending stations:</string>
+    <string name="action_settings">Settings</string>
+    <string name="routing_btn_text">Find your route!</string>
+    <string name="progress_title">Please Wait</string>
+    <string name="progress_form_msg">Loading Stations…</string>
+    <string name="go_nowhere_msg">You go nowhere. Please select differing start and end stations.</string>
+    <string name="title_activity_trip_route">TripRouteActivity</string>
+    <string name="progress_route_msg">Calculating Route…</string>
+    <string name="boarding_instr_msg">Board the %1$s Line to %2$s at the first station below:</string>
+    <string name="time_msg">This trip will take %1$s minutes of travel, not counting time spent waiting for trains.</string>
+    <string name="fare_msg">This trip will require a %1$d-zone fare, costing $%2$.2f.</string>
+    <string name="yvr_fare_msg">This trip will require a %1$d-zone fare plus the $%3$.2f YVR AddFare, costing a total of $%2$.2f.</string>
+    <string name="placeholder">This text should be replaced with actual information.</string>
+    <string name="stn_img_condesc">A photograph or architect\'s concept drawing of the station.</string>
+    <string name="stn_act_route_btn">Find Route to Here</string>
+    <string name="swap_btn_text">Swap Stations</string>
 
 </resources>
