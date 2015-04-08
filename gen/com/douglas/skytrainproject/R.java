@@ -914,6 +914,8 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f050006;
+        public static final int Button=0x7f050009;
+        public static final int Button_ButtonBar=0x7f05000a;
         public static final int InfoText=0x7f050007;
         public static final int Theme_IAPTheme=0x7f050000;
         public static final int TitleText=0x7f050008;

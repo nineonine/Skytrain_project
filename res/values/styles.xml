@@ -20,9 +20,17 @@
         <item name="android:background">@color/pale_cyan</item>
         <item name="android:padding">2dp</item>
     </style>
-    <style name="TitleText">
+    <style name="TitleText" parent="AppTheme">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Button" parent="AppTheme">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="Button.ButtonBar">
+        <item name="android:buttonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:background">@color/pale_cyan</item>
     </style>
 
 </resources>

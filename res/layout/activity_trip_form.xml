@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/hello_world"
-        style="@style/AppTheme.TitleText" />
+        style="@style/TitleText" />
 
     <Spinner
         android:id="@+id/spnStnA"
@@ -46,12 +46,12 @@
         <Button
             android:id="@+id/btnFindRoute"
             android:text="@string/routing_btn_text"
-            style="@style/AppTheme.Button.ButtonBar" />
+            style="@style/Button.ButtonBar" />
 
         <Button
             android:id="@+id/btnSwap"
             android:text="@string/swap_btn_text"
-            style="@style/AppTheme.Button.ButtonBar" />
+            style="@style/Button.ButtonBar" />
     </LinearLayout>
 
 </RelativeLayout>

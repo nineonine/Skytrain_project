@@ -418,6 +418,8 @@ int string yoeng_saam 0x7f060048
 int string yvr_fare_msg 0x7f060035
 int style AppBaseTheme 0x7f050005
 int style AppTheme 0x7f050006
+int style Button 0x7f050009
+int style Button_ButtonBar 0x7f05000a
 int style InfoText 0x7f050007
 int style Theme_IAPTheme 0x7f050000
 int style TitleText 0x7f050008
