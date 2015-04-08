@@ -88,7 +88,7 @@ public class MainActivity extends Activity implements TextWatcher,
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
+//		int id = item.getItemId();
 //		if (id == R.id.action_settings) {
 //			return true;
 //		}
@@ -134,7 +134,7 @@ public class MainActivity extends Activity implements TextWatcher,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		//Are we even getting into the onItemClick method?
-		showToast("Entered method onItemClick(AdapterView<?>, View, int, long)");
+//		showToast("Entered method onItemClick(AdapterView<?>, View, int, long)");
 		boolean useDummyStation = false;
 		if (useDummyStation) {
 			//code for testing
@@ -166,7 +166,7 @@ public class MainActivity extends Activity implements TextWatcher,
 			//since we know that listview's adapter is objAdapter...
 			Item selItem = objAdapter.getItem(position);
 			//Do we reach this point in the code?
-			showToast(selItem.getClass().getName() + ": " + selItem.toString());
+//			showToast(selItem.getClass().getName() + ": " + selItem.toString());
 			if(selItem.isSectionItem())return;//if it's a section header, do nothing else.
 			Items selStn = (Items)selItem;
 			Station stnObj = stationDao.getStation(selStn.getName());

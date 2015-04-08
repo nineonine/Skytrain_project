@@ -16,21 +16,21 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/hello_world"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        style="@style/AppTheme.TitleText" />
 
     <Spinner
         android:id="@+id/spnStnA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lblChoose"
+        android:layout_above="@id/spnStnB"
         android:layout_centerHorizontal="true" />
 
     <Spinner
         android:id="@+id/spnStnB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spnStnA"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
     <LinearLayout
         android:id="@+id/lineButtons"
@@ -39,25 +39,17 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarStyle" >
+        style="@android:style/DeviceDefault.ButtonBar" >
 
         <Button
             android:id="@+id/btnFindRoute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/routing_btn_text"
-            style="?android:attr/buttonBarButtonStyle"
-            android:background="@color/pale_cyan"
-            android:layout_margin="4dp" />
+            style="@style/AppTheme.Button.ButtonBar" />
 
         <Button
             android:id="@+id/btnSwap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/swap_btn_text"
-            style="?android:attr/buttonBarButtonStyle"
-            android:background="@color/pale_cyan"
-            android:layout_margin="4dp" />
+            style="@style/AppTheme.Button.ButtonBar" />
     </LinearLayout>
 
 </RelativeLayout>
