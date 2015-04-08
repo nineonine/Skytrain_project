@@ -92,6 +92,8 @@ public class MainActivity extends Activity implements TextWatcher,
 //		if (id == R.id.action_settings) {
 //			return true;
 //		}
+		boolean isHandled = MenuHandler.handleMenuItemClick(this, item);
+		if(isHandled)return true;
 		return super.onOptionsItemSelected(item);
 	}
 

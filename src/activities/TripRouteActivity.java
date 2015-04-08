@@ -215,19 +215,19 @@ public class TripRouteActivity extends Activity {
 				//if B is on the Expo Line:
 				if(stnBLines.contains(0)){
 					legCount = 2;
-					posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+					posStnB = stnBPosns.get(stnBLines.indexOf(0));
 					return new int[]{idStnA, 2, WATERFRONT_ID, 0, idStnB};
 				}
 				//if B is on the Millennium Line:
 				if(stnBLines.contains(1)){
 					legCount = 3;
-					posStnB = stnBPosns.get(stnBPosns.indexOf(1));
+					posStnB = stnBPosns.get(stnBLines.indexOf(1));
 					return new int[]{idStnA, 2, WATERFRONT_ID, 0, BROADWAY_ID, 1, idStnB};
 				}
 				//if B is on the Evergreen Line:
 				if(stnBLines.contains(4)){
 					legCount = 4;
-					posStnB = stnBPosns.get(stnBPosns.indexOf(4));
+					posStnB = stnBPosns.get(stnBLines.indexOf(4));
 					return new int[]{idStnA, 2, WATERFRONT_ID, 0, BROADWAY_ID, 1, LOUGHEED_ID, 4, idStnB};
 				}
 			}
@@ -237,19 +237,19 @@ public class TripRouteActivity extends Activity {
 				//if B is on the Expo Line:
 				if(stnBLines.contains(0)){
 					legCount = 2;
-					posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+					posStnB = stnBPosns.get(stnBLines.indexOf(0));
 					return new int[]{idStnA, 3, WATERFRONT_ID, 0, idStnB};
 				}
 				//if B is on the Millennium Line:
 				if(stnBLines.contains(1)){
 					legCount = 3;
-					posStnB = stnBPosns.get(stnBPosns.indexOf(1));
+					posStnB = stnBPosns.get(stnBLines.indexOf(1));
 					return new int[]{idStnA, 3, WATERFRONT_ID, 0, BROADWAY_ID, 1, idStnB};
 				}
 				//if B is on the Evergreen Line:
 				if(stnBLines.contains(4)){
 					legCount = 4;
-					posStnB = stnBPosns.get(stnBPosns.indexOf(4));
+					posStnB = stnBPosns.get(stnBLines.indexOf(4));
 					return new int[]{idStnA, 3, WATERFRONT_ID, 0, BROADWAY_ID, 1, LOUGHEED_ID, 4, idStnB};
 				}
 			}
@@ -259,19 +259,19 @@ public class TripRouteActivity extends Activity {
 				//if A is on the Expo Line:
 				if(stnALines.contains(0)){
 					legCount = 2;
-					posStnA = stnAPosns.get(stnAPosns.indexOf(0));
+					posStnA = stnAPosns.get(stnALines.indexOf(0));
 					return new int[]{idStnA, 0, WATERFRONT_ID, 2, idStnB};
 				}
 				//if A is on the Millennium Line:
 				if(stnALines.contains(1)){
 					legCount = 3;
-					posStnA = stnAPosns.get(stnAPosns.indexOf(1));
+					posStnA = stnAPosns.get(stnALines.indexOf(1));
 					return new int[]{idStnA, 1, BROADWAY_ID, 0, WATERFRONT_ID, 2, idStnB};
 				}
 				//if A is on the Evergreen Line:
 				if(stnALines.contains(4)){
 					legCount = 4;
-					posStnA = stnAPosns.get(stnAPosns.indexOf(4));
+					posStnA = stnAPosns.get(stnALines.indexOf(4));
 					return new int[]{idStnA, 4, LOUGHEED_ID, 1, BROADWAY_ID, 0, WATERFRONT_ID, 2, idStnB};
 				}
 			}
@@ -281,40 +281,40 @@ public class TripRouteActivity extends Activity {
 				//if A is on the Expo Line:
 				if(stnALines.contains(0)){
 					legCount = 2;
-					posStnA = stnAPosns.get(stnAPosns.indexOf(0));
+					posStnA = stnAPosns.get(stnALines.indexOf(0));
 					return new int[]{idStnA, 0, WATERFRONT_ID, 3, idStnB};
 				}
 				//if A is on the Millennium Line:
 				if(stnALines.contains(1)){
 					legCount = 3;
-					posStnA = stnAPosns.get(stnAPosns.indexOf(1));
+					posStnA = stnAPosns.get(stnALines.indexOf(1));
 					return new int[]{idStnA, 1, BROADWAY_ID, 0, WATERFRONT_ID, 3, idStnB};
 				}
 				//if A is on the Evergreen Line:
 				if(stnALines.contains(4)){
 					legCount = 4;
-					posStnA = stnAPosns.get(stnAPosns.indexOf(4));
+					posStnA = stnAPosns.get(stnALines.indexOf(4));
 					return new int[]{idStnA, 4, LOUGHEED_ID, 1, BROADWAY_ID, 0, WATERFRONT_ID, 3, idStnB};
 				}
 			}
 			//SPECIAL CASE: Lougheed Town Centre is on two lines.
 			if((idStnA == LOUGHEED_ID && stnBLines.contains(0))){
-				posStnA = stnAPosns.get(stnAPosns.indexOf(1));
-				posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+				posStnA = stnAPosns.get(stnALines.indexOf(1));
+				posStnB = stnBPosns.get(stnBLines.indexOf(0));
 				legCount = 2;
 				return new int[]{LOUGHEED_ID, 1, COLUMBIA_ID, 0, idStnB};
 			}
 			if(idStnB == LOUGHEED_ID && stnALines.contains(0)){
-				posStnB = stnBPosns.get(stnBPosns.indexOf(1));
-				posStnA = stnAPosns.get(stnAPosns.indexOf(0));
+				posStnB = stnBPosns.get(stnBLines.indexOf(1));
+				posStnA = stnAPosns.get(stnALines.indexOf(0));
 				legCount = 2;
 				return new int[]{idStnA, 0, COLUMBIA_ID, 1, LOUGHEED_ID};
 			}
 			//the only remaining possibility is that one station is on the Expo/Millennium
 			//shared track, and the other is on the Evergreen Line.
 			if(stnALines.contains(0)){
-				posStnA = stnAPosns.get(stnAPosns.indexOf(0));
-				posStnB = stnBPosns.get(stnBPosns.indexOf(4));
+				posStnA = stnAPosns.get(stnALines.indexOf(0));
+				posStnB = stnBPosns.get(stnBLines.indexOf(4));
 				if(posStnA < 5){
 					legCount = 3;
 					return new int[]{idStnA, 0, BROADWAY_ID, 1, LOUGHEED_ID, 4, idStnB};
@@ -331,8 +331,8 @@ public class TripRouteActivity extends Activity {
 				legCount = 2;
 				return new int[]{idStnA, 1, LOUGHEED_ID, 4, idStnB};
 			}
-			posStnA = stnAPosns.get(stnAPosns.indexOf(4));
-			posStnB = stnBPosns.get(stnBPosns.indexOf(0));
+			posStnA = stnAPosns.get(stnALines.indexOf(4));
+			posStnB = stnBPosns.get(stnBLines.indexOf(0));
 			if(posStnB < 5){
 				legCount = 3;
 				return new int[]{idStnA, 4, LOUGHEED_ID, 1, BROADWAY_ID, 0, idStnB};
@@ -676,6 +676,8 @@ public class TripRouteActivity extends Activity {
 //		if (id == R.id.action_settings) {
 //			return true;
 //		}
+		boolean isHandled = MenuHandler.handleMenuItemClick(this, item);
+		if(isHandled)return true;
 		return super.onOptionsItemSelected(item);
 	}
 }

@@ -5,7 +5,6 @@ import com.douglas.skytrainproject.R;
 import model.QueryAsyncTask;
 import model.SkytrainOpenHelper;
 import model.Station;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -115,6 +114,8 @@ public class TripFormActivity extends Activity implements OnClickListener {
 //		if (id == R.id.action_settings) {
 //			return true;
 //		}
+		boolean isHandled = MenuHandler.handleMenuItemClick(this, item);
+		if(isHandled)return true;
 		return super.onOptionsItemSelected(item);
 	}
 

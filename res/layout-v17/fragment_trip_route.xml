@@ -15,8 +15,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:text="@string/placeholder"
-        style="@style/AppTheme.InfoText" />
-
+        style="@style/InfoText" />
+    
     <LinearLayout
         android:orientation="vertical"
         android:id="@android:id/list"

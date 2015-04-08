@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -16,24 +16,13 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-    <style name="AppTheme.InfoText">
+    <style name="InfoText" parent="@android:style/TextAppearance.DeviceDefault.Medium">
         <item name="android:background">@color/pale_cyan</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Medium</item>
+        <item name="android:padding">2dp</item>
     </style>
-    <style name="AppTheme.TitleText">
+    <style name="TitleText">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
-    </style>
-    <style name="AppTheme.Button" parent="android:Widget.DeviceDefault.Button" >
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-    <style name="AppTheme.Button.ButtonBar">
-        <item name="android:buttonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-        <item name="android:background">@color/pale_cyan</item>
-        <item name="android:layout_margin">4dp</item>
     </style>
 
 </resources>

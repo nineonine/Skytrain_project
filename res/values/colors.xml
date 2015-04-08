@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#000000</color>
     <color name="pale_cyan">#A6DEFF</color>
+    <color name="deep_blue">#4A83FF</color>
+    <color name="pale_blue">#70ACFF</color>
 </resources>
